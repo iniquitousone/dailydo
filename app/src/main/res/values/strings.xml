@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General app strings -->
+    <string name="app_name">DailyDo</string>
+    <string name="title_activity_task_details"></string>
+    <string name="title_activity_notifications"></string>
+    <!-- Intent action -->
+    <string name="intent_action_reset_tasks">com.finaldrive.dailydo.intent.action.RESET_TASKS</string>
+    <!-- Action strings -->
+    <string name="action_add">Add</string>
+    <string name="action_save">Save</string>
+    <string name="action_done">Done</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_schedule">Scheduler</string>
+    <string name="action_daily_reset">Daily reset</string>
+    <!-- Preference keys -->
+    <string name="pref_daily_do">com.finaldrive.dailydo.pref.DAILY_DO</string>
+    <string name="pref_daily_reset_enabled">com.finaldrive.dailydo.pref.DAILY_RESET_ENABLED</string>
+    <string name="pref_daily_reset_hour">com.finaldrive.dailydo.pref.DAILY_RESET_HOUR</string>
+    <string name="pref_daily_reset_minute">com.finaldrive.dailydo.pref.DAILY_RESET_MINUTE</string>
+</resources>

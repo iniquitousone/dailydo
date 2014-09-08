@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.finaldrive.dailydo"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TaskDetailsActivity"
+            android:label="@string/title_activity_task_details"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.finaldrive.dailydo.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="@string/title_activity_notifications"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.finaldrive.dailydo.MainActivity"/>
+        </activity>
+
+        <service
+            android:name=".service.AlarmService"
+            android:exported="false">
+        </service>
+
+        <receiver
+            android:name=".receiver.AlarmBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+        <receiver
+            android:name=".receiver.ActionBootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+        </receiver>
+        <receiver
+            android:name=".receiver.DailyResetBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+    </application>
+
+</manifest>

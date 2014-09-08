@@ -1,0 +1,35 @@
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
+        <!-- Sets up the ActionBar -->
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <!-- Removes the drop shadow underneath all ActionBar(s) -->
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Makes the ActionButton(s) closer to one another -->
+        <!--<item name="android:actionButtonStyle">@style/ActionButtonStyle</item>-->
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <!-- Action bar style -->
+    <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@color/amber</item>
+        <item name="android:icon">@drawable/ic_logo</item>
+        <item name="android:height">@dimen/actionbar_height</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
+    </style>
+
+    <!-- Action bar text style -->
+    <style name="ActionBarTitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Action button style -->
+    <style name="ActionButtonStyle" parent="android:Widget.Holo.Light.ActionButton">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
+</resources>

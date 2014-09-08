@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/light_gray"
+              android:orientation="vertical"
+              tools:context="com.finaldrive.dailydo.NotificationsActivity">
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/actionbar_height"/>
+
+    <ListView
+        android:id="@+id/alarm_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:divider="@null"
+        android:dividerHeight="@dimen/listview_divider_height"
+        android:paddingTop="@dimen/listview_divider_height"/>
+
+    <TextView
+        android:id="@+id/empty_alarm_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:gravity="center"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="Schedule a notification with the plus button above\n\nNotifications will behave like alarms, but notify you of the upcoming DO"
+        android:textColor="@color/silver"
+        android:visibility="gone"/>
+
+</LinearLayout>
