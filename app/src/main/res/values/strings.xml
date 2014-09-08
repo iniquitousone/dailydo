@@ -3,7 +3,7 @@
     <!-- General app strings -->
     <string name="app_name">DailyDo</string>
     <string name="title_activity_task_details"></string>
-    <string name="title_activity_notifications"></string>
+    <string name="title_activity_notifications">Notifications</string>
     <!-- Intent action -->
     <string name="intent_action_reset_tasks">com.finaldrive.dailydo.intent.action.RESET_TASKS</string>
     <!-- Action strings -->

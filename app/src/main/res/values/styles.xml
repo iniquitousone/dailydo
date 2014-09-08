@@ -13,7 +13,7 @@
     <!-- Action bar style -->
     <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@color/amber</item>
-        <item name="android:icon">@drawable/ic_logo</item>
+        <item name="android:icon">@drawable/ic_logo_invert</item>
         <item name="android:height">@dimen/actionbar_height</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
     </style>

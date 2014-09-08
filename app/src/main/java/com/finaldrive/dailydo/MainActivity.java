@@ -88,7 +88,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
-        getActionBar().setHomeButtonEnabled(true);
         // Initialize the database helper and fetch the List of Task(s) from the database.
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         taskList = dailyDoDatabaseHelper.getTaskEntries();
@@ -228,7 +227,6 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
             case R.id.action_daily_reset:
                 final SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_daily_do), MODE_PRIVATE);
                 final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);

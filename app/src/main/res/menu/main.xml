@@ -1,22 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.finaldrive.dailydo.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.finaldrive.dailydo.MainActivity">
 
     <item
         android:id="@+id/action_daily_reset"
-        android:icon="@drawable/ic_action_reset"
+        android:icon="@drawable/ic_logo"
         android:showAsAction="always"
-        android:title="@string/action_daily_reset"/>
+        android:title="@string/action_daily_reset" />
 
     <item
         android:id="@+id/action_scheduler"
         android:icon="@drawable/ic_action_alarms"
         android:showAsAction="always"
-        android:title="@string/action_schedule"/>
+        android:title="@string/action_schedule" />
 
     <item
         android:id="@+id/action_add_task"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
-        android:title="@string/action_add"/>
+        android:title="@string/action_add" />
 </menu>
