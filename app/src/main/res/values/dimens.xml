@@ -3,6 +3,7 @@
     <dimen name="alarm_entry_normal_height">96dp</dimen>
     <dimen name="task_horizontal_margin">8dp</dimen>
     <dimen name="task_entry_normal_height">48dp</dimen>
+    <dimen name="task_details_indent">56dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="listview_divider_height">6dp</dimen>

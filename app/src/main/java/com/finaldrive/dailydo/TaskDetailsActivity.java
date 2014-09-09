@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -149,6 +150,7 @@ public class TaskDetailsActivity extends Activity {
     private boolean saveContentAndFinish() {
         final EditText titleView = (EditText) findViewById(R.id.details_title);
         final EditText noteView = (EditText) findViewById(R.id.details_note);
+        final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
         final String title = titleView.getText().toString();
         if (title.isEmpty()) {
             Toast.makeText(this, "Please provide a title for your entry", Toast.LENGTH_SHORT).show();
@@ -158,9 +160,12 @@ public class TaskDetailsActivity extends Activity {
         final Intent editIntent = new Intent(this, MainActivity.class);
         Task task;
         if (taskId == TASK_CREATE_ID) {
-            task = dailyDoDatabaseHelper.insertTaskEntry(new Task(title, note, position));
+            task = new Task(title, note, position);
+            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
+            task = dailyDoDatabaseHelper.insertTaskEntry(task);
         } else {
             task = dailyDoDatabaseHelper.getTaskEntry(taskId);
+            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
             task.setTitle(title);
             task.setNote(note);
             task.setRowNumber(position);
