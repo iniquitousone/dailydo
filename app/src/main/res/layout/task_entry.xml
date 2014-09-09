@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:clipChildren="false"
-                android:gravity="center_vertical"
-                android:minHeight="@dimen/task_entry_normal_height"
-                android:paddingTop="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clipChildren="false"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/task_entry_normal_height"
+    android:paddingTop="8dp">
 
     <LinearLayout
         android:id="@+id/task_entry_header"
@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/task_horizontal_margin"
             android:layout_marginRight="4dp"
-            android:src="@drawable/ic_dragger"/>
+            android:src="@drawable/ic_dragger" />
 
         <CheckBox
             android:id="@+id/task_entry_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"/>
+            android:layout_marginRight="4dp" />
 
     </LinearLayout>
 
@@ -56,7 +56,7 @@
             android:text="Example title to test render behavior"
             android:textColor="@color/gray"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/task_entry_separator"
@@ -67,7 +67,7 @@
             android:layout_marginTop="4dp"
             android:layerType="software"
             android:src="@drawable/shape_dotted_line"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/task_entry_note"
@@ -80,7 +80,7 @@
             android:text="Example note to test render behavior"
             android:textColor="@color/silver"
             android:textSize="14sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -90,6 +90,6 @@
         android:layout_alignParentBottom="true"
         android:alpha="0.5"
         android:background="@color/silver"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 </RelativeLayout>

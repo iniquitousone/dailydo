@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/alarm_entry_normal_height"
-                android:background="@color/white"
-                android:longClickable="true">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/alarm_entry_normal_height"
+    android:background="@color/white"
+    android:longClickable="true">
 
     <LinearLayout
         android:id="@+id/days_toggles"
@@ -21,7 +21,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="SUN"
-            android:textOn="SUN"/>
+            android:textOn="SUN" />
 
         <ToggleButton
             android:id="@+id/monday_toggle"
@@ -31,7 +31,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="MON"
-            android:textOn="MON"/>
+            android:textOn="MON" />
 
         <ToggleButton
             android:id="@+id/tuesday_toggle"
@@ -41,7 +41,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="TUE"
-            android:textOn="TUE"/>
+            android:textOn="TUE" />
 
         <ToggleButton
             android:id="@+id/wednesday_toggle"
@@ -51,7 +51,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="WED"
-            android:textOn="WED"/>
+            android:textOn="WED" />
 
         <ToggleButton
             android:id="@+id/thursday_toggle"
@@ -61,7 +61,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="THU"
-            android:textOn="THU"/>
+            android:textOn="THU" />
 
         <ToggleButton
             android:id="@+id/friday_toggle"
@@ -71,7 +71,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="FRI"
-            android:textOn="FRI"/>
+            android:textOn="FRI" />
 
         <ToggleButton
             android:id="@+id/saturday_toggle"
@@ -81,7 +81,7 @@
             android:background="@color/transparent"
             android:textColor="@drawable/selector_toggle_text_colors"
             android:textOff="SAT"
-            android:textOn="SAT"/>
+            android:textOn="SAT" />
 
     </LinearLayout>
 
@@ -92,7 +92,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="18dp"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+        android:layout_marginRight="@dimen/activity_horizontal_margin" />
 
     <TextView
         android:id="@+id/alarm_entry_time"
@@ -107,7 +107,7 @@
         android:includeFontPadding="false"
         android:text="12:00"
         android:textColor="@color/gray"
-        android:textSize="30sp"/>
+        android:textSize="30sp" />
 
     <View
         android:layout_width="match_parent"
@@ -115,6 +115,6 @@
         android:layout_alignParentBottom="true"
         android:alpha="0.5"
         android:background="@color/silver"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 </RelativeLayout>

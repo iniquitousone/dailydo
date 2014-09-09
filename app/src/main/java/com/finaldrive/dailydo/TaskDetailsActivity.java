@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -73,13 +72,12 @@ public class TaskDetailsActivity extends Activity {
         if (taskId != TASK_CREATE_ID) {
             getActionBar().setIcon(R.drawable.ic_action_back_dark);
             final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
-            final EditText titleView = (EditText) findViewById(R.id.edit_task_title);
-            final EditText noteView = (EditText) findViewById(R.id.edit_task_note);
+            final EditText titleView = (EditText) findViewById(R.id.details_title);
+            final EditText noteView = (EditText) findViewById(R.id.details_note);
             titleView.setText(task.getTitle());
             noteView.setText(task.getNote());
         } else {
             getActionBar().setIcon(R.drawable.ic_action_accept);
-            getActionBar().setTitle(Html.fromHtml("<font color=\"gray\">Save</font>"));
         }
     }
 
@@ -149,8 +147,8 @@ public class TaskDetailsActivity extends Activity {
      * @return boolean result if valid
      */
     private boolean saveContentAndFinish() {
-        final EditText titleView = (EditText) findViewById(R.id.edit_task_title);
-        final EditText noteView = (EditText) findViewById(R.id.edit_task_note);
+        final EditText titleView = (EditText) findViewById(R.id.details_title);
+        final EditText noteView = (EditText) findViewById(R.id.details_note);
         final String title = titleView.getText().toString();
         if (title.isEmpty()) {
             Toast.makeText(this, "Please provide a title for your entry", Toast.LENGTH_SHORT).show();

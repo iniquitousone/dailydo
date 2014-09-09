@@ -44,7 +44,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         final Intent intent = new Intent(context.getApplicationContext(), TaskDetailsActivity.class);
         intent.putExtra(TaskDetailsActivity.EXTRA_TASK_ID, task.getId());
         intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, task.getRowNumber());
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
         taskStackBuilder.addNextIntentWithParentStack(intent);
         return taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

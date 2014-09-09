@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.finaldrive.dailydo.NotificationsActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.finaldrive.dailydo.NotificationsActivity">
 
     <item
         android:id="@+id/action_add_alarm"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
-        android:title="@string/action_add"/>
+        android:title="@string/action_add" />
 </menu>

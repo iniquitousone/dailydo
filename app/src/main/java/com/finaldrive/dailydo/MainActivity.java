@@ -240,7 +240,7 @@ public class MainActivity extends Activity {
                 dailyResetTimePickerFragment.show(getFragmentManager(), "DailyResetTimePickerFragment");
                 break;
 
-            case R.id.action_scheduler:
+            case R.id.action_notifications:
                 startActivity(new Intent(this, NotificationsActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;

@@ -53,8 +53,6 @@ public class NotificationsActivity extends Activity {
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
         alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.alarm_entry, alarmList);
-        getActionBar().setIcon(R.drawable.ic_action_back);
-        getActionBar().setDisplayHomeAsUpEnabled(false);
         listView = (ListView) findViewById(R.id.alarm_list_view);
         listView.setAdapter(alarmArrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

@@ -17,49 +17,69 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
         android:text="Title"
         android:textColor="@color/teal"
         android:textSize="14sp" />
 
-    <EditText
-        android:id="@+id/edit_task_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:background="@color/transparent"
-        android:capitalize="sentences"
-        android:hint="(touch to edit)"
-        android:textColor="@color/gray"
-        android:textColorHint="@color/silver"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:minHeight="48dp"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="@dimen/listview_divider_height"
-        android:layerType="software"
-        android:src="@drawable/shape_dotted_line" />
+        <CheckBox
+            android:id="@+id/details_checkbox"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/details_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:capitalize="sentences"
+            android:hint="(touch to edit)"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/silver"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
         android:text="Notes"
         android:textColor="@color/teal"
         android:textSize="14sp" />
 
-    <EditText
-        android:id="@+id/edit_task_note"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:capitalize="sentences"
-        android:gravity="top"
-        android:hint="(optional)"
-        android:textColor="@color/gray"
-        android:textColorHint="@color/silver"
-        android:textSize="18sp" />
+        android:minHeight="48dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="56dp"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/details_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:capitalize="sentences"
+            android:gravity="top"
+            android:hint="(optional)"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/silver"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

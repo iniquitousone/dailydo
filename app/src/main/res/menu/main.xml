@@ -9,10 +9,10 @@
         android:title="@string/action_daily_reset" />
 
     <item
-        android:id="@+id/action_scheduler"
+        android:id="@+id/action_notifications"
         android:icon="@drawable/ic_action_alarms"
         android:showAsAction="always"
-        android:title="@string/action_schedule" />
+        android:title="@string/action_notifications" />
 
     <item
         android:id="@+id/action_add_task"
