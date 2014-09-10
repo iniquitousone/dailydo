@@ -6,10 +6,6 @@
     android:orientation="vertical"
     tools:context="com.finaldrive.dailydo.NotificationsActivity">
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/actionbar_height" />
-
     <ListView
         android:id="@+id/alarm_list_view"
         android:layout_width="match_parent"

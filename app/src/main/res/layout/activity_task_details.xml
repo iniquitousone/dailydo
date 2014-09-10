@@ -10,10 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.finaldrive.dailydo.TaskDetailsActivity">
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/actionbar_height" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

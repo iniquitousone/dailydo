@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,7 +68,7 @@ public class TaskDetailsActivity extends Activity {
         Intent intent = getIntent();
         taskId = intent.getIntExtra(EXTRA_TASK_ID, TASK_CREATE_ID);
         position = intent.getIntExtra(EXTRA_TASK_POSITION, INVALID_VALUE);
-        getActionBar().setBackgroundDrawable(null);
+        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
         getActionBar().setDisplayHomeAsUpEnabled(false);
         // Only load the views with the appropriate text if this is NOT a new Task.
         if (taskId != TASK_CREATE_ID) {
