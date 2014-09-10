@@ -75,8 +75,10 @@ public class TaskDetailsActivity extends Activity {
             final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
             final EditText titleView = (EditText) findViewById(R.id.details_title);
             final EditText noteView = (EditText) findViewById(R.id.details_note);
+            final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
             titleView.setText(task.getTitle());
             noteView.setText(task.getNote());
+            checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
         } else {
             getActionBar().setIcon(R.drawable.ic_action_accept);
         }

@@ -88,6 +88,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
+        final ImageView homeIcon = (ImageView) findViewById(android.R.id.home);
+        homeIcon.setPadding(16, 0, homeIcon.getWidth(), 0);
         // Initialize the database helper and fetch the List of Task(s) from the database.
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         taskList = dailyDoDatabaseHelper.getTaskEntries();
