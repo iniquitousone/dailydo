@@ -232,7 +232,7 @@ public class MainActivity extends Activity {
                 final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);
                 final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
                 final Bundle bundle = new Bundle();
-                bundle.putString(TimePickerFragment.TITLE, "When does your day start?\nThis is when your DOs reset.");
+                bundle.putString(TimePickerFragment.TITLE, "Set a time for your DOs to uncheck everyday:");
                 bundle.putInt(TimePickerFragment.HOUR_OF_DAY, hourOfReset);
                 bundle.putInt(TimePickerFragment.MINUTE, minuteOfReset);
                 final DailyResetTimePickerFragment dailyResetTimePickerFragment = new DailyResetTimePickerFragment();

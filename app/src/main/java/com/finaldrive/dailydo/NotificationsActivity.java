@@ -201,13 +201,13 @@ public class NotificationsActivity extends Activity {
          */
         private void setupDayToggleButton(final ToggleButton toggleButton, final Alarm alarm, final int calendarDay) {
             toggleButton.setChecked(alarm.isCalendarDayEnabled(calendarDay));
-            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            toggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    if (isChecked) {
-                        alarm.enableCalendarDay(calendarDay);
-                    } else {
+                public void onClick(View v) {
+                    if (alarm.isCalendarDayEnabled(calendarDay)) {
                         alarm.disableCalendarDay(calendarDay);
+                    } else {
+                        alarm.enableCalendarDay(calendarDay);
                     }
                     dailyDoDatabaseHelper.updateAlarmEntry(alarm);
                     AlarmService.scheduleNextAlarm(getContext());

@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -69,7 +70,6 @@ public class TaskDetailsActivity extends Activity {
         taskId = intent.getIntExtra(EXTRA_TASK_ID, TASK_CREATE_ID);
         position = intent.getIntExtra(EXTRA_TASK_POSITION, INVALID_VALUE);
         getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-        getActionBar().setDisplayHomeAsUpEnabled(false);
         // Only load the views with the appropriate text if this is NOT a new Task.
         if (taskId != TASK_CREATE_ID) {
             getActionBar().setIcon(R.drawable.ic_action_back_dark);
@@ -82,6 +82,7 @@ public class TaskDetailsActivity extends Activity {
             checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
         } else {
             getActionBar().setIcon(R.drawable.ic_action_accept);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
     }
 

@@ -59,18 +59,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_logo)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
-        if (taskList == null || taskList.isEmpty()) {
-            notificationBuilder.setContentTitle("Good job!")
-                    .setContentText("You finished all of your DOs! (:");
-        } else {
+        if (taskList != null && !taskList.isEmpty()) {
             final Task task = taskList.get(0);
             notificationBuilder.setContentTitle(task.getTitle())
                     .setContentText(task.getNote())
                     .setContentInfo(taskList.size() + " left")
                     .setContentIntent(createPendingIntent(context, task));
+            final Notification notification = notificationBuilder.build();
+            notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notification);
         }
-        final Notification notification = notificationBuilder.build();
-        notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notification);
         AlarmService.scheduleNextAlarm(context);
     }
 }

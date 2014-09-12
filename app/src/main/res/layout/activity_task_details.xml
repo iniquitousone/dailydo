@@ -26,8 +26,10 @@
 
         <CheckBox
             android:id="@+id/details_checkbox"
-            android:layout_width="@dimen/task_details_indent"
-            android:layout_height="wrap_content" />
+            android:layout_marginLeft="8dp"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_toggle_checkbox" />
 
         <EditText
             android:id="@+id/details_title"
@@ -35,7 +37,7 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:capitalize="sentences"
-            android:hint="(touch to edit)"
+            android:hint="(required)"
             android:textColor="@color/gray"
             android:textColorHint="@color/silver"
             android:textSize="18sp"

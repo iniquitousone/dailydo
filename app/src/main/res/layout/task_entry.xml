@@ -17,20 +17,22 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:minWidth="60dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
 
         <ImageView
             android:id="@+id/task_entry_grabber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/task_horizontal_margin"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="12dp"
             android:src="@drawable/ic_dragger" />
 
         <CheckBox
             android:id="@+id/task_entry_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:button="@drawable/selector_toggle_checkbox" />
 
     </LinearLayout>
 
