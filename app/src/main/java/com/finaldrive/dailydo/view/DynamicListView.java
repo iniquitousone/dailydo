@@ -378,7 +378,7 @@ public class DynamicListView extends ListView {
                 mDownX = (int) event.getX();
                 mDownY = (int) event.getY();
                 mActivePointerId = event.getPointerId(0);
-                if ((mDownX >= 1 && mDownX < 100) && !mCellIsMobile) {
+                if ((mDownX >= 1 && mDownX <= 50) && !mCellIsMobile) {
                     mTotalOffset = 0;
                     int position = pointToPosition(mDownX, mDownY);
                     if (position == -1) {
