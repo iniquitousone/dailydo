@@ -6,8 +6,7 @@
     android:background="@color/white"
     android:clipChildren="false"
     android:gravity="center_vertical"
-    android:minHeight="@dimen/task_entry_normal_height"
-    android:paddingTop="8dp">
+    android:minHeight="@dimen/task_entry_normal_height">
 
     <LinearLayout
         android:id="@+id/task_entry_header"
@@ -15,9 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:minWidth="60dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="6dp">
 
         <ImageView
             android:id="@+id/task_entry_grabber"
@@ -32,9 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/selector_toggle_checkbox"
-            android:paddingBottom="6dp"
-            android:paddingLeft="6dp"
-            android:paddingTop="6dp" />
+            android:clickable="false" />
 
     </LinearLayout>
 
@@ -43,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
         android:layout_toRightOf="@id/task_entry_header"
         android:clickable="true"
         android:gravity="center_vertical"
@@ -54,6 +54,7 @@
             android:id="@+id/task_entry_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:autoLink="all"
             android:ellipsize="end"
             android:includeFontPadding="false"
@@ -78,6 +79,7 @@
             android:id="@+id/task_entry_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:autoLink="all"
             android:ellipsize="end"
             android:maxLines="3"
@@ -89,7 +91,16 @@
 
     </LinearLayout>
 
+    <!-- This is a hack to get a wider touch area atop the CheckBox -->
     <View
+        android:id="@+id/task_entry_checkbox_touch"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:layout_toLeftOf="@id/task_entry_content"
+        android:clickable="true" />
+
+    <View
+        android:id="@+id/task_entry_shadow"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_alignParentBottom="true"

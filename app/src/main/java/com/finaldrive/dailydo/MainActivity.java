@@ -304,6 +304,7 @@ public class MainActivity extends Activity {
             }
             final Task task = getItem(position);
             final boolean isChecked = task.getIsChecked() == 1 ? true : false;
+            final View checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
             final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
             final LinearLayout contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
             final ImageView separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
@@ -346,9 +347,11 @@ public class MainActivity extends Activity {
                     return false;
                 }
             });
-            checkBox.setOnClickListener(new View.OnClickListener() {
+            // This is a hack to get a larger top zone for the CheckBox.
+            checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    checkBox.toggle();
                     task.setIsChecked(task.getIsChecked() == 1 ? 0 : 1);
                     task.setRowNumber(position);
                     dailyDoDatabaseHelper.updateTaskEntry(task);

@@ -24,12 +24,23 @@
         android:minHeight="48dp"
         android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/details_checkbox"
-            android:layout_marginLeft="8dp"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:button="@drawable/selector_toggle_checkbox" />
+        <!-- This is a hack to get a wider touch area atop the CheckBox -->
+        <LinearLayout
+            android:id="@+id/details_checkbox_touch"
+            android:layout_width="@dimen/task_details_indent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:paddingTop="2dp">
+
+            <CheckBox
+                android:id="@+id/details_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:button="@drawable/selector_toggle_checkbox"
+                android:clickable="false" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/details_title"
