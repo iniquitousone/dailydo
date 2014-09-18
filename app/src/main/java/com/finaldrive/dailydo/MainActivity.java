@@ -317,11 +317,13 @@ public class MainActivity extends Activity {
                 titleView.setTextColor(getResources().getColor(R.color.silver));
                 noteView.setTypeface(null, Typeface.ITALIC);
                 noteView.setTextColor(getResources().getColor(R.color.silver));
+                convertView.setAlpha(0.75f);
             } else {
                 titleView.setTypeface(null, Typeface.BOLD);
                 titleView.setTextColor(getResources().getColor(R.color.gray));
                 noteView.setTypeface(null, Typeface.NORMAL);
                 noteView.setTextColor(getResources().getColor(R.color.silver));
+                convertView.setAlpha(1.0f);
             }
             // Setup the values.
             titleView.setText(task.getTitle());
