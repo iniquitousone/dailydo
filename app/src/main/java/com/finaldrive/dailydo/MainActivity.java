@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
             taskArrayAdapter.notifyDataSetChanged();
         }
     };
+    // TODO: Decide if bulk deletion is a supported feature.
     private ActionMode.Callback callback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -251,7 +252,6 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

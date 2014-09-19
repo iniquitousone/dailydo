@@ -150,9 +150,10 @@ public class TaskDetailsActivity extends Activity {
                 alertDialog.show();
                 return false;
 
-            default:
+            case android.R.id.home:
                 return saveContentAndFinish();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

@@ -82,9 +82,12 @@ public class NotificationsActivity extends Activity {
                 alarmTimePickerFragment.setArguments(bundle);
                 alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
                 return false;
+
+            case android.R.id.home:
+                finish();
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                return true;
         }
-        finish();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         return super.onOptionsItemSelected(item);
     }
 
