@@ -317,7 +317,7 @@ public class MainActivity extends Activity {
                 titleView.setTextColor(getResources().getColor(R.color.silver));
                 noteView.setTypeface(null, Typeface.ITALIC);
                 noteView.setTextColor(getResources().getColor(R.color.silver));
-                convertView.setAlpha(0.75f);
+                convertView.setAlpha(0.67f);
             } else {
                 titleView.setTypeface(null, Typeface.BOLD);
                 titleView.setTextColor(getResources().getColor(R.color.gray));

@@ -11,6 +11,7 @@
     <string name="action_save">Save</string>
     <string name="action_done">Done</string>
     <string name="action_delete">Delete</string>
+    <string name="action_dismiss">Dismiss</string>
     <string name="action_notifications">Notifications</string>
     <string name="action_daily_reset">Daily reset</string>
     <!-- Preference keys -->

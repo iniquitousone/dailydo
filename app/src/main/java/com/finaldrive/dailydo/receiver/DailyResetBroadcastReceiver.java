@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.finaldrive.dailydo.MainActivity;
 import com.finaldrive.dailydo.R;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
