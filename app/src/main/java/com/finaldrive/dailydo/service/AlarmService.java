@@ -25,8 +25,11 @@ import java.util.Calendar;
 public class AlarmService extends IntentService {
 
     public static final String ACTION_SCHEDULE_NEXT_ALARM = "com.finaldrive.dailydo.service.action.SCHEDULE_NEXT_ALARM";
+    public static final String ACTION_SCHEDULE_SNOOZE = "com.finaldrive.dailydo.service.action.SCHEDULE_SNOOZE";
     public static final String ACTION_SCHEDULE_NEXT_RESET = "com.finaldrive.dailydo.service.action.SCHEDULE_NEXT_RESET";
     public static final String EXTRA_ALARM_ID = "com.finaldrive.dailydo.service.extra.ALARM_ID";
+    public static final String EXTRA_SNOOZE_DURATION = "com.finaldrive.dailydo.service.extra.SNOOZE_DURATION";
+    private static final int ID_SNOOZE = 999;
     private static final String CLASS_NAME = "AlarmService";
     private static Alarm nextAlarm;
     private AlarmManager alarmManager;
@@ -45,6 +48,19 @@ public class AlarmService extends IntentService {
     public static void scheduleNextAlarm(Context context) {
         final Intent intent = new Intent(context, AlarmService.class);
         intent.setAction(ACTION_SCHEDULE_NEXT_ALARM);
+        context.startService(intent);
+    }
+
+    /**
+     * Entry point to scheduling an Alarm snooze based on current time.
+     *
+     * @param context
+     * @param minutes
+     */
+    public static void scheduleSnooze(Context context, int minutes) {
+        final Intent intent = new Intent(context, AlarmService.class);
+        intent.setAction(ACTION_SCHEDULE_SNOOZE);
+        intent.putExtra(EXTRA_SNOOZE_DURATION, minutes);
         context.startService(intent);
     }
 
@@ -76,12 +92,13 @@ public class AlarmService extends IntentService {
         if (intent == null) {
             return;
         }
-
         final String action = intent.getAction();
         if (ACTION_SCHEDULE_NEXT_ALARM.equals(action)) {
             scheduleNextAlarm();
         } else if (ACTION_SCHEDULE_NEXT_RESET.equals(action)) {
             scheduleNextReset();
+        } else if (ACTION_SCHEDULE_SNOOZE.equals(action)) {
+            scheduleSnooze(intent.getIntExtra(EXTRA_SNOOZE_DURATION, 5));
         }
     }
 
@@ -123,6 +140,20 @@ public class AlarmService extends IntentService {
         } else {
             Log.d(CLASS_NAME, "No upcoming Alarm(s) found to schedule.");
         }
+    }
+
+    /**
+     * Schedules a snooze for the provided number of minutes.
+     *
+     * @param minutes
+     */
+    private void scheduleSnooze(int minutes) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, minutes);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                createAlarmIntent(this, ID_SNOOZE));
+        Log.d(CLASS_NAME, String.format("Scheduled snooze for Minutes=%d", minutes));
     }
 
     /**

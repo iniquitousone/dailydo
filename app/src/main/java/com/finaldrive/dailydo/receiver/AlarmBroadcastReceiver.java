@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.finaldrive.dailydo.MainActivity;
 import com.finaldrive.dailydo.R;
+import com.finaldrive.dailydo.SnoozePickerActivity;
 import com.finaldrive.dailydo.TaskDetailsActivity;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.service.AlarmService;
@@ -65,30 +66,52 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Creates a PendingIntent for the Snooze action click.
+     * This will send the user to the {@link SnoozePickerActivity} to pick a snooze duration.
+     *
+     * @param context
+     * @return pendingIntent to direct to SnoozePickerActivity
+     */
+    private static PendingIntent createSnoozeIntent(Context context) {
+        final Intent intent = new Intent(context, SnoozePickerActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(CLASS_NAME, String.format("Received AlarmManager Intent=%s", intent.toString()));
         final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         final DailyDoDatabaseHelper dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(context);
         final List<Task> taskList = dailyDoDatabaseHelper.getUncheckedTaskEntries();
-        final Notification.Builder notificationBuilder = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_logo)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true)
-                .setOngoing(true)
-                .addAction(R.drawable.ic_action_cancel,
-                        context.getString(R.string.action_dismiss),
-                        createActionIntent(context, ACTION_DISMISS));
         if (taskList != null && !taskList.isEmpty()) {
             final Task task = taskList.get(0);
-            notificationBuilder
-                    .setContentTitle(String.format("%d remaining DOs today", taskList.size()))
+            final Notification.Builder notificationBuilder = new Notification.Builder(context)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(false)
+                    .setOngoing(true)
+                    .addAction(R.drawable.ic_action_alarms,
+                            context.getString(R.string.action_snooze),
+                            createSnoozeIntent(context))
+                    .addAction(R.drawable.ic_action_cancel,
+                            context.getString(R.string.action_dismiss),
+                            createActionIntent(context, ACTION_DISMISS))
+                    .setContentTitle(String.format("%d remaining DO(s) today", taskList.size()))
                     .setContentText(String.format("Ongoing: %s", task.getTitle()))
                     .setContentIntent(createNotificationClickIntent(context, task));
             if (taskList.size() > 1) {
                 String bigTextMessage = "";
-                for (int i = 0; i < taskList.size(); i++) {
+                int i = 0;
+                do {
                     bigTextMessage += taskList.get(i).getTitle() + "\n";
+                    i++;
+                } while (i < taskList.size() && i < 5);
+                if (taskList.size() > 5) {
+                    bigTextMessage += "...";
                 }
                 notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessage.trim()));
             }

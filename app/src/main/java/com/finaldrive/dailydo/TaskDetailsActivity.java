@@ -122,13 +122,13 @@ public class TaskDetailsActivity extends Activity {
                         .setTitle("Confirm deletion")
                         .setMessage("Do you want to delete this DO?")
                         .setCancelable(true)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 return;
                             }
                         })
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (taskId == TASK_CREATE_ID) {
