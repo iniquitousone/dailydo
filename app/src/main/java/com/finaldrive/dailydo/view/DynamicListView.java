@@ -85,7 +85,7 @@ public class DynamicListView extends ListView {
             return (int) (start + fraction * (end - start));
         }
     };
-    private final int SMOOTH_SCROLL_AMOUNT_AT_EDGE = 15;
+    private final int SMOOTH_SCROLL_AMOUNT_AT_EDGE = 30;
     private final int MOVE_DURATION = 150;
     private final int LINE_THICKNESS = 2;
     private final int INVALID_ID = -1;
@@ -127,6 +127,7 @@ public class DynamicListView extends ListView {
                 }
             };
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
+    private DisplayMetrics displayMetrics;
     private Rect mHoverCellCurrentBounds;
     private Rect mHoverCellOriginalBounds;
     private boolean mIsWaitingForScrollFinish = false;
@@ -236,8 +237,8 @@ public class DynamicListView extends ListView {
         // Removing the use of the long click listener as it is not desired.
         // setOnItemLongClickListener(mOnItemLongClickListener);
         setOnScrollListener(mScrollListener);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        mSmoothScrollAmountAtEdge = (int) (SMOOTH_SCROLL_AMOUNT_AT_EDGE / metrics.density);
+        displayMetrics = context.getResources().getDisplayMetrics();
+        mSmoothScrollAmountAtEdge = (int) (SMOOTH_SCROLL_AMOUNT_AT_EDGE / displayMetrics.density);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(context);
     }
 
@@ -378,7 +379,7 @@ public class DynamicListView extends ListView {
                 mDownX = (int) event.getX();
                 mDownY = (int) event.getY();
                 mActivePointerId = event.getPointerId(0);
-                if ((mDownX >= 1 && mDownX <= 50) && !mCellIsMobile) {
+                if ((mDownX >= 0 && mDownX <= 50) && !mCellIsMobile) {
                     mTotalOffset = 0;
                     int position = pointToPosition(mDownX, mDownY);
                     if (position == -1) {
@@ -400,6 +401,10 @@ public class DynamicListView extends ListView {
             case MotionEvent.ACTION_MOVE:
                 if (mActivePointerId == INVALID_POINTER_ID) {
                     break;
+                }
+                // If the move event is outside of the listview height, then it is no longer valid.
+                if (event.getY() > this.getHeight() || event.getY() < 0) {
+                    return false;
                 }
 
                 int pointerIndex = event.findPointerIndex(mActivePointerId);

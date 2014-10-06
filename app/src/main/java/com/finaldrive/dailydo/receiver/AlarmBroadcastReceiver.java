@@ -75,9 +75,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
      */
     private static PendingIntent createSnoozeIntent(Context context) {
         final Intent intent = new Intent(context, SnoozePickerActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
