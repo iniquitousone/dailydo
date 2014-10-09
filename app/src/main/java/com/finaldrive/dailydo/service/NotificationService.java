@@ -36,6 +36,7 @@ public class NotificationService extends IntentService {
     private static final String ACTION_UPDATE_NOTIFICATION = "com.finaldrive.dailydo.service.action.UPDATE_NOTIFICATION";
     private static final String ACTION_CANCEL_NOTIFICATION = "com.finaldrive.dailydo.service.action.CANCEL_NOTIFICATION";
     private static final String EXTRA_TASK_ID = "com.finaldrive.dailydo.service.extra.TASK_ID";
+    private static final String EXTRA_TASK_TITLE = "com.finaldrive.dailydo.service.extra.TASK_TITLE";
     private static final String EXTRA_TASK_IS_CHECKED = "com.finaldrive.dailydo.service.extra.IS_CHECKED";
     private static final int INVALID_ID = -99;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
@@ -47,14 +48,14 @@ public class NotificationService extends IntentService {
     }
 
     private static void setIsPresent(Context context) {
-        setStatus(context, true);
+        setNotificationStatus(context, true);
     }
 
     private static void setNotPresent(Context context) {
-        setStatus(context, false);
+        setNotificationStatus(context, false);
     }
 
-    private static void setStatus(Context context, boolean status) {
+    private static void setNotificationStatus(Context context, boolean status) {
         final SharedPreferences sharedPreferences = context.getSharedPreferences(
                 context.getString(R.string.pref_daily_do),
                 Context.MODE_PRIVATE);
@@ -138,36 +139,46 @@ public class NotificationService extends IntentService {
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Notification createNotification(Context context, List<Task> taskList, boolean isAlertOnce) {
-        final Task task = taskList.get(0);
-        final Notification.Builder notificationBuilder = new Notification.Builder(context)
+    private void handleNotification(boolean isAlertOnce) {
+        int remaining = 0;
+        Task ongoingTask = null;
+        String bigTextMessage = "";
+        for (int i = 0; i < taskList.size(); i++) {
+            final Task task = taskList.get(i);
+            if (task == null) {
+                continue;
+            }
+            remaining++;
+            if (ongoingTask == null) {
+                ongoingTask = task;
+            }
+            if (remaining <= 5) {
+                bigTextMessage += task.getTitle() + "\n";
+            }
+        }
+        if (remaining > 5) {
+            bigTextMessage += "...";
+        }
+
+        final Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setOnlyAlertOnce(isAlertOnce)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .addAction(R.drawable.ic_action_alarms,
-                        context.getString(R.string.action_snooze),
-                        createSnoozeIntent(context))
+                        getString(R.string.action_snooze),
+                        createSnoozeIntent(this))
                 .addAction(R.drawable.ic_action_cancel,
-                        context.getString(R.string.action_dismiss),
-                        createActionIntent(context, ACTION_DISMISS))
-                .setContentTitle(String.format("%d remaining DO(s) today", taskList.size()))
-                .setContentText(String.format("Ongoing: %s", task.getTitle()))
-                .setContentIntent(createNotificationClickIntent(context, task));
-        if (taskList.size() > 1) {
-            String bigTextMessage = "";
-            int i = 0;
-            do {
-                bigTextMessage += taskList.get(i).getTitle() + "\n";
-                i++;
-            } while (i < taskList.size() && i < 5);
-            if (taskList.size() > 5) {
-                bigTextMessage += "...";
-            }
+                        getString(R.string.action_dismiss),
+                        createActionIntent(this, ACTION_DISMISS))
+                .setContentTitle(String.format("%d remaining DO(s) today", remaining))
+                .setContentText(String.format("Ongoing: %s", ongoingTask.getTitle()))
+                .setContentIntent(createNotificationClickIntent(this, ongoingTask));
+        if (remaining > 1) {
             notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessage.trim()));
         }
-        return notificationBuilder.build();
+        notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notificationBuilder.build());
     }
 
     @Override
@@ -175,7 +186,7 @@ public class NotificationService extends IntentService {
         super.onCreate();
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        taskList = dailyDoDatabaseHelper.getUncheckedTaskEntries();
+        taskList = dailyDoDatabaseHelper.getTaskEntriesCheckedAsNull();
     }
 
     @Override
@@ -185,8 +196,8 @@ public class NotificationService extends IntentService {
             if (ACTION_CREATE_NOTIFICATION.equals(action)) {
                 createNotification();
             } else if (ACTION_UPDATE_NOTIFICATION.equals(action)) {
-                int taskId = intent.getIntExtra(EXTRA_TASK_ID, INVALID_ID);
-                boolean isChecked = intent.getBooleanExtra(EXTRA_TASK_IS_CHECKED, false);
+                final int taskId = intent.getIntExtra(EXTRA_TASK_ID, INVALID_ID);
+                final boolean isChecked = intent.getBooleanExtra(EXTRA_TASK_IS_CHECKED, false);
                 updateNotification(taskId, isChecked);
             } else if (ACTION_CANCEL_NOTIFICATION.equals(action)) {
                 cancelNotification();
@@ -195,9 +206,8 @@ public class NotificationService extends IntentService {
     }
 
     private void createNotification() {
-        if (taskList != null && !taskList.isEmpty()) {
-            final Notification notification = createNotification(this, taskList, false);
-            notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notification);
+        if (!taskList.isEmpty()) {
+            handleNotification(false);
             setIsPresent(this);
         }
     }
@@ -209,36 +219,15 @@ public class NotificationService extends IntentService {
             if (taskId == INVALID_ID) {
                 return;
             }
+            final Task updatedTask = dailyDoDatabaseHelper.getTaskEntry(taskId);
             if (isChecked) {
                 // If checked, that means the Task is done, so remove it from the notification.
-                for (int i = 0; i < taskList.size(); i++) {
-                    final Task task = taskList.get(i);
-                    if (task.getId() == taskId) {
-                        taskList.remove(i);
-                        break;
-                    }
-                }
+                taskList.set(updatedTask.getRowNumber(), null);
             } else {
                 // Has been unchecked, that means add it back into the notification.
-                final Task updatedTask = dailyDoDatabaseHelper.getTaskEntry(taskId);
-                for (int i = 0; i < taskList.size(); i++) {
-                    final Task currentTask = taskList.get(i);
-                    if (updatedTask.getRowNumber() == currentTask.getRowNumber()) {
-                        // If onCreate() managed to be called already, then this prevents double entries.
-                        break;
-                    } else if (updatedTask.getRowNumber() < currentTask.getRowNumber()) {
-                        taskList.add(i, updatedTask);
-                        break;
-                    }
-                }
+                taskList.set(updatedTask.getRowNumber(), updatedTask);
             }
-            if (taskList.size() == 0) {
-                cancelNotification();
-            } else {
-                Log.d(CLASS_NAME, String.format("Updating notification with TaskList=%s", taskList.toString()));
-                final Notification notification = createNotification(this, taskList, true);
-                notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notification);
-            }
+            handleNotification(true);
         }
     }
 

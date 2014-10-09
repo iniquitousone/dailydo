@@ -342,6 +342,42 @@ public class DailyDoDatabaseHelper extends SQLiteOpenHelper {
         return taskList;
     }
 
+    /**
+     * Gets a List of Task entries, however, all checked items will be null.
+     *
+     * @return list of Task entries
+     */
+    public List<Task> getTaskEntriesCheckedAsNull() {
+        final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        final Cursor cursor = sqLiteDatabase.query(
+                TaskEntry.TABLE,
+                null, // PROJECTION. Get all columns in the table.
+                null, // WHERE clause.
+                null, // WHERE clause params.
+                null, // GROUP. Not grouping by rows.
+                null, // FILTER. Not filtering by row groups.
+                TaskEntry.COLUMN_ROW_NUMBER + " ASC" // SORT.
+        );
+        final List<Task> taskList = new ArrayList<Task>(cursor.getCount());
+        if (cursor.getCount() > 0) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                if (cursor.moveToPosition(i)) {
+                    final Task task = getTaskFromCursor(cursor);
+                    if (task.getIsChecked() == 0) {
+                        taskList.add(getTaskFromCursor(cursor));
+                    } else {
+                        taskList.add(null);
+                    }
+                } else {
+                    Log.w(CLASS_NAME, String.format("Could not move Cursor to Position=%d", i));
+                }
+            }
+        }
+        cursor.close();
+
+        return taskList;
+    }
+
     public List<Task> getUncheckedTaskEntries() {
         final SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         final Cursor cursor = sqLiteDatabase.query(
