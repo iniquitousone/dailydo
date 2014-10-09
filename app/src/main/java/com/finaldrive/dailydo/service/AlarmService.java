@@ -75,6 +75,30 @@ public class AlarmService extends IntentService {
         context.startService(intent);
     }
 
+    /**
+     * Creates a unique PendingIntent (uniqueness determined by {@link Intent#filterEquals}) for scheduling an alarm.
+     *
+     * @param context
+     * @param alarmId
+     * @return pendingIntent
+     */
+    private static PendingIntent createAlarmIntent(Context context, int alarmId) {
+        final Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        intent.putExtra(EXTRA_ALARM_ID, alarmId);
+        return PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    /**
+     * Creates non-unique PendingIntent for scheduling the next daily reset.
+     *
+     * @param context
+     * @return pendingIntent
+     */
+    private static PendingIntent createResetIntent(Context context) {
+        final Intent intent = new Intent(context, DailyResetBroadcastReceiver.class);
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -181,31 +205,5 @@ public class AlarmService extends IntentService {
         } else {
             Log.d(CLASS_NAME, String.format("Resets cancelled."));
         }
-    }
-
-    /**
-     * Creates a unique PendingIntent (uniqueness determined by {@link Intent#filterEquals}) for scheduling an alarm.
-     *
-     * @param context
-     * @param alarmId
-     * @return pendingIntent
-     */
-    private PendingIntent createAlarmIntent(Context context, int alarmId) {
-        final Intent intent = new Intent(context.getApplicationContext(), AlarmBroadcastReceiver.class);
-        intent.putExtra(EXTRA_ALARM_ID, alarmId);
-        return PendingIntent.getBroadcast(context.getApplicationContext(),
-                alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    /**
-     * Creates non-unique PendingIntent for scheduling the next daily reset.
-     *
-     * @param context
-     * @return pendingIntent
-     */
-    private PendingIntent createResetIntent(Context context) {
-        final Intent intent = new Intent(context.getApplicationContext(), DailyResetBroadcastReceiver.class);
-        return PendingIntent.getBroadcast(context.getApplicationContext(),
-                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

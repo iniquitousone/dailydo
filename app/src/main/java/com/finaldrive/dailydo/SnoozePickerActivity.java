@@ -6,11 +6,10 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.finaldrive.dailydo.receiver.NotificationActionBroadcastReceiver;
 import com.finaldrive.dailydo.service.AlarmService;
+import com.finaldrive.dailydo.service.NotificationService;
 
 /**
  * Wrapper Activity that houses the Snooze picker dialog.
@@ -23,7 +22,6 @@ public class SnoozePickerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setIcon(R.drawable.ic_action_alarms)
                 .setTitle("Snooze duration:")
@@ -31,13 +29,13 @@ public class SnoozePickerActivity extends Activity {
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        finish();
+                        finishActivity();
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        finishActivity();
                     }
                 })
                 .setItems(MINUTE_VALUES, new DialogInterface.OnClickListener() {
@@ -45,14 +43,19 @@ public class SnoozePickerActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         final int minutes = MINUTE_ARRAY[which];
                         AlarmService.scheduleSnooze(getApplicationContext(), minutes);
-                        notificationManager.cancel(NotificationActionBroadcastReceiver.ID_DAILY_DO_NOTIFICATION);
+                        NotificationService.startNotificationCancel(getApplicationContext());
                         Toast.makeText(getApplicationContext(),
                                 String.format("Snoozing for %d minutes", minutes),
                                 Toast.LENGTH_SHORT).show();
-                        finish();
+                        finishActivity();
                     }
                 })
                 .create();
         alertDialog.show();
+    }
+
+    private void finishActivity() {
+        finish();
+        overridePendingTransition(0, 0);
     }
 }

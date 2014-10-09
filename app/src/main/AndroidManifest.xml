@@ -39,7 +39,7 @@
             android:label="@string/title_activity_snooze_picker"
             android:launchMode="singleInstance"
             android:taskAffinity=".SnoozePickerActivity"
-            android:theme="@android:style/Theme.NoDisplay"></activity>
+            android:theme="@android:style/Theme.NoDisplay" />
 
         <service
             android:name=".service.AlarmService"
@@ -65,6 +65,10 @@
             android:name=".receiver.NotificationActionBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".service.NotificationService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

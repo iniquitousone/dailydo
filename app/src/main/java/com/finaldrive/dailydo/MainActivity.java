@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import com.finaldrive.dailydo.view.DynamicListView;
 
@@ -113,10 +114,12 @@ public class MainActivity extends Activity {
         final boolean isDailyResetEnabled = sharedPreferences.getBoolean(getString(R.string.pref_daily_reset_enabled), true);
         final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);
         final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
+        final boolean isNotified = sharedPreferences.getBoolean(getString(R.string.pref_notified), false);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.pref_daily_reset_enabled), isDailyResetEnabled);
         editor.putInt(getString(R.string.pref_daily_reset_hour), hourOfReset);
         editor.putInt(getString(R.string.pref_daily_reset_minute), minuteOfReset);
+        editor.putBoolean(getString(R.string.pref_notified), isNotified);
         editor.commit();
     }
 
@@ -169,6 +172,8 @@ public class MainActivity extends Activity {
                 }
                 taskArrayAdapter.notifyDataSetChanged();
                 dynamicListView.smoothScrollToPosition(position);
+                final boolean isChecked = task.getIsChecked() == 1 ? true : false;
+                NotificationService.startNotificationUpdate(this, task.getId(), isChecked);
                 break;
 
             case TaskDetailsActivity.RESULT_CODE_DELETE:
@@ -359,6 +364,7 @@ public class MainActivity extends Activity {
                     dailyDoDatabaseHelper.updateTaskEntry(task);
                     // TODO: Consider using the UI thread to only update this entry.
                     notifyDataSetChanged();
+                    NotificationService.startNotificationUpdate(getContext(), task.getId(), checkBox.isChecked());
                 }
             });
 
