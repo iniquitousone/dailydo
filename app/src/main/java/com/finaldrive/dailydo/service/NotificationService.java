@@ -156,7 +156,10 @@ public class NotificationService extends IntentService {
                 bigTextMessage += task.getTitle() + "\n";
             }
         }
-        if (remaining > 5) {
+        if (remaining == 0) {
+            cancelNotification();
+            return;
+        } else if (remaining > 5) {
             bigTextMessage += "...";
         }
 
