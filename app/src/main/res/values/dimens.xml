@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="alarm_entry_normal_height">96dp</dimen>
+    <dimen name="alarm_entry_normal_height">72dp</dimen>
     <dimen name="task_horizontal_margin">8dp</dimen>
     <dimen name="task_entry_normal_height">48dp</dimen>
     <dimen name="task_details_indent">56dp</dimen>

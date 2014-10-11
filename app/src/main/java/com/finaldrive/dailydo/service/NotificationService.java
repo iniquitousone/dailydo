@@ -36,7 +36,6 @@ public class NotificationService extends IntentService {
     private static final String ACTION_UPDATE_NOTIFICATION = "com.finaldrive.dailydo.service.action.UPDATE_NOTIFICATION";
     private static final String ACTION_CANCEL_NOTIFICATION = "com.finaldrive.dailydo.service.action.CANCEL_NOTIFICATION";
     private static final String EXTRA_TASK_ID = "com.finaldrive.dailydo.service.extra.TASK_ID";
-    private static final String EXTRA_TASK_TITLE = "com.finaldrive.dailydo.service.extra.TASK_TITLE";
     private static final String EXTRA_TASK_IS_CHECKED = "com.finaldrive.dailydo.service.extra.IS_CHECKED";
     private static final int INVALID_ID = -99;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
@@ -139,6 +138,11 @@ public class NotificationService extends IntentService {
         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Handles creating and either cancelling or notifying the notification.
+     *
+     * @param isAlertOnce
+     */
     private void handleNotification(boolean isAlertOnce) {
         int remaining = 0;
         Task ongoingTask = null;

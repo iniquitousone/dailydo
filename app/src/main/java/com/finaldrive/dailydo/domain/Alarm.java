@@ -18,7 +18,10 @@ public class Alarm {
     public static final byte FRIDAY = 0x20;     // 00100000
     public static final byte WEEKDAYS = MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY;
     public static final byte SATURDAY = 0x40;   // 01000000
+    public static final byte WEEKEND = SUNDAY | SATURDAY;
+    public static final byte EVERYDAY = WEEKDAYS | WEEKEND;
     private static final Map<Integer, Byte> CALENDAR_DAY_TO_BYTE_DAY_MAP;
+    private static final Map<Integer, String> CALENDARY_DAY_TO_STRING_MAP;
 
     static {
         CALENDAR_DAY_TO_BYTE_DAY_MAP = new HashMap<Integer, Byte>();
@@ -29,6 +32,14 @@ public class Alarm {
         CALENDAR_DAY_TO_BYTE_DAY_MAP.put(Calendar.THURSDAY, THURSDAY);
         CALENDAR_DAY_TO_BYTE_DAY_MAP.put(Calendar.FRIDAY, FRIDAY);
         CALENDAR_DAY_TO_BYTE_DAY_MAP.put(Calendar.SATURDAY, SATURDAY);
+        CALENDARY_DAY_TO_STRING_MAP = new HashMap<Integer, String>();
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.SUNDAY, "SUN");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.MONDAY, "MON");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.TUESDAY, "TUE");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.WEDNESDAY, "WED");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.THURSDAY, "THU");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.FRIDAY, "FRI");
+        CALENDARY_DAY_TO_STRING_MAP.put(Calendar.SATURDAY, "SAT");
     }
 
     /**
@@ -68,6 +79,10 @@ public class Alarm {
      */
     public static byte getByteDayFromCalendarDay(int calendarDay) {
         return CALENDAR_DAY_TO_BYTE_DAY_MAP.get(calendarDay);
+    }
+
+    public static String getStringDayFromCalendarDay(int calendarDay) {
+        return CALENDARY_DAY_TO_STRING_MAP.get(calendarDay);
     }
 
     public boolean isCalendarDayEnabled(int calendarDay) {

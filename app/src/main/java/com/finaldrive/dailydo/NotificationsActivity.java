@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.finaldrive.dailydo.domain.Alarm;
 import com.finaldrive.dailydo.fragment.AlarmTimePickerFragment;
@@ -29,10 +29,11 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Activity to handle the scheduling of Alarm(s) and the daily reset time.
+ * Activity to handle the scheduling of Alarm(s).
  */
 public class NotificationsActivity extends Activity {
 
+    private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private List<Alarm> alarmList;
     private AlarmArrayAdapter alarmArrayAdapter;
@@ -125,9 +126,45 @@ public class NotificationsActivity extends Activity {
                 convertView = layoutInflater.inflate(R.layout.alarm_entry, parent, false);
             }
             final Alarm alarm = getItem(position);
-            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            final boolean isEnabled = alarm.getIsEnabled() == 1 ? true : false;
+            final Switch switchView = (Switch) convertView.findViewById(R.id.alarm_entry_switch);
+            final TextView timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
+            final ImageButton trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
+            final TextView daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);
+            // Setup the views.
+            if (isEnabled) {
+                convertView.setAlpha(1.0f);
+            } else {
+                convertView.setAlpha(0.67f);
+            }
+            switchView.setChecked(isEnabled);
+            timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
+            daysView.setText(getDays(alarm));
+            // Setup the listeners.
+            switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    alarm.setIsEnabled(isChecked ? 1 : 0);
+                    dailyDoDatabaseHelper.updateAlarmEntry(alarm);
+                    notifyDataSetChanged();
+                    AlarmService.scheduleNextAlarm(getContext());
+                }
+            });
+            timeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Bundle bundle = new Bundle();
+                    bundle.putInt(AlarmTimePickerFragment.POSITION, position);
+                    bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
+                    bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
+                    final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
+                    alarmTimePickerFragment.setArguments(bundle);
+                    alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
+                }
+            });
+            trashButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                             .setIcon(R.drawable.ic_action_about)
                             .setTitle("Confirm deletion")
@@ -151,71 +188,85 @@ public class NotificationsActivity extends Activity {
                             })
                             .create();
                     alertDialog.show();
-                    return false;
                 }
             });
-            final ToggleButton sundayButton = (ToggleButton) convertView.findViewById(R.id.sunday_toggle);
-            setupDayToggleButton(sundayButton, alarm, Calendar.SUNDAY);
-            final ToggleButton mondayButton = (ToggleButton) convertView.findViewById(R.id.monday_toggle);
-            setupDayToggleButton(mondayButton, alarm, Calendar.MONDAY);
-            final ToggleButton tuesdayButton = (ToggleButton) convertView.findViewById(R.id.tuesday_toggle);
-            setupDayToggleButton(tuesdayButton, alarm, Calendar.TUESDAY);
-            final ToggleButton wednesdayButton = (ToggleButton) convertView.findViewById(R.id.wednesday_toggle);
-            setupDayToggleButton(wednesdayButton, alarm, Calendar.WEDNESDAY);
-            final ToggleButton thursdayButton = (ToggleButton) convertView.findViewById(R.id.thursday_toggle);
-            setupDayToggleButton(thursdayButton, alarm, Calendar.THURSDAY);
-            final ToggleButton fridayButton = (ToggleButton) convertView.findViewById(R.id.friday_toggle);
-            setupDayToggleButton(fridayButton, alarm, Calendar.FRIDAY);
-            final ToggleButton saturdayButton = (ToggleButton) convertView.findViewById(R.id.saturday_toggle);
-            setupDayToggleButton(saturdayButton, alarm, Calendar.SATURDAY);
-            final TextView timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
-            timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
-            timeView.setOnClickListener(new View.OnClickListener() {
+            daysView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Bundle bundle = new Bundle();
-                    bundle.putInt(AlarmTimePickerFragment.POSITION, position);
-                    bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
-                    bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
-                    final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
-                    alarmTimePickerFragment.setArguments(bundle);
-                    alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
-                }
-            });
-            final Switch switchView = (Switch) convertView.findViewById(R.id.alarm_entry_switch);
-            switchView.setChecked(alarm.getIsEnabled() == 1 ? true : false);
-            switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    alarm.setIsEnabled(isChecked ? 1 : 0);
-                    dailyDoDatabaseHelper.updateAlarmEntry(alarm);
-                    AlarmService.scheduleNextAlarm(getContext());
+                    final boolean[] booleanArray = new boolean[7];
+                    for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
+                        booleanArray[i - 1] = alarm.isCalendarDayEnabled(i);
+                    }
+                    final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
+                            AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                            .setTitle("Pick repeating days")
+                            .setCancelable(true)
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    return;
+                                }
+                            })
+                            .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            })
+                            .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
+                                        if (booleanArray[i - 1]) {
+                                            alarm.enableCalendarDay(i);
+                                        } else {
+                                            alarm.disableCalendarDay(i);
+                                        }
+                                    }
+                                    dailyDoDatabaseHelper.updateAlarmEntry(alarm);
+                                    notifyDataSetChanged();
+                                    AlarmService.scheduleNextAlarm(getContext());
+                                }
+                            })
+                            .setMultiChoiceItems(DAYS_OF_WEEK, booleanArray, new DialogInterface.OnMultiChoiceClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                    booleanArray[which] = isChecked;
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
                 }
             });
             return convertView;
         }
 
-        /**
-         * Setup the provided ToggleButton state and View.
-         *
-         * @param toggleButton
-         * @param alarm
-         * @param calendarDay
-         */
-        private void setupDayToggleButton(final ToggleButton toggleButton, final Alarm alarm, final int calendarDay) {
-            toggleButton.setChecked(alarm.isCalendarDayEnabled(calendarDay));
-            toggleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (alarm.isCalendarDayEnabled(calendarDay)) {
-                        alarm.disableCalendarDay(calendarDay);
-                    } else {
-                        alarm.enableCalendarDay(calendarDay);
+        private String getDays(Alarm alarm) {
+            int days = alarm.getDaysRepeating();
+            String daysOfWeek = "";
+
+            switch (days) {
+                case Alarm.NONE:
+                    daysOfWeek = "NONE";
+                    break;
+                case Alarm.WEEKEND:
+                    daysOfWeek = "WEEKEND";
+                    break;
+                case Alarm.WEEKDAYS:
+                    daysOfWeek = "WEEKDAYS";
+                    break;
+                case Alarm.EVERYDAY:
+                    daysOfWeek = "EVERYDAY";
+                    break;
+                default:
+                    for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++) {
+                        if (alarm.isCalendarDayEnabled(i)) {
+                            daysOfWeek += String.format("%s  ", Alarm.getStringDayFromCalendarDay(i));
+                        }
                     }
-                    dailyDoDatabaseHelper.updateAlarmEntry(alarm);
-                    AlarmService.scheduleNextAlarm(getContext());
-                }
-            });
+                    break;
+            }
+            return daysOfWeek;
         }
     }
 }
