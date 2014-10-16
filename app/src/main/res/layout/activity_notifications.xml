@@ -22,7 +22,7 @@
         android:gravity="center"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:text="Schedule a notification with the plus button above\n\nNotifications will behave like alarms, but notify you of the upcoming DO"
+        android:text="Schedule a notification with the plus button above\n\nNotifications behave just like alarms but will notify you about upcoming DOs"
         android:textColor="@color/silver"
         android:visibility="gone" />
 

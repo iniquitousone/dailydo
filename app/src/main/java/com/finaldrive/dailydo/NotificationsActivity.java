@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,13 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.finaldrive.dailydo.domain.Alarm;
 import com.finaldrive.dailydo.fragment.AlarmTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
@@ -43,13 +45,21 @@ public class NotificationsActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         setResult(Activity.RESULT_CANCELED);
+        finishActivity();
+    }
+
+    private void finishActivity() {
         finish();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBarStyleHelper.setupActionBar(this, true);
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            getActionBar().setIcon(R.drawable.ic_action_back);
+            getActionBar().setTitle(R.string.title_activity_notifications);
+        }
         setContentView(R.layout.activity_notifications);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
@@ -85,8 +95,7 @@ public class NotificationsActivity extends Activity {
                 return false;
 
             case android.R.id.home:
-                finish();
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                finishActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -127,7 +136,7 @@ public class NotificationsActivity extends Activity {
             }
             final Alarm alarm = getItem(position);
             final boolean isEnabled = alarm.getIsEnabled() == 1 ? true : false;
-            final Switch switchView = (Switch) convertView.findViewById(R.id.alarm_entry_switch);
+            final ToggleButton toggleButton = (ToggleButton) convertView.findViewById(R.id.alarm_entry_toggle);
             final TextView timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
             final ImageButton trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
             final TextView daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);
@@ -135,13 +144,13 @@ public class NotificationsActivity extends Activity {
             if (isEnabled) {
                 convertView.setAlpha(1.0f);
             } else {
-                convertView.setAlpha(0.67f);
+                convertView.setAlpha(0.5f);
             }
-            switchView.setChecked(isEnabled);
+            toggleButton.setChecked(isEnabled);
             timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
             daysView.setText(getDays(alarm));
             // Setup the listeners.
-            switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                     alarm.setIsEnabled(isChecked ? 1 : 0);

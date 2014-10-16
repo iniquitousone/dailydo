@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import com.finaldrive.dailydo.view.DynamicListView;
@@ -52,28 +53,6 @@ public class MainActivity extends Activity {
             taskArrayAdapter.notifyDataSetChanged();
         }
     };
-    // TODO: Decide if bulk deletion is a supported feature.
-    private ActionMode.Callback callback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private List<Task> taskList;
     private TaskArrayAdapter taskArrayAdapter;
@@ -88,6 +67,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call super constructor to establish default Cursor.
         super.onCreate(savedInstanceState);
+        ActionBarStyleHelper.setupActionBar(this, true);
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            getActionBar().setIcon(R.drawable.ic_logo_invert);
+            getActionBar().setTitle(R.string.app_name);
+        }
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
         // Initialize the database helper and fetch the List of Task(s) from the database.
@@ -248,7 +232,6 @@ public class MainActivity extends Activity {
 
             case R.id.action_notifications:
                 startActivity(new Intent(this, NotificationsActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
 
             case R.id.action_add_task:

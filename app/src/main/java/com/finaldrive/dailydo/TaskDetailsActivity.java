@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.finaldrive.dailydo.domain.Task;
+import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
 /**
@@ -64,6 +66,7 @@ public class TaskDetailsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBarStyleHelper.setupActionBar(this, false);
         setContentView(R.layout.activity_task_details);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         // Fetch the Intent extra. If the extra is not found, then this is a create Task event.
@@ -74,7 +77,11 @@ public class TaskDetailsActivity extends Activity {
         final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
         // Only load the views with the appropriate text if this is NOT a new Task.
         if (taskId != TASK_CREATE_ID) {
-            getActionBar().setIcon(R.drawable.ic_action_back_dark);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back_dark);
+            } else {
+                getActionBar().setIcon(R.drawable.ic_action_back_dark);
+            }
             final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
             final EditText titleView = (EditText) findViewById(R.id.details_title);
             final EditText noteView = (EditText) findViewById(R.id.details_note);
@@ -82,7 +89,11 @@ public class TaskDetailsActivity extends Activity {
             noteView.setText(task.getNote());
             checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
         } else {
-            getActionBar().setIcon(R.drawable.ic_action_accept);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_accept);
+            } else {
+                getActionBar().setIcon(R.drawable.ic_action_accept);
+            }
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
         // This is a hack to get a larger top zone for the CheckBox.

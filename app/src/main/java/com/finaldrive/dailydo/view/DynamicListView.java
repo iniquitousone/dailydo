@@ -41,6 +41,7 @@ import android.widget.ListView;
 
 import com.finaldrive.dailydo.R;
 import com.finaldrive.dailydo.domain.Task;
+import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
 import java.util.List;
@@ -537,8 +538,10 @@ public class DynamicListView extends ListView {
         list.get(indexTwo).setRowNumber(indexOne);
         list.set(indexOne, list.get(indexTwo));
         list.set(indexTwo, temp);
-        dailyDoDatabaseHelper.updateTaskEntry(list.get(indexOne));
-        dailyDoDatabaseHelper.updateTaskEntry(list.get(indexTwo));
+        final Task indexOneTask = dailyDoDatabaseHelper.updateTaskEntry(list.get(indexOne));
+        final Task indexTwoTask = dailyDoDatabaseHelper.updateTaskEntry(list.get(indexTwo));
+        NotificationService.startNotificationUpdate(getContext(), indexOneTask.getId(), indexOneTask.getIsChecked() == 1);
+        NotificationService.startNotificationUpdate(getContext(), indexTwoTask.getId(), indexTwoTask.getIsChecked() == 1);
     }
 
     /**

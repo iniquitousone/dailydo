@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:minWidth="72dp"
+        android:minWidth="@dimen/content_left_indent"
         android:orientation="horizontal"
         android:paddingTop="6dp">
 
@@ -24,7 +24,7 @@
             android:id="@+id/task_entry_grabber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/task_horizontal_margin"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_dragger" />
 
@@ -95,6 +95,7 @@
         android:id="@+id/task_entry_checkbox_touch"
         android:layout_width="32dp"
         android:layout_height="48dp"
+        android:layout_marginRight="12dp"
         android:layout_toLeftOf="@id/task_entry_content"
         android:clickable="true" />
 

@@ -15,17 +15,17 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:minWidth="72dp">
+        android:minWidth="@dimen/content_left_indent">
 
-        <Switch
-            android:id="@+id/alarm_entry_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:switchMinWidth="0dp"
+        <ToggleButton
+            android:id="@+id/alarm_entry_toggle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/selector_toggle"
+            android:textColor="@color/white"
             android:textOff=""
-            android:textOn=""
-            android:thumb="@drawable/selector_switch_thumb"
-            android:track="@drawable/selector_switch_track" />
+            android:textOn="ON"
+            android:textSize="8dp" />
 
     </LinearLayout>
 
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/alarm_entry_time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
@@ -50,14 +50,22 @@
             android:textColor="@color/gray"
             android:textSize="36sp" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
         <ImageButton
             android:id="@+id/alarm_entry_discard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:clickable="true"
-            android:src="@drawable/ic_action_discard" />
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_action_cancel_dark" />
 
     </LinearLayout>
 
@@ -82,7 +90,8 @@
         android:layout_toRightOf="@id/alarm_entry_header"
         android:clickable="true"
         android:textColor="@color/teal"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
