@@ -216,6 +216,7 @@ public class NotificationService extends IntentService {
         if (!taskList.isEmpty()) {
             handleNotification(false);
             setIsPresent(this);
+            Log.d(CLASS_NAME, "Created notification.");
         }
     }
 
@@ -235,12 +236,13 @@ public class NotificationService extends IntentService {
                 taskList.set(updatedTask.getRowNumber(), updatedTask);
             }
             handleNotification(true);
+            Log.d(CLASS_NAME, "Updated notification.");
         }
     }
 
     private void cancelNotification() {
-        Log.d(CLASS_NAME, "Cancelled notification.");
         notificationManager.cancel(NotificationService.ID_DAILY_DO_NOTIFICATION);
         setNotPresent(this);
+        Log.d(CLASS_NAME, "Cancelled notification.");
     }
 }

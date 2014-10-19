@@ -43,7 +43,6 @@ public class NotificationsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setResult(Activity.RESULT_CANCELED);
         finishActivity();
     }
@@ -150,10 +149,10 @@ public class NotificationsActivity extends Activity {
             timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
             daysView.setText(getDays(alarm));
             // Setup the listeners.
-            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            toggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    alarm.setIsEnabled(isChecked ? 1 : 0);
+                public void onClick(View v) {
+                    alarm.setIsEnabled(alarm.getIsEnabled() == 1 ? 0 : 1);
                     dailyDoDatabaseHelper.updateAlarmEntry(alarm);
                     notifyDataSetChanged();
                     AlarmService.scheduleNextAlarm(getContext());

@@ -391,6 +391,9 @@ public class DynamicListView extends ListView {
                     View selectedView = getChildAt(itemNum);
                     mMobileItemId = getAdapter().getItemId(position);
                     mHoverCell = getAndAddHoverView(selectedView);
+                    if (mHoverCell == null) {
+                        return true;
+                    }
                     selectedView.setVisibility(INVISIBLE);
 
                     mCellIsMobile = true;
@@ -416,10 +419,6 @@ public class DynamicListView extends ListView {
                 if (mCellIsMobile) {
                     mHoverCellCurrentBounds.offsetTo(mHoverCellOriginalBounds.left,
                             mHoverCellOriginalBounds.top + deltaY + mTotalOffset);
-                    if (mHoverCell == null) {
-                        touchEventsEnded();
-                        break;
-                    }
                     mHoverCell.setBounds(mHoverCellCurrentBounds);
                     invalidate();
 

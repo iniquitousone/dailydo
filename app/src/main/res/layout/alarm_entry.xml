@@ -89,7 +89,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_toRightOf="@id/alarm_entry_header"
         android:clickable="true"
-        android:textColor="@color/teal"
+        android:textColor="@color/light_teal"
         android:textSize="12sp"
         android:textStyle="bold" />
 

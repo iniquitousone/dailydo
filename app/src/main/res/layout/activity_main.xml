@@ -6,24 +6,12 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/alarm_upcoming"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
     <com.finaldrive.dailydo.view.DynamicListView
         android:id="@+id/task_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
-        android:dividerHeight="@dimen/listview_divider_height"
-        android:paddingTop="@dimen/listview_divider_height" />
+        android:dividerHeight="@dimen/listview_divider_height" />
 
     <LinearLayout
         android:id="@+id/empty_task_list_view"
@@ -37,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:src="@drawable/ic_logo_gray" />
+            android:src="@drawable/ic_launcher_gray" />
 
         <TextView
             android:layout_width="match_parent"
