@@ -21,13 +21,18 @@ public class ActionBarStyleHelper {
     public static final void setupActionBar(final Activity activity, boolean isShowTitle) {
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             final ImageView homeIcon = (ImageView) activity.findViewById(android.R.id.home);
-            final DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
-            // Dimensions come from general horizontal margin (16dp) and left edge content spacing (72dp).
-            final int leftPadding = (int) (8 * displayMetrics.density + 0.5f);
-            final int rightPadding = (int) (16 * displayMetrics.density + 0.5f);
-            homeIcon.setPadding(leftPadding, 0, rightPadding, 0);
+            final float density = activity.getResources().getDisplayMetrics().density;
+            if (isShowTitle) {
+                // Material design demands the title be 72dp from the left edge of the screen.
+                final int rightPadding = dpToPixels((72 - 16 - 24), density);
+                homeIcon.setPadding(0, 0, rightPadding, 0);
+            }
             activity.getActionBar().setDisplayHomeAsUpEnabled(false);
             activity.getActionBar().setDisplayShowTitleEnabled(isShowTitle);
         }
+    }
+
+    private static int dpToPixels(int dp, float density) {
+        return (int) (dp * density + 0.5f);
     }
 }

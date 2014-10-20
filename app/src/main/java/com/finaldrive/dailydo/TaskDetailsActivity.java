@@ -129,7 +129,6 @@ public class TaskDetailsActivity extends Activity {
                     return true;
                 }
                 final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                        .setIcon(R.drawable.ic_action_about)
                         .setTitle("Confirm deletion")
                         .setMessage("Do you want to delete this DO?")
                         .setCancelable(true)

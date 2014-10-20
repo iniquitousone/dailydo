@@ -22,6 +22,6 @@ public class DailyResetTimePickerFragment extends TimePickerFragment {
         editor.putInt(getString(R.string.pref_daily_reset_hour), hourOfDay);
         editor.putInt(getString(R.string.pref_daily_reset_minute), minute);
         editor.commit();
-        AlarmService.scheduleNextReset(getActivity());
+        AlarmService.scheduleNextReset(context);
     }
 }

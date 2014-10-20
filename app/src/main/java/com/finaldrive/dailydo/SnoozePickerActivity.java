@@ -21,8 +21,7 @@ public class SnoozePickerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
-                .setIcon(R.drawable.ic_action_alarms)
-                .setTitle("Snooze duration:")
+                .setTitle("Snooze duration")
                 .setCancelable(true)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override

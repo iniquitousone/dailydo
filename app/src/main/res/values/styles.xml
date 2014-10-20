@@ -22,14 +22,11 @@
     <style name="ActionBarTitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">16sp</item>
     </style>
 
     <!-- Action button style -->
     <style name="ActionButtonStyle" parent="android:Widget.Holo.Light.ActionButton">
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingEnd">0dp</item>
+        <item name="android:minWidth">48dp</item>
     </style>
 
 </resources>

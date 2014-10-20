@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -68,10 +67,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call super constructor to establish default Cursor.
         super.onCreate(savedInstanceState);
-        ActionBarStyleHelper.setupActionBar(this, true);
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            getActionBar().setIcon(R.drawable.ic_logo_invert);
             getActionBar().setTitle(R.string.app_name);
+            getActionBar().setDisplayShowTitleEnabled(true);
         }
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
@@ -85,16 +83,14 @@ public class MainActivity extends Activity {
         dynamicListView.setTaskList(taskList);
         dynamicListView.setAdapter(taskArrayAdapter);
         dynamicListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        // Setup and persist the daily reset time to the SharedPreferences.
-        // Though not used in this particular Activity, we want to initialize the data here as entry point.
-        setupDailyResetPreferences();
+        setupSharedPreferences();
     }
 
     /**
      * Setups the SharedPreferences to use across the application. If they have not been initialize, they will here.
      * Otherwise, it will simply re-use what is already in the {@link SharedPreferences}.
      */
-    private void setupDailyResetPreferences() {
+    private void setupSharedPreferences() {
         final SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_daily_do), MODE_PRIVATE);
         final boolean isDailyResetEnabled = sharedPreferences.getBoolean(getString(R.string.pref_daily_reset_enabled), true);
         final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);

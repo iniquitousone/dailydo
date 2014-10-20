@@ -3,6 +3,12 @@
     tools:context="com.finaldrive.dailydo.NotificationsActivity">
 
     <item
+        android:id="@+id/action_set_tone"
+        android:icon="@drawable/ic_action_music"
+        android:showAsAction="always"
+        android:title="@string/action_set_tone" />
+
+    <item
         android:id="@+id/action_add_alarm"
         android:icon="@drawable/ic_action_new"
         android:showAsAction="always"

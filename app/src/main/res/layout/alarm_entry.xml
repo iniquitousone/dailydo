@@ -14,13 +14,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:minWidth="@dimen/content_left_indent">
 
         <ToggleButton
             android:id="@+id/alarm_entry_toggle"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:background="@drawable/selector_toggle"
             android:textColor="@color/white"
             android:textOff=""

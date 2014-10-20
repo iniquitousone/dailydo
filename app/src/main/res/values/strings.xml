@@ -19,6 +19,7 @@
     <string name="action_snooze">Snooze</string>
     <string name="action_notifications">Notifications</string>
     <string name="action_daily_reset">Daily reset</string>
+    <string name="action_set_tone">Set tone</string>
     <string name="action_settings">Settings</string>
     <!-- Preference keys -->
     <string name="pref_daily_do">com.finaldrive.dailydo.pref.DAILY_DO</string>
