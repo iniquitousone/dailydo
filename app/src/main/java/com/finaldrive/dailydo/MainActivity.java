@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
-import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import com.finaldrive.dailydo.view.DynamicListView;
@@ -230,14 +229,23 @@ public class MainActivity extends Activity {
             case R.id.action_notifications:
                 startActivity(new Intent(this, NotificationsActivity.class));
                 break;
-
-            case R.id.action_add_task:
-                final Intent intent = new Intent(this, TaskDetailsActivity.class);
-                intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskList.size());
-                startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
-                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addNewTask(View view) {
+        final Intent intent = new Intent(this, TaskDetailsActivity.class);
+        intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskList.size());
+        startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
+    }
+
+    private static class ViewHolder {
+        private View checkBoxTouchZone;
+        private CheckBox checkBox;
+        private LinearLayout contentView;
+        private ImageView separatorView;
+        private TextView titleView;
+        private TextView noteView;
     }
 
     /**
@@ -252,15 +260,6 @@ public class MainActivity extends Activity {
         public TaskArrayAdapter(Context context, int textViewResourceId, List<Task> objects) {
             super(context, textViewResourceId, objects);
             layoutInflater = LayoutInflater.from(getContext());
-        }
-
-        private static class ViewHolder {
-            private View checkBoxTouchZone;
-            private CheckBox checkBox;
-            private LinearLayout contentView;
-            private ImageView separatorView;
-            private TextView titleView;
-            private TextView noteView;
         }
 
         /**
@@ -293,20 +292,20 @@ public class MainActivity extends Activity {
          */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final ViewHolder holder;
+            final ViewHolder viewHolder;
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.task_entry, parent, false);
-                holder = new ViewHolder();
-                holder.checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
-                holder.checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
-                holder.contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
-                holder.separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
-                holder.titleView = (TextView) convertView.findViewById(R.id.task_entry_title);
+                viewHolder = new ViewHolder();
+                viewHolder.checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
+                viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
+                viewHolder.contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
+                viewHolder.separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
+                viewHolder.titleView = (TextView) convertView.findViewById(R.id.task_entry_title);
                 // The Task note should only have visibility if it is non-null and not empty.
-                holder.noteView = (TextView) convertView.findViewById(R.id.task_entry_note);
-                convertView.setTag(holder);
+                viewHolder.noteView = (TextView) convertView.findViewById(R.id.task_entry_note);
+                convertView.setTag(viewHolder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
             final Task task = getItem(position);
@@ -314,53 +313,53 @@ public class MainActivity extends Activity {
 
             // Setup the isChecked state of the view.
             if (isChecked) {
-                holder.titleView.setTypeface(null, Typeface.BOLD_ITALIC);
-                holder.titleView.setTextColor(getResources().getColor(R.color.silver));
-                holder.noteView.setTypeface(null, Typeface.ITALIC);
-                holder.noteView.setTextColor(getResources().getColor(R.color.silver));
+                viewHolder.titleView.setTypeface(null, Typeface.BOLD_ITALIC);
+                viewHolder.titleView.setTextColor(getResources().getColor(R.color.silver));
+                viewHolder.noteView.setTypeface(null, Typeface.ITALIC);
+                viewHolder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(0.67f);
             } else {
-                holder.titleView.setTypeface(null, Typeface.BOLD);
-                holder.titleView.setTextColor(getResources().getColor(R.color.gray));
-                holder.noteView.setTypeface(null, Typeface.NORMAL);
-                holder.noteView.setTextColor(getResources().getColor(R.color.silver));
+                viewHolder.titleView.setTypeface(null, Typeface.BOLD);
+                viewHolder.titleView.setTextColor(getResources().getColor(R.color.gray));
+                viewHolder.noteView.setTypeface(null, Typeface.NORMAL);
+                viewHolder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(1.0f);
             }
             // Setup the values.
-            holder.titleView.setText(task.getTitle());
+            viewHolder.titleView.setText(task.getTitle());
             if (task.getNote() != null && !task.getNote().isEmpty()) {
-                holder.noteView.setText(task.getNote());
-                holder.noteView.setVisibility(View.VISIBLE);
-                holder.separatorView.setVisibility(View.VISIBLE);
+                viewHolder.noteView.setText(task.getNote());
+                viewHolder.noteView.setVisibility(View.VISIBLE);
+                viewHolder.separatorView.setVisibility(View.VISIBLE);
             } else {
-                holder.noteView.setVisibility(View.GONE);
-                holder.separatorView.setVisibility(View.GONE);
+                viewHolder.noteView.setVisibility(View.GONE);
+                viewHolder.separatorView.setVisibility(View.GONE);
             }
-            holder.checkBox.setChecked(isChecked);
+            viewHolder.checkBox.setChecked(isChecked);
             // Setup the listeners.
-            holder.contentView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startTaskDetailsActivity(task.getId(), position);
                 }
             });
-            holder.contentView.setOnLongClickListener(new View.OnLongClickListener() {
+            viewHolder.contentView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     return false;
                 }
             });
             // This is a hack to get a larger top zone for the CheckBox.
-            holder.checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
+            viewHolder.checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    holder.checkBox.toggle();
+                    viewHolder.checkBox.toggle();
                     task.setIsChecked(task.getIsChecked() == 1 ? 0 : 1);
                     task.setRowNumber(position);
                     dailyDoDatabaseHelper.updateTaskEntry(task);
                     // TODO: Consider using the UI thread to only update this entry.
                     notifyDataSetChanged();
-                    NotificationService.startNotificationUpdate(getContext(), task.getId(), holder.checkBox.isChecked());
+                    NotificationService.startNotificationUpdate(getContext(), task.getId(), viewHolder.checkBox.isChecked());
                 }
             });
 

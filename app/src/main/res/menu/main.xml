@@ -13,10 +13,4 @@
         android:icon="@drawable/ic_action_alarms"
         android:showAsAction="always"
         android:title="@string/action_notifications" />
-
-    <item
-        android:id="@+id/action_add_task"
-        android:icon="@drawable/ic_action_new"
-        android:showAsAction="always"
-        android:title="@string/action_add" />
 </menu>

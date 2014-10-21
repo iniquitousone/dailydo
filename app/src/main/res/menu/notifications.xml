@@ -8,9 +8,4 @@
         android:showAsAction="always"
         android:title="@string/action_set_tone" />
 
-    <item
-        android:id="@+id/action_add_alarm"
-        android:icon="@drawable/ic_action_new"
-        android:showAsAction="always"
-        android:title="@string/action_add" />
 </menu>

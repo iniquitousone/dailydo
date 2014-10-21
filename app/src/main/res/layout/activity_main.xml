@@ -13,6 +13,18 @@
         android:divider="@null"
         android:dividerHeight="@dimen/listview_divider_height" />
 
+    <ImageButton
+        android:id="@+id/new_task_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@color/transparent"
+        android:onClick="addNewTask"
+        android:src="@drawable/layer_add_new" />
+
     <LinearLayout
         android:id="@+id/empty_task_list_view"
         android:layout_width="match_parent"

@@ -99,26 +99,26 @@ public class NotificationsActivity extends Activity {
                 startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
                 return true;
 
-            case R.id.action_add_alarm:
-                final Calendar calendar = Calendar.getInstance();
-                Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-                alarm.setDaysRepeating(Alarm.WEEKDAYS);
-                alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
-                alarmList.add(alarm);
-                final Bundle bundle = new Bundle();
-                bundle.putInt(AlarmTimePickerFragment.POSITION, alarmList.size() - 1);
-                bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
-                bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
-                final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
-                alarmTimePickerFragment.setArguments(bundle);
-                alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
-                return false;
-
             case android.R.id.home:
                 finishActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addNewAlarm(View view) {
+        final Calendar calendar = Calendar.getInstance();
+        Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        alarm.setDaysRepeating(Alarm.WEEKDAYS);
+        alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
+        alarmList.add(alarm);
+        final Bundle bundle = new Bundle();
+        bundle.putInt(AlarmTimePickerFragment.POSITION, alarmList.size() - 1);
+        bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
+        bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
+        final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
+        alarmTimePickerFragment.setArguments(bundle);
+        alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
     }
 
     /**
@@ -138,6 +138,7 @@ public class NotificationsActivity extends Activity {
     }
 
     /**
+     * TODO: Apply ViewHolder pattern.
      * Custom adapter for handling the View for each Alarm entry.
      */
     public final class AlarmArrayAdapter extends ArrayAdapter<Alarm> {
