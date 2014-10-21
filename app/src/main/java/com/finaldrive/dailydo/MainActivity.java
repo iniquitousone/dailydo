@@ -254,6 +254,15 @@ public class MainActivity extends Activity {
             layoutInflater = LayoutInflater.from(getContext());
         }
 
+        private static class ViewHolder {
+            private View checkBoxTouchZone;
+            private CheckBox checkBox;
+            private LinearLayout contentView;
+            private ImageView separatorView;
+            private TextView titleView;
+            private TextView noteView;
+        }
+
         /**
          * Overridden to leverage our database ID as the unique and stable ID for the given Task position.
          *
@@ -284,67 +293,74 @@ public class MainActivity extends Activity {
          */
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder holder;
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.task_entry, parent, false);
+                holder = new ViewHolder();
+                holder.checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
+                holder.checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
+                holder.contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
+                holder.separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
+                holder.titleView = (TextView) convertView.findViewById(R.id.task_entry_title);
+                // The Task note should only have visibility if it is non-null and not empty.
+                holder.noteView = (TextView) convertView.findViewById(R.id.task_entry_note);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
+
             final Task task = getItem(position);
             final boolean isChecked = task.getIsChecked() == 1 ? true : false;
-            final View checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
-            final CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
-            final LinearLayout contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
-            final ImageView separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
-            final TextView titleView = (TextView) convertView.findViewById(R.id.task_entry_title);
-            // The Task note should only have visibility if it is non-null and not empty.
-            final TextView noteView = (TextView) convertView.findViewById(R.id.task_entry_note);
+
             // Setup the isChecked state of the view.
             if (isChecked) {
-                titleView.setTypeface(null, Typeface.BOLD_ITALIC);
-                titleView.setTextColor(getResources().getColor(R.color.silver));
-                noteView.setTypeface(null, Typeface.ITALIC);
-                noteView.setTextColor(getResources().getColor(R.color.silver));
+                holder.titleView.setTypeface(null, Typeface.BOLD_ITALIC);
+                holder.titleView.setTextColor(getResources().getColor(R.color.silver));
+                holder.noteView.setTypeface(null, Typeface.ITALIC);
+                holder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(0.67f);
             } else {
-                titleView.setTypeface(null, Typeface.BOLD);
-                titleView.setTextColor(getResources().getColor(R.color.gray));
-                noteView.setTypeface(null, Typeface.NORMAL);
-                noteView.setTextColor(getResources().getColor(R.color.silver));
+                holder.titleView.setTypeface(null, Typeface.BOLD);
+                holder.titleView.setTextColor(getResources().getColor(R.color.gray));
+                holder.noteView.setTypeface(null, Typeface.NORMAL);
+                holder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(1.0f);
             }
             // Setup the values.
-            titleView.setText(task.getTitle());
+            holder.titleView.setText(task.getTitle());
             if (task.getNote() != null && !task.getNote().isEmpty()) {
-                noteView.setText(task.getNote());
-                noteView.setVisibility(View.VISIBLE);
-                separatorView.setVisibility(View.VISIBLE);
+                holder.noteView.setText(task.getNote());
+                holder.noteView.setVisibility(View.VISIBLE);
+                holder.separatorView.setVisibility(View.VISIBLE);
             } else {
-                noteView.setVisibility(View.GONE);
-                separatorView.setVisibility(View.GONE);
+                holder.noteView.setVisibility(View.GONE);
+                holder.separatorView.setVisibility(View.GONE);
             }
-            checkBox.setChecked(isChecked);
+            holder.checkBox.setChecked(isChecked);
             // Setup the listeners.
-            contentView.setOnClickListener(new View.OnClickListener() {
+            holder.contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startTaskDetailsActivity(task.getId(), position);
                 }
             });
-            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+            holder.contentView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     return false;
                 }
             });
             // This is a hack to get a larger top zone for the CheckBox.
-            checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
+            holder.checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkBox.toggle();
+                    holder.checkBox.toggle();
                     task.setIsChecked(task.getIsChecked() == 1 ? 0 : 1);
                     task.setRowNumber(position);
                     dailyDoDatabaseHelper.updateTaskEntry(task);
                     // TODO: Consider using the UI thread to only update this entry.
                     notifyDataSetChanged();
-                    NotificationService.startNotificationUpdate(getContext(), task.getId(), checkBox.isChecked());
+                    NotificationService.startNotificationUpdate(getContext(), task.getId(), holder.checkBox.isChecked());
                 }
             });
 
