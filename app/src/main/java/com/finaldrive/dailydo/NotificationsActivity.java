@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ import com.finaldrive.dailydo.fragment.AlarmTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
+import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
@@ -44,6 +46,7 @@ public class NotificationsActivity extends Activity {
     private List<Alarm> alarmList;
     private AlarmArrayAdapter alarmArrayAdapter;
     private ListView listView;
+    private boolean isShowingNewAlarmButton = true;
 
     @Override
     public void onBackPressed() {
@@ -67,9 +70,27 @@ public class NotificationsActivity extends Activity {
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
         alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.alarm_entry, alarmList);
+        final View newAlarmButton = findViewById(R.id.new_alarm_button);
         listView = (ListView) findViewById(R.id.alarm_list_view);
         listView.setAdapter(alarmArrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setOnScrollListener(new ListViewScrollListener(listView) {
+            @Override
+            public void onDownwardScroll() {
+                if (isShowingNewAlarmButton) {
+                    isShowingNewAlarmButton = false;
+                    newAlarmButton.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onUpwardScroll() {
+                if (!isShowingNewAlarmButton) {
+                    isShowingNewAlarmButton = true;
+                    newAlarmButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -137,8 +158,14 @@ public class NotificationsActivity extends Activity {
         }
     }
 
+    private static class ViewHolder {
+        private ToggleButton toggleButton;
+        private TextView timeView;
+        private ImageButton trashButton;
+        private TextView daysView;
+    }
+
     /**
-     * TODO: Apply ViewHolder pattern.
      * Custom adapter for handling the View for each Alarm entry.
      */
     public final class AlarmArrayAdapter extends ArrayAdapter<Alarm> {
@@ -152,26 +179,31 @@ public class NotificationsActivity extends Activity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder viewHolder;
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.alarm_entry, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.toggleButton = (ToggleButton) convertView.findViewById(R.id.alarm_entry_toggle);
+                viewHolder.timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
+                viewHolder.trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
+                viewHolder.daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             final Alarm alarm = getItem(position);
             final boolean isEnabled = alarm.getIsEnabled() == 1 ? true : false;
-            final ToggleButton toggleButton = (ToggleButton) convertView.findViewById(R.id.alarm_entry_toggle);
-            final TextView timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
-            final ImageButton trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
-            final TextView daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);
             // Setup the views.
             if (isEnabled) {
                 convertView.setAlpha(1.0f);
             } else {
                 convertView.setAlpha(0.5f);
             }
-            toggleButton.setChecked(isEnabled);
-            timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
-            daysView.setText(getDays(alarm));
+            viewHolder.toggleButton.setChecked(isEnabled);
+            viewHolder.timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
+            viewHolder.daysView.setText(getDays(alarm));
             // Setup the listeners.
-            toggleButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.toggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     alarm.setIsEnabled(alarm.getIsEnabled() == 1 ? 0 : 1);
@@ -180,7 +212,7 @@ public class NotificationsActivity extends Activity {
                     AlarmService.scheduleNextAlarm(getContext());
                 }
             });
-            timeView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.timeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Bundle bundle = new Bundle();
@@ -192,7 +224,7 @@ public class NotificationsActivity extends Activity {
                     alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
                 }
             });
-            trashButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.trashButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK)
@@ -219,7 +251,7 @@ public class NotificationsActivity extends Activity {
                     alertDialog.show();
                 }
             });
-            daysView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.daysView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final boolean[] booleanArray = new boolean[7];

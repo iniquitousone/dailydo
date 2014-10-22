@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import com.finaldrive.dailydo.view.DynamicListView;
@@ -56,6 +58,7 @@ public class MainActivity extends Activity {
     private List<Task> taskList;
     private TaskArrayAdapter taskArrayAdapter;
     private DynamicListView dynamicListView;
+    private boolean isShowingNewTaskButton = true;
 
     /**
      * Entry point into the application. Sets up data and renders ListView.
@@ -77,11 +80,29 @@ public class MainActivity extends Activity {
         taskList = dailyDoDatabaseHelper.getTaskEntries();
         // Initialize and set the ArrayAdapter which acts as the adapter for the main ListView and its content.
         taskArrayAdapter = new TaskArrayAdapter(this, R.layout.task_entry, taskList);
+        final View newTaskButton = findViewById(R.id.new_task_button);
         // Setup the DynamicListView to allow drag-and-sort functionality.
         dynamicListView = (DynamicListView) findViewById(R.id.task_list_view);
         dynamicListView.setTaskList(taskList);
         dynamicListView.setAdapter(taskArrayAdapter);
         dynamicListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        dynamicListView.setOnScrollListener(new ListViewScrollListener(dynamicListView) {
+            @Override
+            public void onDownwardScroll() {
+                if (isShowingNewTaskButton) {
+                    isShowingNewTaskButton = false;
+                    newTaskButton.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onUpwardScroll() {
+                if (!isShowingNewTaskButton) {
+                    isShowingNewTaskButton = true;
+                    newTaskButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         setupSharedPreferences();
     }
 
