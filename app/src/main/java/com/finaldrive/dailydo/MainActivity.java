@@ -15,9 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -29,6 +26,7 @@ import android.widget.Toast;
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
 import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
@@ -93,9 +91,7 @@ public class MainActivity extends Activity {
             public void onDownwardScroll() {
                 if (isShowingNewTaskButton) {
                     isShowingNewTaskButton = false;
-                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, 400);
-                    translateAnimation.setDuration(200);
-                    newTaskButton.startAnimation(translateAnimation);
+                    newTaskButton.startAnimation(TranslateAnimationHelper.DOWNWARD_BUTTON_TRANSLATION);
                     newTaskButton.setVisibility(View.INVISIBLE);
                 }
             }
@@ -104,9 +100,7 @@ public class MainActivity extends Activity {
             public void onUpwardScroll() {
                 if (!isShowingNewTaskButton) {
                     isShowingNewTaskButton = true;
-                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 400, 0);
-                    translateAnimation.setDuration(200);
-                    newTaskButton.startAnimation(translateAnimation);
+                    newTaskButton.startAnimation(TranslateAnimationHelper.UPWARD_BUTTON_TRANSLATION);
                     newTaskButton.setVisibility(View.VISIBLE);
                 }
             }

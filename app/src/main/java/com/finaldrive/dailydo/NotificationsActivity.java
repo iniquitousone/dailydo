@@ -14,10 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +26,7 @@ import com.finaldrive.dailydo.fragment.AlarmTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
+import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
 import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
@@ -80,9 +78,7 @@ public class NotificationsActivity extends Activity {
             public void onDownwardScroll() {
                 if (isShowingNewAlarmButton) {
                     isShowingNewAlarmButton = false;
-                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, 400);
-                    translateAnimation.setDuration(200);
-                    newAlarmButton.startAnimation(translateAnimation);
+                    newAlarmButton.startAnimation(TranslateAnimationHelper.DOWNWARD_BUTTON_TRANSLATION);
                     newAlarmButton.setVisibility(View.INVISIBLE);
                 }
             }
@@ -91,9 +87,7 @@ public class NotificationsActivity extends Activity {
             public void onUpwardScroll() {
                 if (!isShowingNewAlarmButton) {
                     isShowingNewAlarmButton = true;
-                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 400, 0);
-                    translateAnimation.setDuration(200);
-                    newAlarmButton.startAnimation(translateAnimation);
+                    newAlarmButton.startAnimation(TranslateAnimationHelper.UPWARD_BUTTON_TRANSLATION);
                     newAlarmButton.setVisibility(View.VISIBLE);
                 }
             }

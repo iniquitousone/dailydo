@@ -2,14 +2,12 @@ package com.finaldrive.dailydo.helper;
 
 import android.app.Activity;
 import android.os.Build;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.widget.ImageView;
 
 /**
  * Utility class to help setup the ActionBar style where appropriate.
  */
-public class ActionBarStyleHelper {
+public final class ActionBarStyleHelper {
 
     /**
      * Setup the ActionBar for custom-ish layout to match that of Material Design.
