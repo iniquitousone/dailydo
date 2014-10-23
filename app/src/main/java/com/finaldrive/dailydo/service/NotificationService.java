@@ -8,6 +8,7 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import com.finaldrive.dailydo.MainActivity;
@@ -68,6 +69,24 @@ public class NotificationService extends IntentService {
                 context.getString(R.string.pref_daily_do),
                 Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(context.getString(R.string.pref_notified), false);
+    }
+
+    public static void setNotificationTone(Context context, Uri notificationTone) {
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.pref_daily_do),
+                Context.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.pref_notification_tone), notificationTone.toString());
+        editor.commit();
+    }
+
+    public static Uri getNotificationTone(Context context) {
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.pref_daily_do),
+                Context.MODE_PRIVATE);
+        final String notificationTone = sharedPreferences.getString(context.getString(R.string.pref_notification_tone), null);
+        Log.d(CLASS_NAME, String.format("Fetched NotificationTone=%s", notificationTone));
+        return notificationTone != null ? Uri.parse(notificationTone) : null;
     }
 
     public static void startNotificationCreate(Context context) {
@@ -170,7 +189,7 @@ public class NotificationService extends IntentService {
         final Notification.Builder notificationBuilder = new Notification.Builder(this)
                 .setOnlyAlertOnce(isAlertOnce)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setDefaults(Notification.DEFAULT_ALL)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .addAction(R.drawable.ic_action_alarms,
@@ -184,6 +203,12 @@ public class NotificationService extends IntentService {
                 .setContentIntent(createNotificationClickIntent(this, ongoingTask));
         if (remaining > 1) {
             notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessage.trim()));
+        }
+        final Uri notificationTone = getNotificationTone(this);
+        if (notificationTone != null) {
+            notificationBuilder.setSound(notificationTone);
+        } else {
+            notificationBuilder.setDefaults(Notification.DEFAULT_ALL);
         }
         notificationManager.notify(ID_DAILY_DO_NOTIFICATION, notificationBuilder.build());
     }

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_set_tone"
-        android:icon="@drawable/ic_action_music"
+        android:icon="@drawable/ic_action_tone"
         android:showAsAction="always"
         android:title="@string/action_set_tone" />
 

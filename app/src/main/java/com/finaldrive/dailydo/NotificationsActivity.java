@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
 import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
+import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
 import java.util.Calendar;
@@ -39,6 +42,7 @@ import java.util.List;
  */
 public class NotificationsActivity extends Activity {
 
+    private static final String CLASS_NAME = "NotificationsActivity";
     private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private static final int REQUEST_CODE_TONE_PICKER = 1;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
@@ -104,20 +108,33 @@ public class NotificationsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.d(CLASS_NAME, String.format("ActivityResult on RequestCode=%d and ResultCode=%d", requestCode, resultCode));
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                if (requestCode == REQUEST_CODE_TONE_PICKER) {
+                    final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    NotificationService.setNotificationTone(this, pickedTone);
+                }
+                break;
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_set_tone:
+                final Uri notificationTone = NotificationService.getNotificationTone(this);
                 final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                if (notificationTone != null) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
+                } else {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                }
                 startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
                 return true;
 
