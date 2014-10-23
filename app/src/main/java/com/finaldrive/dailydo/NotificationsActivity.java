@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -79,6 +80,9 @@ public class NotificationsActivity extends Activity {
             public void onDownwardScroll() {
                 if (isShowingNewAlarmButton) {
                     isShowingNewAlarmButton = false;
+                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, 400);
+                    translateAnimation.setDuration(200);
+                    newAlarmButton.startAnimation(translateAnimation);
                     newAlarmButton.setVisibility(View.INVISIBLE);
                 }
             }
@@ -87,6 +91,9 @@ public class NotificationsActivity extends Activity {
             public void onUpwardScroll() {
                 if (!isShowingNewAlarmButton) {
                     isShowingNewAlarmButton = true;
+                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 400, 0);
+                    translateAnimation.setDuration(200);
+                    newAlarmButton.startAnimation(translateAnimation);
                     newAlarmButton.setVisibility(View.VISIBLE);
                 }
             }

@@ -13,6 +13,18 @@
         android:divider="@null"
         android:dividerHeight="@dimen/listview_divider_height" />
 
+    <TextView
+        android:id="@+id/empty_alarm_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:gravity="center"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="Schedule a notification with the plus button\n\nYou will be notified at the scheduled times about your incomplete DOs"
+        android:textColor="@color/silver"
+        android:visibility="gone" />
+
     <ImageButton
         android:id="@+id/new_alarm_button"
         android:layout_width="wrap_content"
@@ -24,17 +36,5 @@
         android:background="@color/transparent"
         android:onClick="addNewAlarm"
         android:src="@drawable/layer_add_new" />
-
-    <TextView
-        android:id="@+id/empty_alarm_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_gray"
-        android:gravity="center"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:text="Schedule a notification with the plus button above\n\nYou will be notified at the scheduled times about your upcoming DOs"
-        android:textColor="@color/silver"
-        android:visibility="gone" />
 
 </RelativeLayout>
