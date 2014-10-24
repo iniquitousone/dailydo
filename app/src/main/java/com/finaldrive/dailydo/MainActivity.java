@@ -185,6 +185,7 @@ public class MainActivity extends Activity {
                 if (taskId == INVALID_VALUE || position == INVALID_VALUE) {
                     return;
                 }
+                NotificationService.startNotificationUpdate(this, taskId, true);
                 taskList.remove(position);
                 for (int i = position; i < taskList.size(); i++) {
                     final Task taskToUpdate = taskList.get(i);

@@ -148,7 +148,7 @@ public class NotificationsActivity extends Activity {
     public void addNewAlarm(View view) {
         final Calendar calendar = Calendar.getInstance();
         Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-        alarm.setDaysRepeating(Alarm.WEEKDAYS);
+        alarm.setDaysRepeating(Alarm.EVERYDAY);
         alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
         alarmList.add(alarm);
         final Bundle bundle = new Bundle();

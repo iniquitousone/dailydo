@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="MainTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Sets up the ActionBar -->
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
         <!-- Removes the drop shadow underneath all ActionBar(s) -->

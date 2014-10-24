@@ -253,12 +253,14 @@ public class NotificationService extends IntentService {
                 return;
             }
             final Task updatedTask = dailyDoDatabaseHelper.getTaskEntry(taskId);
-            if (isChecked) {
-                // If checked, that means the Task is done, so remove it from the notification.
-                taskList.set(updatedTask.getRowNumber(), null);
-            } else {
-                // Has been unchecked, that means add it back into the notification.
-                taskList.set(updatedTask.getRowNumber(), updatedTask);
+            if (updatedTask != null) {
+                if (isChecked) {
+                    // If checked, that means the Task is done, so remove it from the notification.
+                    taskList.set(updatedTask.getRowNumber(), null);
+                } else {
+                    // Has been unchecked, that means add it back into the notification.
+                    taskList.set(updatedTask.getRowNumber(), updatedTask);
+                }
             }
             handleNotification(true);
             Log.d(CLASS_NAME, "Updated notification.");

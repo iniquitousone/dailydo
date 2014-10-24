@@ -21,7 +21,7 @@
         android:gravity="center"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:text="Schedule a notification with the plus button\n\nYou will be notified at the scheduled times about your incomplete DOs"
+        android:text="Use the plus button to schedule a notification\n\nYou will be notified at the scheduled times of all your incomplete DOs"
         android:textColor="@color/silver"
         android:visibility="gone" />
 
