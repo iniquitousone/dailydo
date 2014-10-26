@@ -99,12 +99,11 @@
         android:layout_toLeftOf="@id/task_entry_content"
         android:clickable="true" />
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_alignParentBottom="true"
-        android:alpha="0.5"
-        android:background="@color/silver"
+        android:src="@drawable/shape_drop_shadow"
         android:visibility="visible" />
 
 </RelativeLayout>

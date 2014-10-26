@@ -95,12 +95,11 @@
         android:textSize="12sp"
         android:textStyle="bold" />
 
-    <View
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_alignParentBottom="true"
-        android:alpha="0.5"
-        android:background="@color/silver"
+        android:src="@drawable/shape_drop_shadow"
         android:visibility="visible" />
 
 </RelativeLayout>
