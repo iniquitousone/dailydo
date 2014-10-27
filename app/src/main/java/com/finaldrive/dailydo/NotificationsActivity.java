@@ -329,7 +329,7 @@ public class NotificationsActivity extends Activity {
                     daysOfWeek = "NONE";
                     break;
                 case Alarm.WEEKEND:
-                    daysOfWeek = "WEEKEND";
+                    daysOfWeek = "WEEKENDS";
                     break;
                 case Alarm.WEEKDAYS:
                     daysOfWeek = "WEEKDAYS";
