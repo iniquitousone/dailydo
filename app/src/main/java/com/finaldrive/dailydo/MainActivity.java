@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,7 +71,7 @@ public class MainActivity extends Activity {
         // Call super constructor to establish default Cursor.
         super.onCreate(savedInstanceState);
         if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            getActionBar().setTitle(R.string.app_name);
+            getActionBar().setTitle(Html.fromHtml("Daily<b>Do</b>"));
             getActionBar().setDisplayShowTitleEnabled(true);
         }
         // Set the View that will be rendered for this Activity.

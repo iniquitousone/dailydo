@@ -20,7 +20,8 @@
 
     <!-- Action bar text style -->
     <style name="ActionBarTitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
+        <item name="android:fontFamily">san-serif-light</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
