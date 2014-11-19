@@ -245,7 +245,8 @@ public class NotificationsActivity extends Activity {
             viewHolder.trashButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog alertDialog = new AlertDialog.Builder(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                    final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
+                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                             .setTitle("Confirm deletion")
                             .setMessage("Do you want to delete this notification?")
                             .setCancelable(true)
@@ -277,7 +278,7 @@ public class NotificationsActivity extends Activity {
                         booleanArray[i - 1] = alarm.isCalendarDayEnabled(i);
                     }
                     final AlertDialog alertDialog = new AlertDialog.Builder(getContext(),
-                            AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                            AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                             .setTitle("Pick repeating days")
                             .setCancelable(true)
                             .setOnCancelListener(new DialogInterface.OnCancelListener() {

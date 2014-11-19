@@ -1,9 +1,9 @@
 package com.finaldrive.dailydo.fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
@@ -21,12 +21,15 @@ public abstract class TimePickerFragment extends DialogFragment implements TimeP
         final String title = getArguments().getString(TITLE);
         final int hourOfDay = getArguments().getInt(HOUR_OF_DAY);
         final int minute = getArguments().getInt(MINUTE);
-        final Dialog dialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_HOLO_DARK, this, hourOfDay, minute, DateFormat.is24HourFormat(getActivity()));
+        final Dialog dialog = new TimePickerDialog(getActivity(), this, hourOfDay, minute, DateFormat.is24HourFormat(getActivity()));
         if (title != null) {
             dialog.setTitle(title);
-            dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(true);
         }
         return dialog;
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
     }
 }

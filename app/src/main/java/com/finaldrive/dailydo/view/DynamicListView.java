@@ -488,7 +488,7 @@ public class DynamicListView extends ListView {
 
             swapElements(mTaskList, originalItem, getPositionForView(switchView));
 
-            ((BaseAdapter) getAdapter()).notifyDataSetChanged();
+            ((BaseAdapter) getAdapter()).notifyDataSetInvalidated();
 
             mDownY = mLastEventY;
 

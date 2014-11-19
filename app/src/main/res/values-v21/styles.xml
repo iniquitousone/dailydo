@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<style name="AppTheme" parent="android:Theme.Material">-->
-    <!--<item name="android:colorPrimary">@color/amber</item>-->
-    <!--<item name="android:colorPrimaryDark">@color/dark_amber</item>-->
-    <!--</style>-->
+    <!-- Base application theme -->
+    <style name="MainTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MainActionBarStyle</item>
+        <item name="android:colorPrimary">@color/amber</item>
+        <item name="android:colorPrimaryDark">@color/dark_amber</item>
+    </style>
+
+    <style name="MainActionBarStyle" parent="android:Widget.Material.Light.ActionBar">
+        <item name="android:background">@color/amber</item>
+        <item name="android:elevation">1dp</item>
+    </style>
+
+    <!-- Details theme -->
+    <style name="DetailsTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/DetailsActionBarStyle</item>
+        <item name="android:colorPrimary">@color/teal</item>
+        <item name="android:colorPrimaryDark">@color/dark_teal</item>
+    </style>
+
+    <style name="DetailsActionBarStyle" parent="android:Widget.Material.Light.ActionBar">
+        <item name="android:background">@color/teal</item>
+        <item name="android:elevation">1dp</item>
+    </style>
+
 </resources>

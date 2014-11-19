@@ -67,34 +67,24 @@ public class TaskDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBarStyleHelper.setupActionBar(this, false);
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+        }
         setContentView(R.layout.activity_task_details);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         // Fetch the Intent extra. If the extra is not found, then this is a create Task event.
         Intent intent = getIntent();
         taskId = intent.getIntExtra(EXTRA_TASK_ID, TASK_CREATE_ID);
         position = intent.getIntExtra(EXTRA_TASK_POSITION, INVALID_VALUE);
-        getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
         final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
         // Only load the views with the appropriate text if this is NOT a new Task.
         if (taskId != TASK_CREATE_ID) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back_dark);
-            } else {
-                getActionBar().setIcon(R.drawable.ic_action_back_dark);
-            }
             final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
             final EditText titleView = (EditText) findViewById(R.id.details_title);
             final EditText noteView = (EditText) findViewById(R.id.details_note);
             titleView.setText(task.getTitle());
             noteView.setText(task.getNote());
             checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
-        } else {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                getActionBar().setHomeAsUpIndicator(R.drawable.ic_action_accept);
-            } else {
-                getActionBar().setIcon(R.drawable.ic_action_accept);
-            }
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
         // This is a hack to get a larger top zone for the CheckBox.
         final View checkBoxTouchZone = findViewById(R.id.details_checkbox_touch);
@@ -128,7 +118,7 @@ public class TaskDetailsActivity extends Activity {
                     finish();
                     return true;
                 }
-                final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+                final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                         .setTitle("Confirm deletion")
                         .setMessage("Do you want to delete this DO?")
                         .setCancelable(true)
