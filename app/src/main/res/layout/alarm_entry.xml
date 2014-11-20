@@ -78,9 +78,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="4dp"
-        android:layout_toRightOf="@id/alarm_entry_header"
-        android:layerType="software"
-        android:src="@drawable/shape_dotted_line" />
+        android:layout_toRightOf="@id/alarm_entry_header" />
 
     <TextView
         android:id="@+id/alarm_entry_days"

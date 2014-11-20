@@ -2,26 +2,35 @@
     <!-- Base application theme -->
     <style name="MainTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Sets up the ActionBar -->
-        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/MainActionBarStyle</item>
         <!-- Removes the drop shadow underneath all ActionBar(s) -->
         <item name="android:windowContentOverlay">@null</item>
         <!-- Makes the ActionButton(s) closer to one another -->
         <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
     </style>
 
-    <!-- Base application theme -->
-    <style name="DetailsTheme" parent="android:Theme.Holo.Light">
-        <!-- Sets up the ActionBar -->
-        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-        <!-- Removes the drop shadow underneath all ActionBar(s) -->
-        <item name="android:windowContentOverlay">@null</item>
-        <!-- Makes the ActionButton(s) closer to one another -->
-        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
-    </style>
-
-    <!-- Action bar style -->
-    <style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
+    <!-- Main action bar style -->
+    <style name="MainActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@color/amber</item>
+        <item name="android:icon">@color/transparent</item>
+        <item name="android:height">@dimen/actionbar_height</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
+        <item name="android:displayOptions">showHome|useLogo</item>
+    </style>
+
+    <!-- Details application theme -->
+    <style name="DetailsTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Sets up the ActionBar -->
+        <item name="android:actionBarStyle">@style/DetailsActionBarStyle</item>
+        <!-- Removes the drop shadow underneath all ActionBar(s) -->
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Makes the ActionButton(s) closer to one another -->
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
+    </style>
+
+    <!-- Details action bar style -->
+    <style name="DetailsActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@color/teal</item>
         <item name="android:icon">@color/transparent</item>
         <item name="android:height">@dimen/actionbar_height</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleText</item>

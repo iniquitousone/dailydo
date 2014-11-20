@@ -368,12 +368,6 @@ public class MainActivity extends Activity {
                     startTaskDetailsActivity(task.getId(), position);
                 }
             });
-            viewHolder.contentView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
             // This is a hack to get a larger top zone for the CheckBox.
             viewHolder.checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -70,8 +70,6 @@
             android:layout_marginBottom="4dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="4dp"
-            android:layerType="software"
-            android:src="@drawable/shape_dotted_line"
             android:visibility="gone" />
 
         <TextView

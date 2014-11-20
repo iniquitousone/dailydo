@@ -28,6 +28,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -399,7 +400,6 @@ public class DynamicListView extends ListView {
                     mCellIsMobile = true;
 
                     updateNeighborViewsForID(mMobileItemId);
-                    return true;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -488,14 +488,16 @@ public class DynamicListView extends ListView {
 
             swapElements(mTaskList, originalItem, getPositionForView(switchView));
 
-            ((BaseAdapter) getAdapter()).notifyDataSetInvalidated();
+            ((BaseAdapter) getAdapter()).notifyDataSetChanged();
 
             mDownY = mLastEventY;
 
             final int switchViewStartTop = switchView.getTop();
 
-            mobileView.setVisibility(View.VISIBLE);
-            switchView.setVisibility(View.INVISIBLE);
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                mobileView.setVisibility(View.VISIBLE);
+                switchView.setVisibility(View.INVISIBLE);
+            }
 
             updateNeighborViewsForID(mMobileItemId);
 
