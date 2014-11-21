@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 /**
  * Abstract Fragment used to display a TimePickerDialog to allow user input hour and minute.
@@ -15,6 +16,7 @@ public abstract class TimePickerFragment extends DialogFragment implements TimeP
     public static final String TITLE = "TITLE";
     public static final String HOUR_OF_DAY = "HOUR_OF_DAY";
     public static final String MINUTE = "MINUTE";
+    public int counter = 0;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -30,6 +32,6 @@ public abstract class TimePickerFragment extends DialogFragment implements TimeP
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        super.onCancel(dialog);
+        counter++;
     }
 }

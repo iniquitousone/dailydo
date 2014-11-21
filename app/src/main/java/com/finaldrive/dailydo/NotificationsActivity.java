@@ -1,5 +1,6 @@
 package com.finaldrive.dailydo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,11 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.finaldrive.dailydo.domain.Alarm;
-import com.finaldrive.dailydo.fragment.AlarmTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
@@ -44,7 +45,9 @@ public class NotificationsActivity extends Activity {
 
     private static final String CLASS_NAME = "NotificationsActivity";
     private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    private static final String ALARM_POSITION = "ALARM_POSITION";
     private static final int REQUEST_CODE_TONE_PICKER = 1;
+    private static final int ALARM_CREATE_POSITION = -1;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private List<Alarm> alarmList;
     private AlarmArrayAdapter alarmArrayAdapter;
@@ -147,14 +150,10 @@ public class NotificationsActivity extends Activity {
 
     public void addNewAlarm(View view) {
         final Calendar calendar = Calendar.getInstance();
-        Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-        alarm.setDaysRepeating(Alarm.EVERYDAY);
-        alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
-        alarmList.add(alarm);
         final Bundle bundle = new Bundle();
-        bundle.putInt(AlarmTimePickerFragment.POSITION, alarmList.size() - 1);
-        bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
-        bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
+        bundle.putInt(ALARM_POSITION, ALARM_CREATE_POSITION);
+        bundle.putInt(TimePickerFragment.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+        bundle.putInt(TimePickerFragment.MINUTE, calendar.get(Calendar.MINUTE));
         final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
         alarmTimePickerFragment.setArguments(bundle);
         alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
@@ -234,7 +233,7 @@ public class NotificationsActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     final Bundle bundle = new Bundle();
-                    bundle.putInt(AlarmTimePickerFragment.POSITION, position);
+                    bundle.putInt(ALARM_POSITION, position);
                     bundle.putInt(TimePickerFragment.HOUR_OF_DAY, alarm.getHour());
                     bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
                     final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
@@ -347,6 +346,32 @@ public class NotificationsActivity extends Activity {
                     break;
             }
             return daysOfWeek;
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    public final class AlarmTimePickerFragment extends TimePickerFragment {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if (counter > 0) {
+                return;
+            }
+            counter++;
+            int position = getArguments().getInt(ALARM_POSITION);
+            if (position == ALARM_CREATE_POSITION) {
+                Alarm alarm = new Alarm(hourOfDay, minute);
+                alarm.setDaysRepeating(Alarm.EVERYDAY);
+                alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
+                alarmList.add(alarm);
+                position = alarmList.size() - 1;
+            }
+            final Alarm alarm = alarmArrayAdapter.getItem(position);
+            alarm.setHour(hourOfDay);
+            alarm.setMinute(minute);
+            dailyDoDatabaseHelper.updateAlarmEntry(alarm);
+            alarmArrayAdapter.notifyDataSetChanged();
+            listView.smoothScrollToPosition(position);
+            AlarmService.scheduleNextAlarm(getActivity());
         }
     }
 }

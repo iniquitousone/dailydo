@@ -22,13 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.finaldrive.dailydo.domain.Task;
-import com.finaldrive.dailydo.fragment.DailyResetTimePickerFragment;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
 import com.finaldrive.dailydo.listener.ListViewScrollListener;
+import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import com.finaldrive.dailydo.view.DynamicListView;
@@ -246,7 +247,20 @@ public class MainActivity extends Activity {
                 bundle.putString(TimePickerFragment.TITLE, "Set a time for your DOs to uncheck everyday");
                 bundle.putInt(TimePickerFragment.HOUR_OF_DAY, hourOfReset);
                 bundle.putInt(TimePickerFragment.MINUTE, minuteOfReset);
-                final DailyResetTimePickerFragment dailyResetTimePickerFragment = new DailyResetTimePickerFragment();
+                final TimePickerFragment dailyResetTimePickerFragment = new TimePickerFragment() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if (counter > 0) {
+                            return;
+                        }
+                        counter++;
+                        final SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(getString(R.string.pref_daily_reset_hour), hourOfDay);
+                        editor.putInt(getString(R.string.pref_daily_reset_minute), minute);
+                        editor.commit();
+                        AlarmService.scheduleNextReset(getActivity());
+                    }
+                };
                 dailyResetTimePickerFragment.setArguments(bundle);
                 dailyResetTimePickerFragment.show(getFragmentManager(), "DailyResetTimePickerFragment");
                 break;
