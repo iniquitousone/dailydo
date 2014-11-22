@@ -53,6 +53,5 @@ public class SnoozePickerActivity extends Activity {
 
     private void finishActivity() {
         finish();
-        overridePendingTransition(0, 0);
     }
 }

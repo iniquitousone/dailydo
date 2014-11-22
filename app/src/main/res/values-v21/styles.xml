@@ -3,7 +3,7 @@
     <!-- Base application theme -->
     <style name="MainTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MainActionBarStyle</item>
-        <item name="android:colorPrimary">@color/amber</item>
+        <item name="android:colorPrimary">@color/light_gray</item>
         <item name="android:colorPrimaryDark">@color/dark_amber</item>
     </style>
 
@@ -15,7 +15,7 @@
     <!-- Details theme -->
     <style name="DetailsTheme" parent="android:Theme.Material.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/DetailsActionBarStyle</item>
-        <item name="android:colorPrimary">@color/teal</item>
+        <item name="android:colorPrimary">@color/darker_teal</item>
         <item name="android:colorPrimaryDark">@color/dark_teal</item>
     </style>
 
