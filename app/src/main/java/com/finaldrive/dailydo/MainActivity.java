@@ -134,6 +134,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         registerReceiver(resetListener, new IntentFilter(getString(R.string.intent_action_reset_tasks)));
     }
 
