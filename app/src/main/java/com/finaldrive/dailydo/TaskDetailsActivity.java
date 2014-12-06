@@ -89,6 +89,8 @@ public class TaskDetailsActivity extends Activity {
             if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                 getActionBar().setIcon(R.drawable.ic_action_accept);
             }
+            // Bring up the keyboard whenever it is a new Task for easier input.
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
         // This is a hack to get a larger top zone for the CheckBox.
         final View checkBoxTouchZone = findViewById(R.id.details_checkbox_touch);
