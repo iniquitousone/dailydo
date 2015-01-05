@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
-import com.finaldrive.dailydo.view.DynamicListView;
+import com.finaldrive.dailydo.view.DragListView;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class MainActivity extends Activity {
     };
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private TaskArrayAdapter taskArrayAdapter;
-    private DynamicListView dynamicListView;
+    private DragListView dragListView;
     private boolean isShowingNewTaskButton = true;
 
     /**
@@ -82,12 +83,12 @@ public class MainActivity extends Activity {
         // Initialize and set the ArrayAdapter which acts as the adapter for the main ListView and its content.
         taskArrayAdapter = new TaskArrayAdapter(this, R.layout.task_entry, taskList);
         final View newTaskButton = findViewById(R.id.new_task_button);
-        // Setup the DynamicListView to allow drag-and-sort functionality.
-        dynamicListView = (DynamicListView) findViewById(R.id.task_list_view);
-        dynamicListView.setTaskList(taskList);
-        dynamicListView.setAdapter(taskArrayAdapter);
-        dynamicListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        dynamicListView.setOnScrollListener(new ListViewScrollListener(dynamicListView) {
+
+        dragListView = (DragListView) findViewById(R.id.task_list_view);
+        dragListView.setAdapter(taskArrayAdapter);
+        dragListView.setList(taskList);
+        dragListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        dragListView.setOnScrollListener(new ListViewScrollListener(dragListView) {
             @Override
             public void onDownwardScroll() {
                 if (isShowingNewTaskButton) {
@@ -104,6 +105,33 @@ public class MainActivity extends Activity {
                     newTaskButton.startAnimation(TranslateAnimationHelper.UPWARD_BUTTON_TRANSLATION);
                     newTaskButton.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+        dragListView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent dragEvent) {
+                // Effectively overriding default behavior in the ListView to keep it generic.
+                if (dragEvent.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+                    int mPosition = dragListView.mPosition;
+                    int dPosition = dragListView.dPosition;
+                    if (dPosition >= 0 && mPosition != dPosition) {
+                        Task temp = taskList.get(mPosition);
+                        // Set the row numbers to be what they should be now.
+                        taskList.get(mPosition).setRowNumber(dPosition);
+                        taskList.get(dPosition).setRowNumber(mPosition);
+                        // Swap positions in the list.
+                        taskList.set(mPosition, taskList.get(dPosition));
+                        taskList.set(dPosition, temp);
+                        // Persist to database.
+                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(mPosition));
+                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(dPosition));
+                        taskArrayAdapter.notifyDataSetChanged();
+                    }
+                    dragListView.getChildAt(mPosition).setVisibility(View.VISIBLE);
+                    dragListView.setIsDragging(false);
+                    return true;
+                }
+                return false; // Do no want to consume the other drag events in the ListView.
             }
         });
         setupSharedPreferences();
@@ -169,7 +197,7 @@ public class MainActivity extends Activity {
                 taskArrayAdapter.clear();
                 taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
                 taskArrayAdapter.notifyDataSetChanged();
-                dynamicListView.smoothScrollToPosition(position);
+                dragListView.smoothScrollToPosition(position);
                 final boolean isChecked = task.getIsChecked() == 1 ? true : false;
                 NotificationService.startNotificationUpdate(this, task.getId(), isChecked);
                 break;

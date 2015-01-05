@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.finaldrive.dailydo.view.DynamicListView
+    <com.finaldrive.dailydo.view.DragListView
         android:id="@+id/task_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
