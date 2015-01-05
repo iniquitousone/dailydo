@@ -51,13 +51,12 @@ public class MainActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(context, "Resetting all DOs!", Toast.LENGTH_SHORT).show();
             // Re-establish the underlying data set and re-render the List view.
-            taskList.clear();
-            taskList.addAll(dailyDoDatabaseHelper.getTaskEntries());
+            taskArrayAdapter.clear();
+            taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
             taskArrayAdapter.notifyDataSetChanged();
         }
     };
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
-    private List<Task> taskList;
     private TaskArrayAdapter taskArrayAdapter;
     private DynamicListView dynamicListView;
     private boolean isShowingNewTaskButton = true;
@@ -79,7 +78,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         // Initialize the database helper and fetch the List of Task(s) from the database.
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
-        taskList = dailyDoDatabaseHelper.getTaskEntries();
+        final List<Task> taskList = dailyDoDatabaseHelper.getTaskEntries();
         // Initialize and set the ArrayAdapter which acts as the adapter for the main ListView and its content.
         taskArrayAdapter = new TaskArrayAdapter(this, R.layout.task_entry, taskList);
         final View newTaskButton = findViewById(R.id.new_task_button);
@@ -167,15 +166,8 @@ public class MainActivity extends Activity {
                     return;
                 }
                 final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
-                switch (requestCode) {
-                    case TaskDetailsActivity.REQUEST_CODE_TASK_CREATE:
-                        taskList.add(task);
-                        break;
-
-                    case TaskDetailsActivity.REQUEST_CODE_TASK_DETAILS:
-                        taskList.set(position, task);
-                        break;
-                }
+                taskArrayAdapter.clear();
+                taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
                 taskArrayAdapter.notifyDataSetChanged();
                 dynamicListView.smoothScrollToPosition(position);
                 final boolean isChecked = task.getIsChecked() == 1 ? true : false;
@@ -184,19 +176,12 @@ public class MainActivity extends Activity {
 
             case TaskDetailsActivity.RESULT_CODE_DELETE:
                 taskId = data.getIntExtra(TaskDetailsActivity.EXTRA_TASK_ID, INVALID_VALUE);
-                position = data.getIntExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, INVALID_VALUE);
-                if (taskId == INVALID_VALUE || position == INVALID_VALUE) {
+                if (taskId == INVALID_VALUE) {
                     return;
                 }
                 NotificationService.startNotificationUpdate(this, taskId, true);
-                taskList.remove(position);
-                for (int i = position; i < taskList.size(); i++) {
-                    final Task taskToUpdate = taskList.get(i);
-                    if (taskToUpdate.getRowNumber() != i) {
-                        taskToUpdate.setRowNumber(i);
-                        dailyDoDatabaseHelper.updateTaskEntry(taskToUpdate);
-                    }
-                }
+                taskArrayAdapter.clear();
+                taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
                 taskArrayAdapter.notifyDataSetChanged();
                 break;
         }
@@ -275,7 +260,7 @@ public class MainActivity extends Activity {
 
     public void addNewTask(View view) {
         final Intent intent = new Intent(this, TaskDetailsActivity.class);
-        intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskList.size());
+        intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskArrayAdapter.getCount());
         startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
     }
 
@@ -391,7 +376,6 @@ public class MainActivity extends Activity {
                     task.setIsChecked(task.getIsChecked() == 1 ? 0 : 1);
                     task.setRowNumber(position);
                     dailyDoDatabaseHelper.updateTaskEntry(task);
-                    // TODO: Consider using the UI thread to only update this entry.
                     notifyDataSetChanged();
                     NotificationService.startNotificationUpdate(getContext(), task.getId(), viewHolder.checkBox.isChecked());
                 }

@@ -165,7 +165,7 @@ public class NotificationService extends IntentService {
     private void handleNotification(boolean isAlertOnce) {
         int remaining = 0;
         Task ongoingTask = null;
-        String bigTextMessage = "";
+        StringBuffer bigTextMessageBuffer = new StringBuffer();
         for (int i = 0; i < taskList.size(); i++) {
             final Task task = taskList.get(i);
             if (task == null) {
@@ -176,14 +176,14 @@ public class NotificationService extends IntentService {
                 ongoingTask = task;
             }
             if (remaining <= 5) {
-                bigTextMessage += task.getTitle() + "\n";
+                bigTextMessageBuffer.append(task.getTitle() + "\n");
             }
         }
         if (remaining == 0) {
             cancelNotification();
             return;
         } else if (remaining > 5) {
-            bigTextMessage += "...";
+            bigTextMessageBuffer.append("...");
         }
 
         final Notification.Builder notificationBuilder = new Notification.Builder(this)
@@ -202,7 +202,7 @@ public class NotificationService extends IntentService {
                 .setContentText(String.format("Ongoing: %s", ongoingTask.getTitle()))
                 .setContentIntent(createNotificationClickIntent(this, ongoingTask));
         if (remaining > 1) {
-            notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessage.trim()));
+            notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessageBuffer.toString().trim()));
         }
         final Uri notificationTone = getNotificationTone(this);
         if (notificationTone != null) {
