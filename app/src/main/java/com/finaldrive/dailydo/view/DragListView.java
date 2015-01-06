@@ -2,6 +2,7 @@ package com.finaldrive.dailydo.view;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,9 +57,19 @@ public class DragListView extends ListView {
                 if ((mDownX >= 0 && mDownX <= 50) && !isDragging) {
                     isDragging = true;
                     mPosition = pointToPosition(mDownX, mDownY) - getFirstVisiblePosition();
+                    if (mPosition == INVALID_POSITION) {
+                        isDragging = false;
+                        return true;
+                    }
                     draggedView = getChildAt(mPosition);
-                    ClipData dragData = ClipData.newPlainText(String.valueOf(draggedView.getId()), "");
-                    DragShadowBuilder dragShadowBuilder = new DragShadowBuilder(draggedView);
+                    final ClipData dragData = ClipData.newPlainText(String.valueOf(draggedView.getId()), "");
+                    final DragShadowBuilder dragShadowBuilder = new DragShadowBuilder(draggedView) {
+                        @Override
+                        public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
+                            shadowSize.set(draggedView.getWidth(), draggedView.getHeight());
+                            shadowTouchPoint.set(shadowTouchPoint.x, shadowSize.y / 2);
+                        }
+                    };
                     draggedView.startDrag(dragData, dragShadowBuilder, null, 0);
                     draggedView.setVisibility(View.INVISIBLE);
                 }
@@ -94,6 +104,7 @@ public class DragListView extends ListView {
                 isDragging = false;
                 return true;
             case DragEvent.ACTION_DRAG_EXITED:
+                isDragging = false;
                 return true;
             default:
                 return false;

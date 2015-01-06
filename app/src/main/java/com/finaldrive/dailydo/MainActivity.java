@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
         dragListView.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent dragEvent) {
-                // Effectively overriding default behavior in the ListView to keep it generic.
+                // Effectively overriding default behavior in the DragListView.
                 if (dragEvent.getAction() == DragEvent.ACTION_DRAG_ENDED) {
                     int mPosition = dragListView.mPosition;
                     int dPosition = dragListView.dPosition;
@@ -125,7 +125,15 @@ public class MainActivity extends Activity {
                         // Persist to database.
                         dailyDoDatabaseHelper.updateTaskEntry(taskList.get(mPosition));
                         dailyDoDatabaseHelper.updateTaskEntry(taskList.get(dPosition));
+                        // Notify the change in the list.
                         taskArrayAdapter.notifyDataSetChanged();
+                        // Notify the change in the notification.
+                        NotificationService.startNotificationUpdate(MainActivity.this,
+                                taskList.get(mPosition).getId(),
+                                taskList.get(mPosition).getIsChecked() == 1);
+                        NotificationService.startNotificationUpdate(MainActivity.this,
+                                taskList.get(dPosition).getId(),
+                                taskList.get(dPosition).getIsChecked() == 1);
                     }
                     dragListView.getChildAt(mPosition).setVisibility(View.VISIBLE);
                     dragListView.setIsDragging(false);
@@ -198,7 +206,7 @@ public class MainActivity extends Activity {
                 taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
                 taskArrayAdapter.notifyDataSetChanged();
                 dragListView.smoothScrollToPosition(position);
-                final boolean isChecked = task.getIsChecked() == 1 ? true : false;
+                final boolean isChecked = task.getIsChecked() == 1;
                 NotificationService.startNotificationUpdate(this, task.getId(), isChecked);
                 break;
 
