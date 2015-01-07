@@ -17,10 +17,12 @@ public class SnoozePickerActivity extends Activity {
     private static final CharSequence[] MINUTE_VALUES = {"5 minutes", "15 minutes", "30 minutes", "45 minutes", "1 hour", "2 hours"};
     private static final int[] MINUTE_ARRAY = {5, 15, 30, 45, 60, 120};
 
+    private AlertDialog alertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setTitle("Snooze duration")
                 .setCancelable(true)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -49,6 +51,12 @@ public class SnoozePickerActivity extends Activity {
                 })
                 .create();
         alertDialog.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        alertDialog.dismiss();
     }
 
     private void finishActivity() {
