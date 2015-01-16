@@ -58,9 +58,33 @@ public class TaskDetailsActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (!saveContentAndFinish()) {
+        final EditText titleView = (EditText) findViewById(R.id.details_title);
+        final EditText noteView = (EditText) findViewById(R.id.details_note);
+        final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
+        final String title = titleView.getText().toString();
+        if (title.isEmpty()) {
+            Toast.makeText(this, "Please provide a title for your entry", Toast.LENGTH_SHORT).show();
             return;
         }
+        final String note = noteView.getText().toString();
+        final Intent editIntent = new Intent(this, MainActivity.class);
+        Task task;
+        if (taskId == TASK_CREATE_ID) {
+            task = new Task(title, note, position);
+            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
+            task = dailyDoDatabaseHelper.insertTaskEntry(task);
+        } else {
+            task = dailyDoDatabaseHelper.getTaskEntry(taskId);
+            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
+            task.setTitle(title);
+            task.setNote(note);
+            task.setRowNumber(position);
+            dailyDoDatabaseHelper.updateTaskEntry(task);
+        }
+        editIntent.putExtra(EXTRA_TASK_ID, task.getId());
+        editIntent.putExtra(EXTRA_TASK_POSITION, position);
+        setResult(Activity.RESULT_OK, editIntent);
+        finish();
     }
 
     @Override
@@ -157,44 +181,9 @@ public class TaskDetailsActivity extends Activity {
                 return false;
 
             case android.R.id.home:
-                return saveContentAndFinish();
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Saves the content of the Task and finishes the Activity if a valid title is available.
-     *
-     * @return boolean result if valid
-     */
-    private boolean saveContentAndFinish() {
-        final EditText titleView = (EditText) findViewById(R.id.details_title);
-        final EditText noteView = (EditText) findViewById(R.id.details_note);
-        final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
-        final String title = titleView.getText().toString();
-        if (title.isEmpty()) {
-            Toast.makeText(this, "Please provide a title for your entry", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        final String note = noteView.getText().toString();
-        final Intent editIntent = new Intent(this, MainActivity.class);
-        Task task;
-        if (taskId == TASK_CREATE_ID) {
-            task = new Task(title, note, position);
-            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
-            task = dailyDoDatabaseHelper.insertTaskEntry(task);
-        } else {
-            task = dailyDoDatabaseHelper.getTaskEntry(taskId);
-            task.setIsChecked(checkBox.isChecked() ? 1 : 0);
-            task.setTitle(title);
-            task.setNote(note);
-            task.setRowNumber(position);
-            dailyDoDatabaseHelper.updateTaskEntry(task);
-        }
-        editIntent.putExtra(EXTRA_TASK_ID, task.getId());
-        editIntent.putExtra(EXTRA_TASK_POSITION, position);
-        setResult(Activity.RESULT_OK, editIntent);
-        finish();
-        return true;
     }
 }
