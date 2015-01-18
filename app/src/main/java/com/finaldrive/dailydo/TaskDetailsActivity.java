@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +23,7 @@ import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
  * Activity for handling the detailed view of a Task.
  * Said view is also leveraged for editing and deleting.
  */
-public class TaskDetailsActivity extends Activity {
+public class TaskDetailsActivity extends ActionBarActivity {
 
     /**
      * Request code for the create Task intent.
@@ -90,7 +90,6 @@ public class TaskDetailsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarStyleHelper.setupActionBar(this, false);
         setContentView(R.layout.activity_task_details);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         // Fetch the Intent extra. If the extra is not found, then this is a create Task event.
@@ -100,9 +99,6 @@ public class TaskDetailsActivity extends Activity {
         final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
         // Only load the views with the appropriate text if this is NOT a new Task.
         if (taskId != TASK_CREATE_ID) {
-            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                getActionBar().setIcon(R.drawable.ic_action_back);
-            }
             final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
             final EditText titleView = (EditText) findViewById(R.id.details_title);
             final EditText noteView = (EditText) findViewById(R.id.details_note);
@@ -110,9 +106,6 @@ public class TaskDetailsActivity extends Activity {
             noteView.setText(task.getNote());
             checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
         } else {
-            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                getActionBar().setIcon(R.drawable.ic_action_accept);
-            }
             // Bring up the keyboard whenever it is a new Task for easier input.
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }

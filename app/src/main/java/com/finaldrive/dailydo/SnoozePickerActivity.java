@@ -1,9 +1,9 @@
 package com.finaldrive.dailydo;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import com.finaldrive.dailydo.service.AlarmService;
@@ -12,7 +12,7 @@ import com.finaldrive.dailydo.service.NotificationService;
 /**
  * Wrapper Activity that houses the Snooze picker dialog.
  */
-public class SnoozePickerActivity extends Activity {
+public class SnoozePickerActivity extends ActionBarActivity {
 
     private static final CharSequence[] MINUTE_VALUES = {"5 minutes", "15 minutes", "30 minutes", "45 minutes", "1 hour", "2 hours"};
     private static final int[] MINUTE_ARRAY = {5, 15, 30, 45, 60, 120};
@@ -28,13 +28,13 @@ public class SnoozePickerActivity extends Activity {
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        finishActivity();
+                        finish();
                     }
                 })
                 .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finishActivity();
+                        finish();
                     }
                 })
                 .setItems(MINUTE_VALUES, new DialogInterface.OnClickListener() {
@@ -46,7 +46,7 @@ public class SnoozePickerActivity extends Activity {
                         Toast.makeText(getApplicationContext(),
                                 String.format("Snoozing for %d minutes", minutes),
                                 Toast.LENGTH_SHORT).show();
-                        finishActivity();
+                        finish();
                     }
                 })
                 .create();
@@ -56,10 +56,8 @@ public class SnoozePickerActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        alertDialog.dismiss();
-    }
-
-    private void finishActivity() {
-        finish();
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 }

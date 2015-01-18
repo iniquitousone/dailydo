@@ -7,9 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * Main activity for handling the List of Task(s) to show.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     private static final String CLASS_NAME = "MainActivity";
     private static final int INVALID_VALUE = -99;
@@ -71,10 +70,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         // Call super constructor to establish default Cursor.
         super.onCreate(savedInstanceState);
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            getActionBar().setTitle(Html.fromHtml("Daily<b>Do</b>"));
-            getActionBar().setDisplayShowTitleEnabled(true);
-        }
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
         // Initialize the database helper and fetch the List of Task(s) from the database.
@@ -226,18 +221,18 @@ public class MainActivity extends Activity {
     /**
      * Handles state of the ListView whenever it is empty to show a helpful message to the user.
      */
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        final View emptyListView = findViewById(R.id.empty_task_list_view);
-        final ListView listView = (ListView) findViewById(R.id.task_list_view);
-        if (listView == null) {
-            throw new RuntimeException("No listview provided.");
-        }
-        if (emptyListView != null) {
-            listView.setEmptyView(emptyListView);
-        }
-    }
+//    @Override
+//    public void onContentChanged() {
+//        super.onContentChanged();
+//        final View emptyListView = findViewById(R.id.empty_task_list_view);
+//        final ListView listView = (ListView) findViewById(R.id.task_list_view);
+//        if (listView == null) {
+//            throw new RuntimeException("No listview provided.");
+//        }
+//        if (emptyListView != null) {
+//            listView.setEmptyView(emptyListView);
+//        }
+//    }
 
     /**
      * Inflates the associated {@link menu/main.xml}, responsible for the ActionBar items.

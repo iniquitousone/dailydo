@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme -->
-    <style name="MainTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/MainActionBarStyle</item>
-        <item name="android:colorPrimary">@color/light_gray</item>
-        <item name="android:colorPrimaryDark">@color/dark_amber</item>
+    <style name="MainTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/MainActionBarStyle</item>
+        <item name="colorPrimary">@color/amber</item>
+        <item name="colorPrimaryDark">@color/dark_amber</item>
     </style>
 
-    <style name="MainActionBarStyle" parent="android:Widget.Material.Light.ActionBar">
-        <item name="android:background">@color/amber</item>
-        <item name="android:elevation">1dp</item>
+    <style name="MainActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/amber</item>
+        <item name="elevation">1dp</item>
     </style>
 
     <!-- Details theme -->
-    <style name="DetailsTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/DetailsActionBarStyle</item>
-        <item name="android:colorPrimary">@color/light_gray</item>
-        <item name="android:colorPrimaryDark">@color/dark_teal</item>
+    <style name="DetailsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/DetailsActionBarStyle</item>
+        <item name="colorPrimary">@color/teal</item>
+        <item name="colorPrimaryDark">@color/dark_teal</item>
     </style>
 
-    <style name="DetailsActionBarStyle" parent="android:Widget.Material.Light.ActionBar">
-        <item name="android:background">@color/teal</item>
-        <item name="android:elevation">1dp</item>
+    <style name="DetailsActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/teal</item>
+        <item name="elevation">1dp</item>
+    </style>
+
+    <!-- Transparent theme designed for the SnoozePickerActivity -->
+    <style name="Transparent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 </resources>

@@ -40,12 +40,12 @@
         </activity>
         <activity
             android:name=".SnoozePickerActivity"
+            android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_snooze_picker"
             android:noHistory="true"
-            android:parentActivityName=".SnoozePickerActivity"
             android:taskAffinity=".SnoozePickerActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/Transparent" />
 
         <service
             android:name=".service.AlarmService"

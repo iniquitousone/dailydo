@@ -1,11 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.finaldrive.dailydo.NotificationsActivity">
 
     <item
         android:id="@+id/action_set_tone"
         android:icon="@drawable/ic_action_tone"
-        android:showAsAction="always"
-        android:title="@string/action_set_tone" />
+        android:title="@string/action_set_tone"
+        app:showAsAction="always" />
 
 </menu>

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,7 +42,7 @@ import java.util.List;
 /**
  * Activity to handle the scheduling of Alarm(s).
  */
-public class NotificationsActivity extends Activity {
+public class NotificationsActivity extends ActionBarActivity {
 
     private static final String CLASS_NAME = "NotificationsActivity";
     private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -67,11 +68,6 @@ public class NotificationsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarStyleHelper.setupActionBar(this, true);
-        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            getActionBar().setIcon(R.drawable.ic_action_back);
-            getActionBar().setTitle(R.string.title_activity_notifications);
-        }
         setContentView(R.layout.activity_notifications);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
@@ -162,18 +158,18 @@ public class NotificationsActivity extends Activity {
     /**
      * Handles state of the ListView whenever it is empty to show a helpful message to the user.
      */
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        View emptyListView = findViewById(R.id.empty_alarm_list_view);
-        ListView listView = (ListView) findViewById(R.id.alarm_list_view);
-        if (listView == null) {
-            throw new RuntimeException("No listview provided.");
-        }
-        if (emptyListView != null) {
-            listView.setEmptyView(emptyListView);
-        }
-    }
+//    @Override
+//    public void onContentChanged() {
+//        super.onContentChanged();
+//        View emptyListView = findViewById(R.id.empty_alarm_list_view);
+//        ListView listView = (ListView) findViewById(R.id.alarm_list_view);
+//        if (listView == null) {
+//            throw new RuntimeException("No listview provided.");
+//        }
+//        if (emptyListView != null) {
+//            listView.setEmptyView(emptyListView);
+//        }
+//    }
 
     private static class ViewHolder {
         private ToggleButton toggleButton;

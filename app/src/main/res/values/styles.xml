@@ -1,52 +1,36 @@
 <resources>
     <!-- Base application theme -->
-    <style name="MainTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Sets up the ActionBar -->
-        <item name="android:actionBarStyle">@style/MainActionBarStyle</item>
-        <!-- Removes the drop shadow underneath all ActionBar(s) -->
+    <style name="MainTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/MainActionBarStyle</item>
+        <item name="colorPrimary">@color/amber</item>
+        <item name="colorPrimaryDark">@color/dark_amber</item>
+    </style>
+
+    <style name="MainActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/amber</item>
+        <item name="elevation">1dp</item>
+    </style>
+
+    <!-- Details theme -->
+    <style name="DetailsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/DetailsActionBarStyle</item>
+        <item name="colorPrimary">@color/teal</item>
+        <item name="colorPrimaryDark">@color/dark_teal</item>
+    </style>
+
+    <style name="DetailsActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/teal</item>
+        <item name="elevation">1dp</item>
+    </style>
+
+    <!-- Transparent theme designed for the SnoozePickerActivity -->
+    <style name="Transparent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
-        <!-- Makes the ActionButton(s) closer to one another -->
-        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
-    </style>
-
-    <!-- Main action bar style -->
-    <style name="MainActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:background">@color/amber</item>
-        <item name="android:icon">@color/transparent</item>
-        <item name="android:height">@dimen/actionbar_height</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
-        <item name="android:displayOptions">showHome|useLogo</item>
-    </style>
-
-    <!-- Details application theme -->
-    <style name="DetailsTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Sets up the ActionBar -->
-        <item name="android:actionBarStyle">@style/DetailsActionBarStyle</item>
-        <!-- Removes the drop shadow underneath all ActionBar(s) -->
-        <item name="android:windowContentOverlay">@null</item>
-        <!-- Makes the ActionButton(s) closer to one another -->
-        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
-    </style>
-
-    <!-- Details action bar style -->
-    <style name="DetailsActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:background">@color/teal</item>
-        <item name="android:icon">@color/transparent</item>
-        <item name="android:height">@dimen/actionbar_height</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
-        <item name="android:displayOptions">showHome|useLogo</item>
-    </style>
-
-    <!-- Action bar text style -->
-    <style name="ActionBarTitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">
-        <!--<item name="android:textStyle">bold</item>-->
-        <item name="android:fontFamily">san-serif-light</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <!-- Action button style -->
-    <style name="ActionButtonStyle" parent="android:Widget.Holo.Light.ActionButton">
-        <item name="android:minWidth">48dp</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 </resources>
