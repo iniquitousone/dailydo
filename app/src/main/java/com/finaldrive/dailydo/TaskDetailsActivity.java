@@ -102,7 +102,7 @@ public class TaskDetailsActivity extends ActionBarActivity {
             final EditText noteView = (EditText) findViewById(R.id.details_note);
             titleView.setText(task.getTitle());
             noteView.setText(task.getNote());
-            checkBox.setChecked(task.getIsChecked() == 1 ? true : false);
+            checkBox.setChecked(task.getIsChecked() == 1);
         } else {
             // Bring up the keyboard whenever it is a new Task for easier input.
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -127,7 +127,7 @@ public class TaskDetailsActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_delete_task:
                 if (taskId == TASK_CREATE_ID) {
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Discarded", Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
                 }
@@ -155,7 +155,7 @@ public class TaskDetailsActivity extends ActionBarActivity {
                                     deleteIntent.putExtra(EXTRA_TASK_POSITION, position);
                                     setResult(RESULT_CODE_DELETE, deleteIntent);
                                 }
-                                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Discarded", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         })
