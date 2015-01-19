@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.finaldrive.dailydo.domain.Task;
-import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
 /**
@@ -109,14 +107,6 @@ public class TaskDetailsActivity extends ActionBarActivity {
             // Bring up the keyboard whenever it is a new Task for easier input.
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
-        // This is a hack to get a larger top zone for the CheckBox.
-        final View checkBoxTouchZone = findViewById(R.id.details_checkbox_touch);
-        checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkBox.toggle();
-            }
-        });
     }
 
     @Override

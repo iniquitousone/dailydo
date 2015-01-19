@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:minWidth="@dimen/content_left_indent"
+        android:gravity="top"
+        android:minWidth="@dimen/task_entry_left_indent"
         android:orientation="horizontal"
         android:paddingTop="6dp">
 
@@ -24,16 +23,16 @@
             android:id="@+id/task_entry_grabber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/ic_dragger" />
 
         <CheckBox
             android:id="@+id/task_entry_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:button="@drawable/selector_toggle_checkbox"
-            android:clickable="false" />
+            android:clickable="true" />
 
     </LinearLayout>
 
@@ -60,8 +59,7 @@
             android:maxLines="1"
             android:text="Example title to test render behavior"
             android:textColor="@color/gray"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/task_entry_separator"
@@ -82,20 +80,12 @@
             android:maxLines="3"
             android:paddingTop="2dp"
             android:text="Example note to test render behavior"
-            android:textColor="@color/silver"
+            android:fontFamily="san-serif-light"
+            android:textColor="@color/gray"
             android:textSize="14sp"
             android:visibility="gone" />
 
     </LinearLayout>
-
-    <!-- This is a hack to get a wider touch area atop the CheckBox -->
-    <View
-        android:id="@+id/task_entry_checkbox_touch"
-        android:layout_width="32dp"
-        android:layout_height="48dp"
-        android:layout_marginRight="12dp"
-        android:layout_toLeftOf="@id/task_entry_content"
-        android:clickable="true" />
 
     <ImageView
         android:layout_width="match_parent"

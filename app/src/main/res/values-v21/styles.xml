@@ -5,11 +5,13 @@
         <item name="actionBarStyle">@style/MainActionBarStyle</item>
         <item name="colorPrimary">@color/amber</item>
         <item name="colorPrimaryDark">@color/dark_amber</item>
+        <item name="colorAccent">@color/teal</item>
+        <item name="colorControlNormal">@color/gray</item>
     </style>
 
     <style name="MainActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/amber</item>
-        <item name="elevation">1dp</item>
+        <item name="elevation">2dp</item>
     </style>
 
     <!-- Details theme -->
@@ -17,11 +19,13 @@
         <item name="actionBarStyle">@style/DetailsActionBarStyle</item>
         <item name="colorPrimary">@color/teal</item>
         <item name="colorPrimaryDark">@color/dark_teal</item>
+        <item name="colorAccent">@color/teal</item>
+        <item name="colorControlNormal">@color/gray</item>
     </style>
 
     <style name="DetailsActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/teal</item>
-        <item name="elevation">1dp</item>
+        <item name="elevation">2dp</item>
     </style>
 
     <!-- Transparent theme designed for the SnoozePickerActivity -->

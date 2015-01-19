@@ -12,7 +12,16 @@ public final class TimeFormatHelper {
 
     public static String format(final Context context, final Calendar calendar) {
         final java.text.DateFormat timeFormat = DateFormat.getTimeFormat(context.getApplicationContext());
-        return timeFormat.format(calendar.getTime());
+        String formattedTime = timeFormat.format(calendar.getTime());
+        // Lower case the AM/PM if present
+        if (!DateFormat.is24HourFormat(context)) {
+            if (formattedTime.contains("AM")) {
+                formattedTime = formattedTime.replace("AM", "am");
+            } else {
+                formattedTime = formattedTime.replace("PM", "pm");
+            }
+        }
+        return formattedTime;
     }
 
     public static String format(final Context context, int hour, int minute) {

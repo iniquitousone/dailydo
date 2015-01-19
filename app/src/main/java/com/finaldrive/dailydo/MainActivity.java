@@ -78,10 +78,12 @@ public class MainActivity extends ActionBarActivity {
         // Initialize and set the ArrayAdapter which acts as the adapter for the main ListView and its content.
         taskArrayAdapter = new TaskArrayAdapter(this, R.layout.task_entry, taskList);
         final View newTaskButton = findViewById(R.id.new_task_button);
+        final View emptyListView = findViewById(R.id.empty_task_list_view);
 
         dragListView = (DragListView) findViewById(R.id.task_list_view);
         dragListView.setAdapter(taskArrayAdapter);
         dragListView.setList(taskList);
+        dragListView.setEmptyView(emptyListView);
         dragListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         dragListView.setOnScrollListener(new ListViewScrollListener(dragListView) {
             @Override
@@ -201,8 +203,7 @@ public class MainActivity extends ActionBarActivity {
                 taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
                 taskArrayAdapter.notifyDataSetChanged();
                 dragListView.smoothScrollToPosition(position);
-                final boolean isChecked = task.getIsChecked() == 1;
-                NotificationService.startNotificationUpdate(this, task.getId(), isChecked);
+                NotificationService.startNotificationUpdate(this, task.getId(), task.getIsChecked() == 1);
                 break;
 
             case TaskDetailsActivity.RESULT_CODE_DELETE:
@@ -296,7 +297,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private static class ViewHolder {
-        private View checkBoxTouchZone;
         private CheckBox checkBox;
         private LinearLayout contentView;
         private ImageView separatorView;
@@ -352,7 +352,6 @@ public class MainActivity extends ActionBarActivity {
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.task_entry, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.checkBoxTouchZone = convertView.findViewById(R.id.task_entry_checkbox_touch);
                 viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
                 viewHolder.contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);
                 viewHolder.separatorView = (ImageView) convertView.findViewById(R.id.task_entry_separator);
@@ -371,14 +370,12 @@ public class MainActivity extends ActionBarActivity {
             if (isChecked) {
                 viewHolder.titleView.setTypeface(null, Typeface.BOLD_ITALIC);
                 viewHolder.titleView.setTextColor(getResources().getColor(R.color.silver));
-                viewHolder.noteView.setTypeface(null, Typeface.ITALIC);
                 viewHolder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(0.67f);
             } else {
                 viewHolder.titleView.setTypeface(null, Typeface.BOLD);
                 viewHolder.titleView.setTextColor(getResources().getColor(R.color.gray));
-                viewHolder.noteView.setTypeface(null, Typeface.NORMAL);
-                viewHolder.noteView.setTextColor(getResources().getColor(R.color.silver));
+                viewHolder.noteView.setTextColor(getResources().getColor(R.color.gray));
                 convertView.setAlpha(1.0f);
             }
             // Setup the values.
@@ -400,7 +397,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
             // This is a hack to get a larger top zone for the CheckBox.
-            viewHolder.checkBoxTouchZone.setOnClickListener(new View.OnClickListener() {
+            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     viewHolder.checkBox.toggle();

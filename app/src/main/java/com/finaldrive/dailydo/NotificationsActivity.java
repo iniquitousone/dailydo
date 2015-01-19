@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -28,7 +27,6 @@ import android.widget.ToggleButton;
 
 import com.finaldrive.dailydo.domain.Alarm;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
-import com.finaldrive.dailydo.helper.ActionBarStyleHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
 import com.finaldrive.dailydo.listener.ListViewScrollListener;
@@ -73,9 +71,11 @@ public class NotificationsActivity extends ActionBarActivity {
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
         alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.alarm_entry, alarmList);
         final View newAlarmButton = findViewById(R.id.new_alarm_button);
+        final View emptyListView = findViewById(R.id.empty_alarm_list_view);
         listView = (ListView) findViewById(R.id.alarm_list_view);
         listView.setAdapter(alarmArrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setEmptyView(emptyListView);
         listView.setOnScrollListener(new ListViewScrollListener(listView) {
             @Override
             public void onDownwardScroll() {

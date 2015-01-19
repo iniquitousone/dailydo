@@ -23,21 +23,16 @@
         android:minHeight="48dp"
         android:orientation="horizontal">
 
-        <!-- This is a hack to get a wider touch area atop the CheckBox -->
         <LinearLayout
-            android:id="@+id/details_checkbox_touch"
             android:layout_width="@dimen/content_left_indent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingTop="2dp">
+            android:gravity="center_horizontal|top">
 
             <CheckBox
                 android:id="@+id/details_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/selector_toggle_checkbox"
-                android:clickable="false" />
+                android:clickable="true" />
 
         </LinearLayout>
 
@@ -45,6 +40,7 @@
             android:id="@+id/details_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:background="@color/transparent"
             android:capitalize="sentences"
             android:hint="(required)"
@@ -60,9 +56,8 @@
         android:layout_height="2dp"
         android:layout_marginBottom="12dp"
         android:layout_marginLeft="@dimen/content_left_indent"
-        android:layerType="software"
         android:src="@drawable/shape_dotted_line"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,6 +70,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:minHeight="48dp"
         android:orientation="horizontal">
 
