@@ -405,7 +405,7 @@ public class MainActivity extends ActionBarActivity {
                     task.setRowNumber(position);
                     dailyDoDatabaseHelper.updateTaskEntry(task);
                     notifyDataSetChanged();
-                    NotificationService.startNotificationUpdate(getContext(), task.getId(), viewHolder.checkBox.isChecked());
+                    NotificationService.startNotificationUpdate(getContext(), task.getId(), task.getIsChecked() == 1);
                 }
             });
 
