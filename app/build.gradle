@@ -7,8 +7,8 @@ android {
         applicationId 'com.finaldrive.dailydo'
         minSdkVersion 17
         targetSdkVersion 21
-        versionCode 7
-        versionName '1.6'
+        versionCode 8
+        versionName '2.0'
     }
     buildTypes {
         release {
@@ -22,9 +22,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:appcompat-v7:21.0.3'
 }
