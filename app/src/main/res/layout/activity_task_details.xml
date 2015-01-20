@@ -56,7 +56,6 @@
         android:layout_height="2dp"
         android:layout_marginBottom="12dp"
         android:layout_marginLeft="@dimen/content_left_indent"
-        android:src="@drawable/shape_dotted_line"
         android:visibility="invisible" />
 
     <TextView

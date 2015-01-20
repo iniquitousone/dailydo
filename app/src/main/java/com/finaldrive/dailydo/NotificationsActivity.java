@@ -155,22 +155,6 @@ public class NotificationsActivity extends ActionBarActivity {
         alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
     }
 
-    /**
-     * Handles state of the ListView whenever it is empty to show a helpful message to the user.
-     */
-//    @Override
-//    public void onContentChanged() {
-//        super.onContentChanged();
-//        View emptyListView = findViewById(R.id.empty_alarm_list_view);
-//        ListView listView = (ListView) findViewById(R.id.alarm_list_view);
-//        if (listView == null) {
-//            throw new RuntimeException("No listview provided.");
-//        }
-//        if (emptyListView != null) {
-//            listView.setEmptyView(emptyListView);
-//        }
-//    }
-
     private static class ViewHolder {
         private ToggleButton toggleButton;
         private TextView timeView;
