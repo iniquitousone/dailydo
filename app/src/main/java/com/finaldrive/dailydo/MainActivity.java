@@ -89,31 +89,31 @@ public class MainActivity extends ActionBarActivity {
             public boolean onDrag(View v, DragEvent dragEvent) {
                 // Effectively overriding default behavior in the DragListView.
                 if (dragEvent.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-                    int mPosition = dragListView.mPosition;
-                    int dPosition = dragListView.dPosition;
-                    if (dPosition >= 0 && mPosition != dPosition
-                            && dPosition < taskList.size()) {
-                        Task temp = taskList.get(mPosition);
+                    int mIndex = dragListView.mIndex;
+                    int dIndex = dragListView.dIndex;
+                    if (dIndex >= 0 && mIndex != dIndex
+                            && dIndex < taskList.size()) {
+                        Task temp = taskList.get(mIndex);
                         // Set the row numbers to be what they should be now.
-                        taskList.get(mPosition).setRowNumber(dPosition);
-                        taskList.get(dPosition).setRowNumber(mPosition);
+                        taskList.get(mIndex).setRowNumber(dIndex);
+                        taskList.get(dIndex).setRowNumber(mIndex);
                         // Swap positions in the list.
-                        taskList.set(mPosition, taskList.get(dPosition));
-                        taskList.set(dPosition, temp);
+                        taskList.set(mIndex, taskList.get(dIndex));
+                        taskList.set(dIndex, temp);
                         // Persist to database.
-                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(mPosition));
-                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(dPosition));
+                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(mIndex));
+                        dailyDoDatabaseHelper.updateTaskEntry(taskList.get(dIndex));
                         // Notify the change in the list.
                         taskArrayAdapter.notifyDataSetChanged();
                         // Notify the change in the notification.
                         NotificationService.startNotificationUpdate(MainActivity.this,
-                                taskList.get(mPosition).getId(),
-                                taskList.get(mPosition).getIsChecked() == 1);
+                                taskList.get(mIndex).getId(),
+                                taskList.get(mIndex).getIsChecked() == 1);
                         NotificationService.startNotificationUpdate(MainActivity.this,
-                                taskList.get(dPosition).getId(),
-                                taskList.get(dPosition).getIsChecked() == 1);
+                                taskList.get(dIndex).getId(),
+                                taskList.get(dIndex).getIsChecked() == 1);
                     }
-                    dragListView.getChildAt(mPosition).setVisibility(View.VISIBLE);
+                    dragListView.getChildAt(dragListView.mPosition).setVisibility(View.VISIBLE);
                     dragListView.setIsDragging(false);
                     return true;
                 }

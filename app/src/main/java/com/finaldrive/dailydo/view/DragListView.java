@@ -19,13 +19,27 @@ import java.util.List;
 public class DragListView extends ListView {
 
     private static final String CLASS_NAME = "DragListView";
+    private List list;
     private boolean isDragging = false;
+    private View draggedView = null;
     private int mDownX = -1;
     private int mDownY = -1;
-    private View draggedView = null;
-    private List list;
+    /**
+     * The mobile position in the ListView accounting for visible items.
+     */
     public int mPosition = -1;
+    /**
+     * The index in the List of the mobile position.
+     */
+    public int mIndex = -1;
+    /**
+     * The dragged position in the ListView accounting for visible items.
+     */
     public int dPosition = -1;
+    /**
+     * The index in the List of the dragged position.
+     */
+    public int dIndex = -1;
 
     public DragListView(Context context) {
         super(context);
@@ -42,7 +56,8 @@ public class DragListView extends ListView {
         init(context);
     }
 
-    public void init(Context context) {}
+    public void init(Context context) {
+    }
 
     public void setList(List list) {
         this.list = list;
@@ -54,13 +69,15 @@ public class DragListView extends ListView {
             case MotionEvent.ACTION_DOWN:
                 mDownX = (int) motionEvent.getX();
                 mDownY = (int) motionEvent.getY();
-                if ((mDownX >= 0 && mDownX <= 50) && !isDragging) {
+                if ((mDownX >= 0 && mDownX <= 70) && !isDragging) {
                     isDragging = true;
-                    mPosition = pointToPosition(mDownX, mDownY) - getFirstVisiblePosition();
+                    mIndex = pointToPosition(mDownX, mDownY);
+                    mPosition = mIndex - getFirstVisiblePosition();
                     if (mPosition == INVALID_POSITION) {
                         isDragging = false;
                         return true;
                     }
+                    Log.d(CLASS_NAME, String.format("Initiated drag at Index=%d", mIndex));
                     draggedView = getChildAt(mPosition);
                     final ClipData dragData = ClipData.newPlainText(String.valueOf(draggedView.getId()), "");
                     final DragShadowBuilder dragShadowBuilder = new DragShadowBuilder(draggedView) {
@@ -90,14 +107,16 @@ public class DragListView extends ListView {
                 return true;
             case DragEvent.ACTION_DROP:
                 int dDownY = (int) dragEvent.getY();
-                dPosition = pointToPosition(1, dDownY) - getFirstVisiblePosition();
+                dIndex = pointToPosition(1, dDownY);
+                dPosition = dIndex - getFirstVisiblePosition();
+                Log.d(CLASS_NAME, String.format("Dropped at Index=%d", dIndex));
                 return true;
             case DragEvent.ACTION_DRAG_ENDED:
-                Log.d(CLASS_NAME, String.format("OriginalPosition=%d and CoveredPosition=%d", mPosition, dPosition));
-                if (dPosition >= 0 && mPosition != dPosition) {
-                    Object temp = list.get(mPosition);
-                    list.set(mPosition, list.get(dPosition));
-                    list.set(dPosition, temp);
+                Log.d(CLASS_NAME, String.format("OriginalIndex=%d and CoveredIndex=%d", mIndex, dIndex));
+                if (dIndex >= 0 && mIndex != dIndex) {
+                    Object temp = list.get(mIndex);
+                    list.set(mIndex, list.get(dIndex));
+                    list.set(dIndex, temp);
                     ((ArrayAdapter) getAdapter()).notifyDataSetChanged();
                 }
                 draggedView.setVisibility(View.VISIBLE);
