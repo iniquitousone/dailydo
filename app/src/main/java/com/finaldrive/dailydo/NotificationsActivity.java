@@ -28,8 +28,6 @@ import android.widget.ToggleButton;
 import com.finaldrive.dailydo.domain.Alarm;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
-import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
-import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
@@ -51,7 +49,7 @@ public class NotificationsActivity extends ActionBarActivity {
     private List<Alarm> alarmList;
     private AlarmArrayAdapter alarmArrayAdapter;
     private ListView listView;
-    private boolean isShowingNewAlarmButton = true;
+    private LayoutInflater layoutInflater;
 
     @Override
     public void onBackPressed() {
@@ -67,34 +65,17 @@ public class NotificationsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
+        layoutInflater = LayoutInflater.from(this);
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         alarmList = dailyDoDatabaseHelper.getAlarmEntries();
-        alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.alarm_entry, alarmList);
-        final View newAlarmButton = findViewById(R.id.new_alarm_button);
+        alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.entry_alarm, alarmList);
         final View emptyListView = findViewById(R.id.empty_alarm_list_view);
         listView = (ListView) findViewById(R.id.alarm_list_view);
+        listView.addHeaderView(layoutInflater.inflate(R.layout.list_view_header, null), null, false);
+        listView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
         listView.setAdapter(alarmArrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setEmptyView(emptyListView);
-        listView.setOnScrollListener(new ListViewScrollListener(listView) {
-            @Override
-            public void onDownwardScroll() {
-                if (isShowingNewAlarmButton) {
-                    isShowingNewAlarmButton = false;
-                    newAlarmButton.startAnimation(TranslateAnimationHelper.DOWNWARD_BUTTON_TRANSLATION);
-                    newAlarmButton.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onUpwardScroll() {
-                if (!isShowingNewAlarmButton) {
-                    isShowingNewAlarmButton = true;
-                    newAlarmButton.startAnimation(TranslateAnimationHelper.UPWARD_BUTTON_TRANSLATION);
-                    newAlarmButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
     }
 
     @Override
@@ -167,18 +148,15 @@ public class NotificationsActivity extends ActionBarActivity {
      */
     public final class AlarmArrayAdapter extends ArrayAdapter<Alarm> {
 
-        private LayoutInflater layoutInflater;
-
         public AlarmArrayAdapter(Context context, int textViewResourceId, List<Alarm> objects) {
             super(context, textViewResourceId, objects);
-            layoutInflater = LayoutInflater.from(getContext());
         }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.alarm_entry, parent, false);
+                convertView = layoutInflater.inflate(R.layout.entry_alarm, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.toggleButton = (ToggleButton) convertView.findViewById(R.id.alarm_entry_toggle);
                 viewHolder.timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);

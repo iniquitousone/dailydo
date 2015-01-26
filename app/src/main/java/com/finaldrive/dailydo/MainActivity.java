@@ -27,8 +27,6 @@ import android.widget.Toast;
 
 import com.finaldrive.dailydo.domain.Task;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
-import com.finaldrive.dailydo.helper.TranslateAnimationHelper;
-import com.finaldrive.dailydo.listener.ListViewScrollListener;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
@@ -59,7 +57,7 @@ public class MainActivity extends ActionBarActivity {
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private TaskArrayAdapter taskArrayAdapter;
     private DragListView dragListView;
-    private boolean isShowingNewTaskButton = true;
+    private LayoutInflater layoutInflater;
 
     /**
      * Entry point into the application. Sets up data and renders ListView.
@@ -72,38 +70,21 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
+        layoutInflater = LayoutInflater.from(this);
         // Initialize the database helper and fetch the List of Task(s) from the database.
         dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
         final List<Task> taskList = dailyDoDatabaseHelper.getTaskEntries();
         // Initialize and set the ArrayAdapter which acts as the adapter for the main ListView and its content.
-        taskArrayAdapter = new TaskArrayAdapter(this, R.layout.task_entry, taskList);
-        final View newTaskButton = findViewById(R.id.new_task_button);
+        taskArrayAdapter = new TaskArrayAdapter(this, R.layout.entry_task, taskList);
         final View emptyListView = findViewById(R.id.empty_task_list_view);
 
         dragListView = (DragListView) findViewById(R.id.task_list_view);
+        dragListView.addHeaderView(layoutInflater.inflate(R.layout.list_view_header, null), null, false);
+        dragListView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
         dragListView.setAdapter(taskArrayAdapter);
         dragListView.setList(taskList);
         dragListView.setEmptyView(emptyListView);
         dragListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        dragListView.setOnScrollListener(new ListViewScrollListener(dragListView) {
-            @Override
-            public void onDownwardScroll() {
-                if (isShowingNewTaskButton) {
-                    isShowingNewTaskButton = false;
-                    newTaskButton.startAnimation(TranslateAnimationHelper.DOWNWARD_BUTTON_TRANSLATION);
-                    newTaskButton.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onUpwardScroll() {
-                if (!isShowingNewTaskButton) {
-                    isShowingNewTaskButton = true;
-                    newTaskButton.startAnimation(TranslateAnimationHelper.UPWARD_BUTTON_TRANSLATION);
-                    newTaskButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         dragListView.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent dragEvent) {
@@ -295,11 +276,9 @@ public class MainActivity extends ActionBarActivity {
     private final class TaskArrayAdapter extends ArrayAdapter<Task> {
 
         private static final int INVALID_ID = -1;
-        private LayoutInflater layoutInflater;
 
         public TaskArrayAdapter(Context context, int textViewResourceId, List<Task> objects) {
             super(context, textViewResourceId, objects);
-            layoutInflater = LayoutInflater.from(getContext());
         }
 
         /**
@@ -334,7 +313,7 @@ public class MainActivity extends ActionBarActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = layoutInflater.inflate(R.layout.task_entry, parent, false);
+                convertView = layoutInflater.inflate(R.layout.entry_task, parent, false);
                 viewHolder = new ViewHolder();
                 viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.task_entry_checkbox);
                 viewHolder.contentView = (LinearLayout) convertView.findViewById(R.id.task_entry_content);

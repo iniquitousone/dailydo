@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:gravity="top"
-        android:minWidth="@dimen/task_entry_left_indent"
+        android:minWidth="@dimen/content_left_indent"
         android:orientation="horizontal"
         android:paddingTop="6dp">
 
@@ -23,9 +23,9 @@
             android:id="@+id/task_entry_grabber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="6dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_dragger" />
 
         <CheckBox
@@ -40,13 +40,14 @@
         android:id="@+id/task_entry_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_toRightOf="@id/task_entry_header"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingTop="4dp">
+        android:paddingLeft="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:id="@+id/task_entry_title"
@@ -74,9 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:autoLink="all"
+            android:fontFamily="san-serif-light"
             android:paddingTop="2dp"
             android:text="Example note to test render behavior"
-            android:fontFamily="san-serif-light"
             android:textColor="@color/gray"
             android:textSize="14sp"
             android:visibility="gone" />
@@ -85,9 +86,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/shape_drop_shadow"
+        android:src="@drawable/entry_drop_shadow"
         android:visibility="visible" />
 
 </RelativeLayout>
