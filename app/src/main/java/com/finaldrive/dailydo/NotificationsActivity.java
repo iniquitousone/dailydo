@@ -71,7 +71,6 @@ public class NotificationsActivity extends ActionBarActivity {
         alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.entry_alarm, alarmList);
         final View emptyListView = findViewById(R.id.empty_alarm_list_view);
         listView = (ListView) findViewById(R.id.alarm_list_view);
-        listView.addHeaderView(layoutInflater.inflate(R.layout.list_view_header, null), null, false);
         listView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
         listView.setAdapter(alarmArrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

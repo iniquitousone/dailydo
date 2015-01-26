@@ -79,7 +79,6 @@ public class MainActivity extends ActionBarActivity {
         final View emptyListView = findViewById(R.id.empty_task_list_view);
 
         dragListView = (DragListView) findViewById(R.id.task_list_view);
-        dragListView.addHeaderView(layoutInflater.inflate(R.layout.list_view_header, null), null, false);
         dragListView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
         dragListView.setAdapter(taskArrayAdapter);
         dragListView.setList(taskList);
@@ -92,7 +91,8 @@ public class MainActivity extends ActionBarActivity {
                 if (dragEvent.getAction() == DragEvent.ACTION_DRAG_ENDED) {
                     int mPosition = dragListView.mPosition;
                     int dPosition = dragListView.dPosition;
-                    if (dPosition >= 0 && mPosition != dPosition) {
+                    if (dPosition >= 0 && mPosition != dPosition
+                            && dPosition < taskList.size()) {
                         Task temp = taskList.get(mPosition);
                         // Set the row numbers to be what they should be now.
                         taskList.get(mPosition).setRowNumber(dPosition);

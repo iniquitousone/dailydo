@@ -7,8 +7,8 @@ android {
         applicationId 'com.finaldrive.dailydo'
         minSdkVersion 17
         targetSdkVersion 21
-        versionCode 9
-        versionName '2.1'
+        versionCode 10
+        versionName '2.2'
     }
     buildTypes {
         release {
