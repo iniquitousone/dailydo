@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.finaldrive.dailydo.MainActivity;
@@ -186,11 +187,13 @@ public class NotificationService extends IntentService {
             bigTextMessageBuffer.append("...");
         }
 
-        final Notification.Builder notificationBuilder = new Notification.Builder(this)
+        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setPriority(Notification.PRIORITY_HIGH)
                 .setOnlyAlertOnce(isAlertOnce)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(false)
+                .setColor(this.getResources().getColor(R.color.amber))
                 .setOngoing(true)
                 .addAction(R.drawable.ic_action_alarms,
                         getString(R.string.action_snooze),
@@ -202,7 +205,7 @@ public class NotificationService extends IntentService {
                 .setContentText(String.format("Ongoing: %s", ongoingTask.getTitle()))
                 .setContentIntent(createNotificationClickIntent(this, ongoingTask));
         if (remaining > 1) {
-            notificationBuilder.setStyle(new Notification.BigTextStyle().bigText(bigTextMessageBuffer.toString().trim()));
+            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigTextMessageBuffer.toString().trim()));
         }
         final Uri notificationTone = getNotificationTone(this);
         if (notificationTone != null) {

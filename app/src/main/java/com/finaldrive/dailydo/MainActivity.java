@@ -115,6 +115,8 @@ public class MainActivity extends ActionBarActivity {
                     }
                     dragListView.getChildAt(dragListView.mPosition).setVisibility(View.VISIBLE);
                     dragListView.setIsDragging(false);
+                    dragListView.mIndex = -1;
+                    dragListView.dIndex = -1;
                     return true;
                 }
                 return false; // Do no want to consume the other drag events in the ListView.
