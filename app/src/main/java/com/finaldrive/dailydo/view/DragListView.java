@@ -19,7 +19,6 @@ import java.util.List;
 public class DragListView extends ListView {
 
     private static final String CLASS_NAME = "DragListView";
-    private List list;
     private boolean isDragging = false;
     private View draggedView = null;
     private int mDownX = -1;
@@ -59,10 +58,6 @@ public class DragListView extends ListView {
     public void init(Context context) {
     }
 
-    public void setList(List list) {
-        this.list = list;
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
@@ -73,7 +68,7 @@ public class DragListView extends ListView {
                     isDragging = true;
                     mIndex = pointToPosition(mDownX, mDownY);
                     mPosition = mIndex - getFirstVisiblePosition();
-                    if (mPosition == INVALID_POSITION) {
+                    if (mPosition <= INVALID_POSITION) {
                         isDragging = false;
                         return true;
                     }
@@ -106,19 +101,8 @@ public class DragListView extends ListView {
             case DragEvent.ACTION_DRAG_LOCATION:
                 return true;
             case DragEvent.ACTION_DROP:
-                int dDownY = (int) dragEvent.getY();
-                dIndex = pointToPosition(1, dDownY);
-                dPosition = dIndex - getFirstVisiblePosition();
-                Log.d(CLASS_NAME, String.format("Dropped at Index=%d", dIndex));
                 return true;
             case DragEvent.ACTION_DRAG_ENDED:
-                Log.d(CLASS_NAME, String.format("OriginalIndex=%d and CoveredIndex=%d", mIndex, dIndex));
-                if (dIndex >= 0 && mIndex != dIndex) {
-                    Object temp = list.get(mIndex);
-                    list.set(mIndex, list.get(dIndex));
-                    list.set(dIndex, temp);
-                    ((ArrayAdapter) getAdapter()).notifyDataSetChanged();
-                }
                 draggedView.setVisibility(View.VISIBLE);
                 isDragging = false;
                 return true;

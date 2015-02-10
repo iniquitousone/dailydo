@@ -81,18 +81,29 @@ public class MainActivity extends ActionBarActivity {
         dragListView = (DragListView) findViewById(R.id.task_list_view);
         dragListView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
         dragListView.setAdapter(taskArrayAdapter);
-        dragListView.setList(taskList);
         dragListView.setEmptyView(emptyListView);
         dragListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         dragListView.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent dragEvent) {
                 // Effectively overriding default behavior in the DragListView.
-                if (dragEvent.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-                    int mIndex = dragListView.mIndex;
-                    int dIndex = dragListView.dIndex;
-                    if (dIndex >= 0 && mIndex != dIndex
-                            && dIndex < taskList.size()) {
+                if (dragEvent.getAction() == DragEvent.ACTION_DRAG_LOCATION) {
+                    int mIndex = dragListView.mIndex; // Index of the mobile view in adapter.
+                    int dDownY = (int) dragEvent.getY(); // Y pixel location.
+                    int dIndex = dragListView.pointToPosition(1, dDownY); // Dragged index in adapter.
+                    if (dIndex >= 0
+                            && dIndex < taskList.size()
+                            && mIndex >= 0
+                            && mIndex < taskList.size()
+                            && mIndex != dIndex) {
+                        // View position that is currently being crossed into.
+                        int dPosition = dIndex - dragListView.getFirstVisiblePosition();
+                        final View view = dragListView.getChildAt(dPosition);
+                        // Only proceed to swap if Y is greater than halfway point of covered View.
+                        if (view != null
+                                && (dDownY < (view.getTop() + view.getBottom()) / 2)) {
+                            return false;
+                        }
                         Task temp = taskList.get(mIndex);
                         // Set the row numbers to be what they should be now.
                         taskList.get(mIndex).setRowNumber(dIndex);
@@ -112,12 +123,10 @@ public class MainActivity extends ActionBarActivity {
                         NotificationService.startNotificationUpdate(MainActivity.this,
                                 taskList.get(dIndex).getId(),
                                 taskList.get(dIndex).getIsChecked() == 1);
+                        // Update the index of the mobile view, since it has been swapped.
+                        dragListView.mIndex = dIndex;
+                        Log.d(CLASS_NAME, String.format("Swapped OriginalIndex=%d and CoveredIndex=%d", mIndex, dIndex));
                     }
-                    dragListView.getChildAt(dragListView.mPosition).setVisibility(View.VISIBLE);
-                    dragListView.setIsDragging(false);
-                    dragListView.mIndex = -1;
-                    dragListView.dIndex = -1;
-                    return true;
                 }
                 return false; // Do no want to consume the other drag events in the ListView.
             }
