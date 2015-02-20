@@ -14,8 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
+import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 
 
@@ -40,7 +43,6 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.pref_daily_do), Context.MODE_PRIVATE);
-        final boolean isDailyResetEnabled = sharedPreferences.getBoolean(getString(R.string.pref_daily_reset_enabled), true);
         final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);
         final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
         final View contentView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -50,21 +52,45 @@ public class SettingsFragment extends Fragment {
         dailyResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Uri notificationTone = NotificationService.getNotificationTone(SettingsFragment.this.getActivity());
-                final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                if (notificationTone != null) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
-                } else {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                }
-                startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
+                final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);
+                final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
+                final Bundle bundle = new Bundle();
+                bundle.putString(TimePickerFragment.TITLE, "Set a time for your DOs to uncheck everyday");
+                bundle.putInt(TimePickerFragment.HOUR_OF_DAY, hourOfReset);
+                bundle.putInt(TimePickerFragment.MINUTE, minuteOfReset);
+                final TimePickerFragment dailyResetTimePickerFragment = new TimePickerFragment() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        if (counter > 0) {
+                            return;
+                        }
+                        counter++;
+                        final SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(getString(R.string.pref_daily_reset_hour), hourOfDay);
+                        editor.putInt(getString(R.string.pref_daily_reset_minute), minute);
+                        editor.commit();
+                        textView.setText(TimeFormatHelper.format(this.getActivity(), hourOfDay, minute));
+                        AlarmService.scheduleNextReset(getActivity());
+                    }
+                };
+                dailyResetTimePickerFragment.setArguments(bundle);
+                dailyResetTimePickerFragment.show(SettingsFragment.this.getActivity().getFragmentManager(), "DailyResetTimePickerFragment");
             }
         });
+
+//        final Uri notificationTone = NotificationService.getNotificationTone(SettingsFragment.this.getActivity());
+//        final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
+//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+//        if (notificationTone != null) {
+//            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
+//        } else {
+//            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+//        }
+//        startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
 
         return contentView;
     }
