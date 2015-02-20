@@ -10,10 +10,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +34,13 @@ import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Activity to handle the scheduling of Alarm(s).
- */
-public class NotificationsActivity extends ActionBarActivity {
 
-    private static final String CLASS_NAME = "NotificationsActivity";
+/**
+ * Fragment for handling the Notification list view.
+ */
+public class NotificationsFragment extends Fragment {
+
+    private static final String CLASS_NAME = "NotificationsFragment";
     private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private static final String ALARM_POSITION = "ALARM_POSITION";
     private static final int REQUEST_CODE_TONE_PICKER = 1;
@@ -51,58 +51,15 @@ public class NotificationsActivity extends ActionBarActivity {
     private ListView listView;
     private LayoutInflater layoutInflater;
 
-    @Override
-    public void onBackPressed() {
-        setResult(Activity.RESULT_CANCELED);
-        finishActivity();
-    }
-
-    private void finishActivity() {
-        finish();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifications);
-        layoutInflater = LayoutInflater.from(this);
-        dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this);
-        alarmList = dailyDoDatabaseHelper.getAlarmEntries();
-        alarmArrayAdapter = new AlarmArrayAdapter(this, R.layout.entry_alarm, alarmList);
-        final View emptyListView = findViewById(R.id.empty_alarm_list_view);
-        listView = (ListView) findViewById(R.id.alarm_list_view);
-        listView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
-        listView.setAdapter(alarmArrayAdapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setEmptyView(emptyListView);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.notifications, menu);
-        return true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(CLASS_NAME, String.format("ActivityResult on RequestCode=%d and ResultCode=%d", requestCode, resultCode));
-        switch (resultCode) {
-            case Activity.RESULT_OK:
-                if (requestCode == REQUEST_CODE_TONE_PICKER) {
-                    final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    NotificationService.setNotificationTone(this, pickedTone);
-                }
-                break;
-        }
+    public NotificationsFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_set_tone:
-                final Uri notificationTone = NotificationService.getNotificationTone(this);
+            case android.R.id.home:
+                final Uri notificationTone = NotificationService.getNotificationTone(this.getActivity());
                 final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
@@ -116,23 +73,69 @@ public class NotificationsActivity extends ActionBarActivity {
                 }
                 startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
                 return true;
-
-            case android.R.id.home:
-                finishActivity();
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void addNewAlarm(View view) {
-        final Calendar calendar = Calendar.getInstance();
-        final Bundle bundle = new Bundle();
-        bundle.putInt(ALARM_POSITION, ALARM_CREATE_POSITION);
-        bundle.putInt(TimePickerFragment.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-        bundle.putInt(TimePickerFragment.MINUTE, calendar.get(Calendar.MINUTE));
-        final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
-        alarmTimePickerFragment.setArguments(bundle);
-        alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dailyDoDatabaseHelper = DailyDoDatabaseHelper.getInstance(this.getActivity());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        layoutInflater = inflater;
+        final View contentView = layoutInflater.inflate(R.layout.fragment_notifications, container, false);
+        alarmList = dailyDoDatabaseHelper.getAlarmEntries();
+        alarmArrayAdapter = new AlarmArrayAdapter(this.getActivity(), R.layout.entry_alarm, alarmList);
+        final View emptyListView = contentView.findViewById(R.id.empty_alarm_list_view);
+        listView = (ListView) contentView.findViewById(R.id.alarm_list_view);
+        listView.addFooterView(layoutInflater.inflate(R.layout.list_view_footer, null), null, false);
+        listView.setAdapter(alarmArrayAdapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setEmptyView(emptyListView);
+        final View newNotificationButton = contentView.findViewById(R.id.new_alarm_button);
+        newNotificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                final Bundle bundle = new Bundle();
+                bundle.putInt(ALARM_POSITION, ALARM_CREATE_POSITION);
+                bundle.putInt(TimePickerFragment.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+                bundle.putInt(TimePickerFragment.MINUTE, calendar.get(Calendar.MINUTE));
+                final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
+                alarmTimePickerFragment.setArguments(bundle);
+                alarmTimePickerFragment.show(NotificationsFragment.this.getActivity().getFragmentManager(), "AlarmTimePickerFragment");
+            }
+        });
+
+        return contentView;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(CLASS_NAME, String.format("ActivityResult on RequestCode=%d and ResultCode=%d", requestCode, resultCode));
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                if (requestCode == REQUEST_CODE_TONE_PICKER) {
+                    final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    NotificationService.setNotificationTone(this.getActivity(), pickedTone);
+                }
+                break;
+        }
     }
 
     private static class ViewHolder {
@@ -195,7 +198,7 @@ public class NotificationsActivity extends ActionBarActivity {
                     bundle.putInt(TimePickerFragment.MINUTE, alarm.getMinute());
                     final AlarmTimePickerFragment alarmTimePickerFragment = new AlarmTimePickerFragment();
                     alarmTimePickerFragment.setArguments(bundle);
-                    alarmTimePickerFragment.show(getFragmentManager(), "AlarmTimePickerFragment");
+                    alarmTimePickerFragment.show(NotificationsFragment.this.getActivity().getFragmentManager(), "AlarmTimePickerFragment");
                 }
             });
             viewHolder.trashButton.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +222,7 @@ public class NotificationsActivity extends ActionBarActivity {
                                     alarmList.remove(position);
                                     alarmArrayAdapter.notifyDataSetChanged();
                                     AlarmService.scheduleNextAlarm(getContext());
-                                    Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationsFragment.this.getActivity().getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .create();
@@ -328,7 +331,7 @@ public class NotificationsActivity extends ActionBarActivity {
             dailyDoDatabaseHelper.updateAlarmEntry(alarm);
             alarmArrayAdapter.notifyDataSetChanged();
             listView.smoothScrollToPosition(position);
-            AlarmService.scheduleNextAlarm(getActivity());
+            AlarmService.scheduleNextAlarm(this.getActivity());
         }
     }
 }
