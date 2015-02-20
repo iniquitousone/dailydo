@@ -284,14 +284,14 @@ public class NotificationsFragment extends Fragment {
                 Alarm alarm = new Alarm(hourOfDay, minute);
                 alarm.setDaysRepeating(Alarm.EVERYDAY);
                 dailyDoDatabaseHelper.insertAlarmEntry(alarm);
-                alarmArrayAdapter.clear();
-                alarmArrayAdapter.addAll(dailyDoDatabaseHelper.getAlarmEntries());
             } else {
                 final Alarm alarm = alarmArrayAdapter.getItem(position);
                 alarm.setHour(hourOfDay);
                 alarm.setMinute(minute);
                 dailyDoDatabaseHelper.updateAlarmEntry(alarm);
             }
+            alarmArrayAdapter.clear();
+            alarmArrayAdapter.addAll(dailyDoDatabaseHelper.getAlarmEntries());
             alarmArrayAdapter.notifyDataSetChanged();
             AlarmService.scheduleNextAlarm(this.getActivity());
         }
