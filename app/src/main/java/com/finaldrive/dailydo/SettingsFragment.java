@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class SettingsFragment extends Fragment {
 
     private static final String CLASS_NAME = "SettingsFragment";
     private static final int REQUEST_CODE_TONE_PICKER = 1;
+    private TextView notificationToneTextView;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -46,8 +48,8 @@ public class SettingsFragment extends Fragment {
         final int hourOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_hour), 0);
         final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
         final View contentView = inflater.inflate(R.layout.fragment_settings, container, false);
-        final TextView textView = (TextView) contentView.findViewById(R.id.daily_reset_text_view);
-        textView.setText(TimeFormatHelper.format(this.getActivity(), hourOfReset, minuteOfReset));
+        final TextView dailyResetTextView = (TextView) contentView.findViewById(R.id.daily_reset_text_view);
+        dailyResetTextView.setText(TimeFormatHelper.format(this.getActivity(), hourOfReset, minuteOfReset));
         final View dailyResetButton = contentView.findViewById(R.id.daily_reset_button);
         dailyResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +71,7 @@ public class SettingsFragment extends Fragment {
                         editor.putInt(getString(R.string.pref_daily_reset_hour), hourOfDay);
                         editor.putInt(getString(R.string.pref_daily_reset_minute), minute);
                         editor.commit();
-                        textView.setText(TimeFormatHelper.format(this.getActivity(), hourOfDay, minute));
+                        dailyResetTextView.setText(TimeFormatHelper.format(this.getActivity(), hourOfDay, minute));
                         AlarmService.scheduleNextReset(getActivity());
                     }
                 };
@@ -77,20 +79,28 @@ public class SettingsFragment extends Fragment {
                 dailyResetTimePickerFragment.show(SettingsFragment.this.getActivity().getFragmentManager(), "DailyResetTimePickerFragment");
             }
         });
-
-//        final Uri notificationTone = NotificationService.getNotificationTone(SettingsFragment.this.getActivity());
-//        final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
-//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-//        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-//        if (notificationTone != null) {
-//            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
-//        } else {
-//            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-//        }
-//        startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
+        final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), NotificationService.getNotificationTone(this.getActivity()));
+        notificationToneTextView = (TextView) contentView.findViewById(R.id.notification_tone_text_view);
+        notificationToneTextView.setText(ringtone.getTitle(this.getActivity()));
+        final View notificationToneButton = contentView.findViewById(R.id.notification_tone_button);
+        notificationToneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Uri notificationTone = NotificationService.getNotificationTone(SettingsFragment.this.getActivity());
+                final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                if (notificationTone != null) {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
+                } else {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
+                }
+                startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
+            }
+        });
 
         return contentView;
     }
@@ -114,6 +124,8 @@ public class SettingsFragment extends Fragment {
                 if (requestCode == REQUEST_CODE_TONE_PICKER) {
                     final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     NotificationService.setNotificationTone(this.getActivity(), pickedTone);
+                    final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), pickedTone);
+                    notificationToneTextView.setText(ringtone.getTitle(this.getActivity()));
                 }
                 break;
         }

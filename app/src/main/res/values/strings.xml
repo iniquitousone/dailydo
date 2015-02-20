@@ -5,7 +5,6 @@
     <string name="app_name">DailyDo</string>
     <string name="title_activity_task_details"></string>
     <string name="title_activity_snooze_picker"></string>
-    <string name="title_activity_notifications">Notifications</string>
     <!-- Intent action -->
     <string name="intent_action_reset_tasks">com.finaldrive.dailydo.intent.action.RESET_TASKS</string>
     <!-- Action strings -->
@@ -28,6 +27,5 @@
     <string name="pref_daily_reset_minute">com.finaldrive.dailydo.pref.DAILY_RESET_MINUTE</string>
     <string name="pref_notified">com.finaldrive.dailydo.pref.NOTIFIED</string>
     <string name="pref_notification_tone">com.finaldrive.dailydo.pref.NOTIFICATION_TONE</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
