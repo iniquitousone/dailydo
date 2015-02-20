@@ -46,7 +46,6 @@ public class NotificationsFragment extends Fragment {
     private static final int REQUEST_CODE_TONE_PICKER = 1;
     private static final int ALARM_CREATE_POSITION = -1;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
-    private List<Alarm> alarmList;
     private AlarmArrayAdapter alarmArrayAdapter;
     private ListView listView;
     private LayoutInflater layoutInflater;
@@ -88,7 +87,7 @@ public class NotificationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         layoutInflater = inflater;
         final View contentView = layoutInflater.inflate(R.layout.fragment_notifications, container, false);
-        alarmList = dailyDoDatabaseHelper.getAlarmEntries();
+        final List<Alarm> alarmList = dailyDoDatabaseHelper.getAlarmEntries();
         alarmArrayAdapter = new AlarmArrayAdapter(this.getActivity(), R.layout.entry_alarm, alarmList);
         final View emptyListView = contentView.findViewById(R.id.empty_alarm_list_view);
         listView = (ListView) contentView.findViewById(R.id.alarm_list_view);
@@ -219,7 +218,8 @@ public class NotificationsFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dailyDoDatabaseHelper.deleteAlarmEntry(alarm.getId());
-                                    alarmList.remove(position);
+                                    alarmArrayAdapter.clear();
+                                    alarmArrayAdapter.addAll(dailyDoDatabaseHelper.getAlarmEntries());
                                     alarmArrayAdapter.notifyDataSetChanged();
                                     AlarmService.scheduleNextAlarm(getContext());
                                     Toast.makeText(NotificationsFragment.this.getActivity().getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
@@ -321,16 +321,16 @@ public class NotificationsFragment extends Fragment {
             if (position == ALARM_CREATE_POSITION) {
                 Alarm alarm = new Alarm(hourOfDay, minute);
                 alarm.setDaysRepeating(Alarm.EVERYDAY);
-                alarm = dailyDoDatabaseHelper.insertAlarmEntry(alarm);
-                alarmList.add(alarm);
-                position = alarmList.size() - 1;
+                dailyDoDatabaseHelper.insertAlarmEntry(alarm);
+                alarmArrayAdapter.clear();
+                alarmArrayAdapter.addAll(dailyDoDatabaseHelper.getAlarmEntries());
+            } else {
+                final Alarm alarm = alarmArrayAdapter.getItem(position);
+                alarm.setHour(hourOfDay);
+                alarm.setMinute(minute);
+                dailyDoDatabaseHelper.updateAlarmEntry(alarm);
             }
-            final Alarm alarm = alarmArrayAdapter.getItem(position);
-            alarm.setHour(hourOfDay);
-            alarm.setMinute(minute);
-            dailyDoDatabaseHelper.updateAlarmEntry(alarm);
             alarmArrayAdapter.notifyDataSetChanged();
-            listView.smoothScrollToPosition(position);
             AlarmService.scheduleNextAlarm(this.getActivity());
         }
     }
