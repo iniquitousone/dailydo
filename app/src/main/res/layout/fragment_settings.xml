@@ -25,14 +25,14 @@
                 android:layout_height="wrap_content"
                 android:text="DOs are scheduled to uncheck daily at"
                 android:textColor="@color/gray"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/daily_reset_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
+                android:textColor="@color/teal"
                 android:textSize="52sp" />
         </LinearLayout>
     </FrameLayout>
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="Notification tone"
                 android:textColor="@color/gray"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -72,8 +72,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Default tone"
-                android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textColor="@color/teal"
+                android:textSize="16sp" />
 
         </LinearLayout>
     </FrameLayout>

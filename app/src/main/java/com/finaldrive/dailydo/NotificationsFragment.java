@@ -135,7 +135,7 @@ public class NotificationsFragment extends Fragment {
             if (isEnabled) {
                 convertView.setAlpha(1.0f);
             } else {
-                convertView.setAlpha(0.5f);
+                convertView.setAlpha(0.67f);
             }
             viewHolder.toggleButton.setChecked(isEnabled);
             viewHolder.timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
