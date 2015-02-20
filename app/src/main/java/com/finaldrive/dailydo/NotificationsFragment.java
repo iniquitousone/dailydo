@@ -17,8 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -100,7 +102,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private static class ViewHolder {
-        private ToggleButton toggleButton;
+        private Switch toggleButton;
         private TextView timeView;
         private ImageButton trashButton;
         private TextView daysView;
@@ -121,7 +123,7 @@ public class NotificationsFragment extends Fragment {
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.entry_alarm, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.toggleButton = (ToggleButton) convertView.findViewById(R.id.alarm_entry_toggle);
+                viewHolder.toggleButton = (Switch) convertView.findViewById(R.id.alarm_entry_toggle);
                 viewHolder.timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
                 viewHolder.trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
                 viewHolder.daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);
@@ -130,26 +132,25 @@ public class NotificationsFragment extends Fragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final Alarm alarm = getItem(position);
-            final boolean isEnabled = alarm.getIsEnabled() == 1 ? true : false;
             // Setup the views.
-            if (isEnabled) {
+            if (alarm.getIsEnabled() == 1) {
                 convertView.setAlpha(1.0f);
             } else {
                 convertView.setAlpha(0.67f);
             }
-            viewHolder.toggleButton.setChecked(isEnabled);
             viewHolder.timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
             viewHolder.daysView.setText(getDays(alarm));
             // Setup the listeners.
-            viewHolder.toggleButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    alarm.setIsEnabled(alarm.getIsEnabled() == 1 ? 0 : 1);
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    alarm.setIsEnabled(isChecked ? 1 : 0);
                     dailyDoDatabaseHelper.updateAlarmEntry(alarm);
                     notifyDataSetChanged();
                     AlarmService.scheduleNextAlarm(getContext());
                 }
             });
+            viewHolder.toggleButton.setChecked(alarm.getIsEnabled() == 1);
             viewHolder.timeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

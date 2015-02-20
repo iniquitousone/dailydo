@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity {
             public CharSequence getPageTitle(int position) {
                 switch (position) {
                     case 0:
-                        final Drawable taskIcon = getResources().getDrawable(R.drawable.ic_notification);
+                        final Drawable taskIcon = getResources().getDrawable(R.drawable.ic_list_white);
                         taskIcon.setBounds(0, 0, taskIcon.getIntrinsicWidth(), taskIcon.getIntrinsicHeight());
                         final ImageSpan taskIconImageSpan = new ImageSpan(taskIcon);
                         final SpannableStringBuilder taskIconSpan = new SpannableStringBuilder(" ");

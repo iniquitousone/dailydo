@@ -287,7 +287,6 @@ public class TasksFragment extends Fragment {
                     startTaskDetailsActivity(task.getId(), position);
                 }
             });
-            // This is a hack to get a larger top zone for the CheckBox.
             viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

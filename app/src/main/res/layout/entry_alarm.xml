@@ -13,19 +13,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
-        android:minWidth="@dimen/content_left_indent">
+        android:gravity="center"
+        android:minWidth="@dimen/entry_left_indent">
 
-        <ToggleButton
+        <Switch
             android:id="@+id/alarm_entry_toggle"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:background="@drawable/alarm_selector_toggle"
-            android:textColor="@color/white"
-            android:textOff=""
-            android:textOn=""
-            android:textSize="8dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
