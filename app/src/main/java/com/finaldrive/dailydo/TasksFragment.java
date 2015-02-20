@@ -28,7 +28,6 @@ import com.finaldrive.dailydo.view.DragListView;
 
 import java.util.List;
 
-
 /**
  * Main Fragment for handling the Task list view.
  */

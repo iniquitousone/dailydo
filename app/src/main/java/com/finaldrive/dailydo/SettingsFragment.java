@@ -22,9 +22,8 @@ import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.service.NotificationService;
 
-
 /**
- *
+ * Fragment for handling Settings such as the daily reset time and the notification tone.
  */
 public class SettingsFragment extends Fragment {
 

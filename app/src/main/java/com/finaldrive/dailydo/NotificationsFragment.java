@@ -34,7 +34,6 @@ import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 import java.util.Calendar;
 import java.util.List;
 
-
 /**
  * Fragment for handling the Notification list view.
  */
