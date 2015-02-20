@@ -1,6 +1,5 @@
 package com.finaldrive.dailydo;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -8,20 +7,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TimePicker;
 
-import com.finaldrive.dailydo.fragment.TimePickerFragment;
-import com.finaldrive.dailydo.service.AlarmService;
 import com.finaldrive.dailydo.view.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -50,8 +41,9 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         setupSharedPreferences();
         final List<Fragment> fragmentList = new ArrayList<Fragment>(3);
-        fragmentList.add(new TaskFragment());
+        fragmentList.add(new TasksFragment());
         fragmentList.add(new NotificationsFragment());
+        fragmentList.add(new SettingsFragment());
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -82,8 +74,16 @@ public class MainActivity extends FragmentActivity {
                         notificationsIconSpan.setSpan(notificationsIconImageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         return notificationsIconSpan;
 
+                    case 2:
+                        final Drawable settingsIcon = getResources().getDrawable(R.drawable.ic_settings_white);
+                        settingsIcon.setBounds(0, 0, settingsIcon.getIntrinsicWidth(), settingsIcon.getIntrinsicHeight());
+                        final ImageSpan settingsIconImageSpan = new ImageSpan(settingsIcon);
+                        final SpannableStringBuilder settingsIconSpan = new SpannableStringBuilder(" ");
+                        settingsIconSpan.setSpan(settingsIconImageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        return settingsIconSpan;
+
                     default:
-                        return "Other";
+                        return "";
                 }
             }
         };

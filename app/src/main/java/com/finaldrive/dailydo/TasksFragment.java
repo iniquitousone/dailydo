@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,7 +32,7 @@ import java.util.List;
 /**
  * Main Fragment for handling the Task list view.
  */
-public class TaskFragment extends Fragment {
+public class TasksFragment extends Fragment {
 
     private static final String CLASS_NAME = "TaskFragment";
     private static final int INVALID_VALUE = -99;
@@ -55,7 +54,7 @@ public class TaskFragment extends Fragment {
         }
     };
 
-    public TaskFragment() {
+    public TasksFragment() {
         // Required empty public constructor
     }
 
@@ -113,10 +112,10 @@ public class TaskFragment extends Fragment {
                         // Notify the change in the list.
                         taskArrayAdapter.notifyDataSetChanged();
                         // Notify the change in the notification.
-                        NotificationService.startNotificationUpdate(TaskFragment.this.getActivity(),
+                        NotificationService.startNotificationUpdate(TasksFragment.this.getActivity(),
                                 taskList.get(mIndex).getId(),
                                 taskList.get(mIndex).getIsChecked() == 1);
-                        NotificationService.startNotificationUpdate(TaskFragment.this.getActivity(),
+                        NotificationService.startNotificationUpdate(TasksFragment.this.getActivity(),
                                 taskList.get(dIndex).getId(),
                                 taskList.get(dIndex).getIsChecked() == 1);
                         // Update the index of the mobile view, since it has been swapped.
@@ -131,7 +130,7 @@ public class TaskFragment extends Fragment {
         newTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent intent = new Intent(TaskFragment.this.getActivity(), TaskDetailsActivity.class);
+                final Intent intent = new Intent(TasksFragment.this.getActivity(), TaskDetailsActivity.class);
                 intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskArrayAdapter.getCount());
                 startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
             }

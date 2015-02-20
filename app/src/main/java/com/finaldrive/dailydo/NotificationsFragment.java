@@ -43,7 +43,6 @@ public class NotificationsFragment extends Fragment {
     private static final String CLASS_NAME = "NotificationsFragment";
     private static final CharSequence[] DAYS_OF_WEEK = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     private static final String ALARM_POSITION = "ALARM_POSITION";
-    private static final int REQUEST_CODE_TONE_PICKER = 1;
     private static final int ALARM_CREATE_POSITION = -1;
     private DailyDoDatabaseHelper dailyDoDatabaseHelper;
     private AlarmArrayAdapter alarmArrayAdapter;
@@ -52,28 +51,6 @@ public class NotificationsFragment extends Fragment {
 
     public NotificationsFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                final Uri notificationTone = NotificationService.getNotificationTone(this.getActivity());
-                final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                if (notificationTone != null) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, notificationTone);
-                } else {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI);
-                }
-                startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -121,20 +98,6 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(CLASS_NAME, String.format("ActivityResult on RequestCode=%d and ResultCode=%d", requestCode, resultCode));
-        switch (resultCode) {
-            case Activity.RESULT_OK:
-                if (requestCode == REQUEST_CODE_TONE_PICKER) {
-                    final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    NotificationService.setNotificationTone(this.getActivity(), pickedTone);
-                }
-                break;
-        }
     }
 
     private static class ViewHolder {
