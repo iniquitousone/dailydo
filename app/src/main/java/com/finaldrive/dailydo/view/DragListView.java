@@ -20,7 +20,7 @@ public class DragListView extends ListView {
 
     private static final String CLASS_NAME = "DragListView";
     private boolean isDragging = false;
-    private View draggedView = null;
+    public View draggedView = null;
     private int mDownX = -1;
     private int mDownY = -1;
     /**

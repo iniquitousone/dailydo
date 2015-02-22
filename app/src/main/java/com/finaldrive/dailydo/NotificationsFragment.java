@@ -5,32 +5,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.finaldrive.dailydo.domain.Alarm;
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.service.AlarmService;
-import com.finaldrive.dailydo.service.NotificationService;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
 import java.util.Calendar;
@@ -102,7 +94,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private static class ViewHolder {
-        private Switch toggleButton;
+        private SwitchCompat toggleButton;
         private TextView timeView;
         private ImageButton trashButton;
         private TextView daysView;
@@ -123,7 +115,7 @@ public class NotificationsFragment extends Fragment {
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.entry_alarm, parent, false);
                 viewHolder = new ViewHolder();
-                viewHolder.toggleButton = (Switch) convertView.findViewById(R.id.alarm_entry_toggle);
+                viewHolder.toggleButton = (SwitchCompat) convertView.findViewById(R.id.alarm_entry_toggle);
                 viewHolder.timeView = (TextView) convertView.findViewById(R.id.alarm_entry_time);
                 viewHolder.trashButton = (ImageButton) convertView.findViewById(R.id.alarm_entry_discard);
                 viewHolder.daysView = (TextView) convertView.findViewById(R.id.alarm_entry_days);

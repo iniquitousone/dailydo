@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -110,6 +111,11 @@ public class TasksFragment extends Fragment {
                         dailyDoDatabaseHelper.updateTaskEntry(taskList.get(dIndex));
                         // Notify the change in the list.
                         taskArrayAdapter.notifyDataSetChanged();
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            if (dragListView.draggedView != null) {
+                                dragListView.draggedView.setVisibility(View.VISIBLE);
+                            }
+                        }
                         // Notify the change in the notification.
                         NotificationService.startNotificationUpdate(TasksFragment.this.getActivity(),
                                 taskList.get(mIndex).getId(),

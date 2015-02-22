@@ -32,7 +32,7 @@
             android:gravity="center"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="Use the plus button to add a new DO\n\nThen use the alarm button above to schedule your notifications"
+            android:text="Use the plus button to add a new DO\n\nThen switch to the alarms tab to schedule your notifications"
             android:textColor="@color/silver" />
 
     </LinearLayout>

@@ -5,9 +5,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Main activity for housing the various Fragment(s) the user will interact with.
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
     private static final String CLASS_NAME = "MainActivity";
     private FragmentPagerAdapter fragmentPagerAdapter;
@@ -39,6 +39,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         // Set the View that will be rendered for this Activity.
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
         setupSharedPreferences();
         final List<Fragment> fragmentList = new ArrayList<Fragment>(3);
         fragmentList.add(new TasksFragment());

@@ -6,22 +6,24 @@
     android:background="@color/white"
     android:minHeight="@dimen/alarm_entry_normal_height">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/alarm_entry_header"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:minWidth="@dimen/entry_left_indent">
+        android:minWidth="@dimen/entry_left_indent"
+        android:orientation="vertical">
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:id="@+id/alarm_entry_toggle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/alarm_entry_content"
