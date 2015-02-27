@@ -133,6 +133,9 @@ public class NotificationsFragment extends Fragment {
             viewHolder.timeView.setText(TimeFormatHelper.format(getContext(), alarm.getHour(), alarm.getMinute()));
             viewHolder.daysView.setText(getDays(alarm));
             // Setup the listeners.
+            // Set the setOnCheckedChangeListener to null first so we don't trigger a change immediately after setting the value.
+            viewHolder.toggleButton.setOnCheckedChangeListener(null);
+            viewHolder.toggleButton.setChecked(alarm.getIsEnabled() == 1);
             viewHolder.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -142,7 +145,6 @@ public class NotificationsFragment extends Fragment {
                     AlarmService.scheduleNextAlarm(getContext());
                 }
             });
-            viewHolder.toggleButton.setChecked(alarm.getIsEnabled() == 1);
             viewHolder.timeView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
