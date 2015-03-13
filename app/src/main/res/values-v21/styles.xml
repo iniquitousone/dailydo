@@ -17,7 +17,7 @@
     <!-- Details theme -->
     <style name="DetailsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/DetailsActionBarStyle</item>
-        <item name="colorPrimary">@color/teal</item>
+        <item name="colorPrimary">@color/amber</item>
         <item name="colorPrimaryDark">@color/dark_teal</item>
         <item name="colorAccent">@color/teal</item>
         <item name="colorControlNormal">@color/gray</item>
