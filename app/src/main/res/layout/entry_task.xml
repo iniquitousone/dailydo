@@ -88,7 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/entry_drop_shadow"
+        android:alpha="0.5"
+        android:src="@drawable/drop_shadow"
         android:visibility="visible" />
 
 </RelativeLayout>

@@ -11,6 +11,11 @@
         android:divider="@null"
         android:drawSelectorOnTop="true" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:src="@drawable/drop_shadow" />
+
     <LinearLayout
         android:id="@+id/empty_task_list_view"
         android:layout_width="match_parent"

@@ -1,14 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.finaldrive.dailydo.SettingsFragment">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/daily_reset_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/daily_reset_button"
@@ -35,19 +37,27 @@
                 android:textColor="@color/gray"
                 android:textSize="52sp" />
         </LinearLayout>
-    </FrameLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:src="@drawable/drop_shadow"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/entry_drop_shadow"
-        android:visibility="visible" />
+        android:layout_height="2dp"
+        android:src="@drawable/drop_shadow" />
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/notification_tone_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_below="@id/daily_reset_wrapper"
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/notification_tone_button"
@@ -76,13 +86,13 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
-    </FrameLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/entry_drop_shadow"
-        android:visibility="visible" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.5"
+            android:src="@drawable/drop_shadow"
+            android:visibility="visible" />
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
