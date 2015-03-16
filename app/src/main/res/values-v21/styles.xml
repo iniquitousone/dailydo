@@ -11,7 +11,7 @@
 
     <style name="MainActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/amber</item>
-        <item name="elevation">2dp</item>
+        <item name="elevation">4dp</item>
     </style>
 
     <!-- Details theme -->
@@ -25,7 +25,7 @@
 
     <style name="DetailsActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/teal</item>
-        <item name="elevation">2dp</item>
+        <item name="elevation">4dp</item>
     </style>
 
     <!-- Transparent theme designed for the SnoozePickerActivity -->

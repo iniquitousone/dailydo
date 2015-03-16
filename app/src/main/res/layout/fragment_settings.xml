@@ -46,11 +46,6 @@
             android:visibility="visible" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:src="@drawable/drop_shadow" />
-
     <LinearLayout
         android:id="@+id/notification_tone_wrapper"
         android:layout_width="match_parent"
@@ -94,5 +89,10 @@
             android:src="@drawable/drop_shadow"
             android:visibility="visible" />
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:src="@drawable/drop_shadow" />
 
 </RelativeLayout>

@@ -11,11 +11,6 @@
         android:divider="@null"
         android:drawSelectorOnTop="true" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:src="@drawable/drop_shadow" />
-
     <TextView
         android:id="@+id/empty_alarm_list_view"
         android:layout_width="match_parent"
@@ -39,5 +34,10 @@
         android:background="@drawable/add_new_button"
         android:clickable="true"
         android:elevation="4dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:src="@drawable/drop_shadow" />
 
 </RelativeLayout>
