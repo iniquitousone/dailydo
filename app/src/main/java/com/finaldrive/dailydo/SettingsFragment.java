@@ -18,9 +18,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.finaldrive.dailydo.fragment.TimePickerFragment;
+import com.finaldrive.dailydo.helper.NotificationToneHelper;
 import com.finaldrive.dailydo.helper.TimeFormatHelper;
 import com.finaldrive.dailydo.service.AlarmService;
-import com.finaldrive.dailydo.service.NotificationService;
 
 /**
  * Fragment for handling Settings such as the daily reset time and the notification tone.
@@ -78,14 +78,14 @@ public class SettingsFragment extends Fragment {
                 dailyResetTimePickerFragment.show(SettingsFragment.this.getActivity().getFragmentManager(), "DailyResetTimePickerFragment");
             }
         });
-        final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), NotificationService.getNotificationTone(this.getActivity()));
+        final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), NotificationToneHelper.getTone(this.getActivity()));
         notificationToneTextView = (TextView) contentView.findViewById(R.id.notification_tone_text_view);
         notificationToneTextView.setText(ringtone.getTitle(this.getActivity()));
         final View notificationToneButton = contentView.findViewById(R.id.notification_tone_button);
         notificationToneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Uri notificationTone = NotificationService.getNotificationTone(SettingsFragment.this.getActivity());
+                final Uri notificationTone = NotificationToneHelper.getTone(SettingsFragment.this.getActivity());
                 final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select tone");
@@ -122,7 +122,7 @@ public class SettingsFragment extends Fragment {
             case Activity.RESULT_OK:
                 if (requestCode == REQUEST_CODE_TONE_PICKER) {
                     final Uri pickedTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    NotificationService.setNotificationTone(this.getActivity(), pickedTone);
+                    NotificationToneHelper.setTone(this.getActivity(), pickedTone);
                     final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), pickedTone);
                     notificationToneTextView.setText(ringtone.getTitle(this.getActivity()));
                 }

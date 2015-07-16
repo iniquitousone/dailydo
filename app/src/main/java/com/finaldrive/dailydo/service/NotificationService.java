@@ -17,6 +17,7 @@ import com.finaldrive.dailydo.R;
 import com.finaldrive.dailydo.SnoozePickerActivity;
 import com.finaldrive.dailydo.TaskDetailsActivity;
 import com.finaldrive.dailydo.domain.Task;
+import com.finaldrive.dailydo.helper.NotificationToneHelper;
 import com.finaldrive.dailydo.receiver.NotificationActionBroadcastReceiver;
 import com.finaldrive.dailydo.store.DailyDoDatabaseHelper;
 
@@ -70,24 +71,6 @@ public class NotificationService extends IntentService {
                 context.getString(R.string.pref_daily_do),
                 Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(context.getString(R.string.pref_notified), false);
-    }
-
-    public static void setNotificationTone(Context context, Uri notificationTone) {
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(
-                context.getString(R.string.pref_daily_do),
-                Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_notification_tone), notificationTone.toString());
-        editor.commit();
-    }
-
-    public static Uri getNotificationTone(Context context) {
-        final SharedPreferences sharedPreferences = context.getSharedPreferences(
-                context.getString(R.string.pref_daily_do),
-                Context.MODE_PRIVATE);
-        final String notificationTone = sharedPreferences.getString(context.getString(R.string.pref_notification_tone), null);
-        Log.d(CLASS_NAME, String.format("Fetched NotificationTone=%s", notificationTone));
-        return notificationTone != null ? Uri.parse(notificationTone) : null;
     }
 
     public static void startNotificationCreate(Context context) {
@@ -207,7 +190,7 @@ public class NotificationService extends IntentService {
         if (remaining > 1) {
             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigTextMessageBuffer.toString().trim()));
         }
-        final Uri notificationTone = getNotificationTone(this);
+        final Uri notificationTone = NotificationToneHelper.getTone(this);
         if (notificationTone != null) {
             notificationBuilder.setSound(notificationTone);
         } else {
