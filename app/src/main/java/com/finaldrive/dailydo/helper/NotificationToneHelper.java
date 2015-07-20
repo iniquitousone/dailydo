@@ -19,8 +19,9 @@ public class NotificationToneHelper {
         final String notificationTone = sharedPreferences.getString(context.getString(R.string.pref_notification_tone), null);
         if (notificationTone == null) {
             setTone(context, Settings.System.DEFAULT_NOTIFICATION_URI);
+            return Settings.System.DEFAULT_NOTIFICATION_URI;
         }
-        return Settings.System.DEFAULT_NOTIFICATION_URI;
+        return Uri.parse(sharedPreferences.getString(context.getString(R.string.pref_notification_tone), null));
     }
 
     public static void setTone(final Context context, Uri notificationToneUri) {
