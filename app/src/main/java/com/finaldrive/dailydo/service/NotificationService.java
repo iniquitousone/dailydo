@@ -73,6 +73,13 @@ public class NotificationService extends IntentService {
         return sharedPreferences.getBoolean(context.getString(R.string.pref_notified), false);
     }
 
+    private static boolean isVibrate(Context context) {
+        final SharedPreferences sharedPreferences = context.getSharedPreferences(
+                context.getString(R.string.pref_daily_do),
+                Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(context.getString(R.string.pref_notification_vibrate), false);
+    }
+
     public static void startNotificationCreate(Context context) {
         final Intent intent = new Intent(context, NotificationService.class);
         intent.setAction(ACTION_CREATE_NOTIFICATION);
@@ -174,7 +181,9 @@ public class NotificationService extends IntentService {
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setOnlyAlertOnce(isAlertOnce)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS)
+                .setDefaults(isVibrate(this)
+                        ? Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS
+                        : Notification.DEFAULT_LIGHTS)
                 .setAutoCancel(false)
                 .setColor(this.getResources().getColor(R.color.amber))
                 .setOngoing(true)
