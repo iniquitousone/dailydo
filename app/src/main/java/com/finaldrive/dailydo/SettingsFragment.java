@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -30,8 +31,8 @@ public class SettingsFragment extends Fragment {
 
     private static final String CLASS_NAME = "SettingsFragment";
     private static final int REQUEST_CODE_TONE_PICKER = 1;
+    // Class level variable so the onActivityResult() can leverage the view
     private TextView notificationToneTextView;
-    private SwitchCompat notificationVibrateSwitch;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -51,6 +52,7 @@ public class SettingsFragment extends Fragment {
         final int minuteOfReset = sharedPreferences.getInt(getString(R.string.pref_daily_reset_minute), 0);
         final boolean isVibrate = sharedPreferences.getBoolean(getString(R.string.pref_notification_vibrate), false);
         final View contentView = inflater.inflate(R.layout.fragment_settings, container, false);
+        // Setup the daily reset view
         final TextView dailyResetTextView = (TextView) contentView.findViewById(R.id.daily_reset_text_view);
         dailyResetTextView.setText(TimeFormatHelper.format(this.getActivity(), hourOfReset, minuteOfReset));
         final View dailyResetButton = contentView.findViewById(R.id.daily_reset_button);
@@ -81,6 +83,7 @@ public class SettingsFragment extends Fragment {
                 dailyResetTimePickerFragment.show(SettingsFragment.this.getActivity().getFragmentManager(), "DailyResetTimePickerFragment");
             }
         });
+        // Setup the notification tone view
         final Ringtone ringtone = RingtoneManager.getRingtone(this.getActivity(), NotificationToneHelper.getTone(this.getActivity()));
         notificationToneTextView = (TextView) contentView.findViewById(R.id.notification_tone_text_view);
         notificationToneTextView.setText(ringtone.getTitle(this.getActivity()));
@@ -103,14 +106,22 @@ public class SettingsFragment extends Fragment {
                 startActivityForResult(intent, REQUEST_CODE_TONE_PICKER);
             }
         });
-        notificationVibrateSwitch = (SwitchCompat) contentView.findViewById(R.id.notification_vibrate_toggle);
+        // Setup the notification vibrate switch view
+        final SwitchCompat notificationVibrateSwitch = (SwitchCompat) contentView.findViewById(R.id.notification_vibrate_toggle);
         notificationVibrateSwitch.setChecked(isVibrate);
-        notificationVibrateSwitch.setOnClickListener(new View.OnClickListener() {
+        notificationVibrateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Log.d(CLASS_NAME, String.format("Notification vibrate isEnabled=%s", notificationVibrateSwitch.isChecked()));
+                editor.putBoolean(getString(R.string.pref_notification_vibrate), notificationVibrateSwitch.isChecked());
+                editor.commit();
+            }
+        });
+        final View notificationVibrateButton = contentView.findViewById(R.id.notification_vibrate_button);
+        notificationVibrateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 notificationVibrateSwitch.toggle();
-                editor.putBoolean(getString(R.string.pref_notification_vibrate), notificationVibrateSwitch.isChecked());
-                editor.commit();
             }
         });
 
