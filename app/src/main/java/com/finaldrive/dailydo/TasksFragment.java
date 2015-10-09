@@ -265,14 +265,8 @@ public class TasksFragment extends Fragment {
 
             // Setup the isChecked state of the view.
             if (isChecked) {
-                viewHolder.titleView.setTypeface(null, Typeface.BOLD_ITALIC);
-                viewHolder.titleView.setTextColor(getResources().getColor(R.color.silver));
-                viewHolder.noteView.setTextColor(getResources().getColor(R.color.silver));
                 convertView.setAlpha(0.67f);
             } else {
-                viewHolder.titleView.setTypeface(null, Typeface.BOLD);
-                viewHolder.titleView.setTextColor(getResources().getColor(R.color.gray));
-                viewHolder.noteView.setTextColor(getResources().getColor(R.color.gray));
                 convertView.setAlpha(1.0f);
             }
             // Setup the values.

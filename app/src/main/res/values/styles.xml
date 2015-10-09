@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme -->
     <style name="MainTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textViewStyle">@style/MainTextViewStyle</item>
         <item name="actionBarStyle">@style/MainActionBarStyle</item>
         <item name="colorPrimary">@color/amber</item>
         <item name="colorPrimaryDark">@color/dark_amber</item>
@@ -13,8 +14,13 @@
         <item name="elevation">4dp</item>
     </style>
 
+    <style name="MainTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
     <!-- Details theme -->
     <style name="DetailsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textViewStyle">@style/MainTextViewStyle</item>
         <item name="actionBarStyle">@style/DetailsActionBarStyle</item>
         <item name="colorPrimary">@color/amber</item>
         <item name="colorPrimaryDark">@color/dark_teal</item>

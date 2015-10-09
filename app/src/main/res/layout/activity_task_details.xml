@@ -44,10 +44,9 @@
             android:background="@color/transparent"
             android:capitalize="sentences"
             android:hint="(required)"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             android:textColorHint="@color/silver"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 

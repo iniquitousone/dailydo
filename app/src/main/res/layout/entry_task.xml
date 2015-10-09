@@ -26,7 +26,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_dragger" />
+            android:src="@drawable/ic_dragger"
+            android:tint="@color/silver" />
 
         <CheckBox
             android:id="@+id/task_entry_checkbox"
@@ -57,7 +58,7 @@
             android:autoLink="all"
             android:includeFontPadding="false"
             android:text="Example title to test render behavior"
-            android:textColor="@color/gray"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <ImageView
@@ -75,21 +76,12 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:autoLink="all"
-            android:fontFamily="san-serif-light"
             android:paddingTop="2dp"
             android:text="Example note to test render behavior"
             android:textColor="@color/gray"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:visibility="gone" />
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.5"
-        android:src="@drawable/drop_shadow"
-        android:visibility="visible" />
 
 </RelativeLayout>
