@@ -1,37 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:minHeight="@dimen/alarm_entry_normal_height">
-
-    <FrameLayout
-        android:id="@+id/alarm_entry_header"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:minWidth="@dimen/entry_left_indent"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/alarm_entry_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:checked="true"
-            android:padding="2dp" />
-
-    </FrameLayout>
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:id="@+id/alarm_entry_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@id/alarm_entry_header"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -40,18 +22,54 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
+            android:fontFamily="sans-serif-thin"
             android:gravity="left"
             android:includeFontPadding="false"
             android:text="12:00"
+            android:textColor="@color/black"
+            android:textSize="48sp" />
+
+        <FrameLayout
+            android:id="@+id/alarm_entry_header"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/alarm_entry_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="2dp" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/alarm_entry_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="EVERYDAY"
             android:textColor="@color/gray"
-            android:textSize="36sp" />
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/alarm_entry_discard"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:padding="8dp"
@@ -60,28 +78,4 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/alarm_entry_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/alarm_entry_content"
-        android:layout_marginBottom="8dp"
-        android:layout_toRightOf="@id/alarm_entry_header"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="EVERYDAY"
-        android:textColor="@color/teal"
-        android:textSize="12sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.5"
-        android:src="@drawable/drop_shadow"
-        android:visibility="visible" />
-
-</RelativeLayout>
+</LinearLayout>
