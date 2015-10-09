@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Time your DOs uncheck everyday"
-                android:textColor="@color/gray"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sound"
-                android:textColor="@color/gray"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Vibrate"
-                android:textColor="@color/gray"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <android.support.v7.widget.SwitchCompat
