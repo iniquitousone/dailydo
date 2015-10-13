@@ -8,4 +8,5 @@
     <dimen name="actionbar_expanded_height">128dp</dimen>
     <dimen name="content_left_indent">60dp</dimen>
     <dimen name="entry_left_indent">72dp</dimen>
+    <dimen name="spacer_height">8dp</dimen>
 </resources>
