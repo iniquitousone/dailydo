@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.internal.view.menu.ActionMenuItem;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -61,8 +61,10 @@ public class TaskDetailsActivity extends ActionBarActivity {
         final CheckBox checkBox = (CheckBox) findViewById(R.id.details_checkbox);
         final String title = titleView.getText().toString();
         if (title.isEmpty()) {
-            Toast.makeText(this, "Please provide a title for your entry", Toast.LENGTH_SHORT).show();
-            return;
+            final MenuItem menuItem = new ActionMenuItem(this, 0, R.id.action_delete_task, 0, 0, "");
+            if (onOptionsItemSelected(menuItem)) {
+                return;
+            }
         }
         final String note = noteView.getText().toString();
         final Intent editIntent = new Intent(this, MainActivity.class);
@@ -126,11 +128,6 @@ public class TaskDetailsActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_task:
-                if (taskId == TASK_CREATE_ID) {
-                    Toast.makeText(this, "Discarded", Toast.LENGTH_SHORT).show();
-                    finish();
-                    return true;
-                }
                 final AlertDialog alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                         .setTitle("Confirm deletion")
                         .setMessage("Do you want to delete this DO?")
@@ -161,7 +158,7 @@ public class TaskDetailsActivity extends ActionBarActivity {
                         })
                         .create();
                 alertDialog.show();
-                return false;
+                return true;
 
             case android.R.id.home:
                 onBackPressed();
