@@ -136,12 +136,19 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(TasksFragment.this.getActivity(), TaskDetailsActivity.class);
-                intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, taskArrayAdapter.getCount());
+                intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, 0);
                 startActivityForResult(intent, TaskDetailsActivity.REQUEST_CODE_TASK_CREATE);
             }
         });
 
         return contentView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // On fragment pause, synchronize the whole list to be safe.
+        syncRowNumbers(0);
     }
 
     @Override
@@ -175,8 +182,15 @@ public class TasksFragment extends Fragment {
                     return;
                 }
                 final Task task = dailyDoDatabaseHelper.getTaskEntry(taskId);
-                taskArrayAdapter.clear();
-                taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
+                if (requestCode == TaskDetailsActivity.REQUEST_CODE_TASK_CREATE) {
+                    // On creates, we can simply insert the new entry and sync the rowNumbers.
+                    taskArrayAdapter.insert(task, 0);
+                    syncRowNumbers(0);
+                } else {
+                    // On updates, we just clear and re-add all the entries to force a UI render.
+                    taskArrayAdapter.clear();
+                    taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
+                }
                 taskArrayAdapter.notifyDataSetChanged();
                 dragListView.smoothScrollToPosition(position);
                 NotificationService.startNotificationUpdate(this.getActivity(), task.getId(), task.getIsChecked() == 1);
@@ -184,14 +198,34 @@ public class TasksFragment extends Fragment {
 
             case TaskDetailsActivity.RESULT_CODE_DELETE:
                 taskId = data.getIntExtra(TaskDetailsActivity.EXTRA_TASK_ID, INVALID_VALUE);
-                if (taskId == INVALID_VALUE) {
+                position = data.getIntExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, INVALID_VALUE);
+                if (taskId == INVALID_VALUE || position == INVALID_VALUE) {
                     return;
                 }
                 NotificationService.startNotificationUpdate(this.getActivity(), taskId, true);
                 taskArrayAdapter.clear();
                 taskArrayAdapter.addAll(dailyDoDatabaseHelper.getTaskEntries());
+                // Sync everything that followed the deleted Task.
+                syncRowNumbers(position);
                 taskArrayAdapter.notifyDataSetChanged();
+                dragListView.smoothScrollToPosition(position);
                 break;
+        }
+    }
+
+    /**
+     * Performs a sync on the Task.rowNumber and the list position, starting at the provided point.
+     * On deletes, we should only need to sync where the deleted entry was.
+     *
+     * @param startingPosition to start the sync
+     */
+    private void syncRowNumbers(int startingPosition) {
+        for (int i = startingPosition; i < taskArrayAdapter.getCount(); i++) {
+            final Task task = taskArrayAdapter.getItem(i);
+            if (task.getRowNumber() != i) {
+                task.setRowNumber(i);
+                dailyDoDatabaseHelper.updateTaskEntry(task);
+            }
         }
     }
 
@@ -218,7 +252,7 @@ public class TasksFragment extends Fragment {
         /**
          * Overridden to leverage our database ID as the unique and stable ID for the given Task position.
          *
-         * @param position
+         * @param position of the Task
          * @return id of the associated Task
          */
         @Override
@@ -261,7 +295,7 @@ public class TasksFragment extends Fragment {
             }
 
             final Task task = getItem(position);
-            final boolean isChecked = task.getIsChecked() == 1 ? true : false;
+            final boolean isChecked = task.getIsChecked() == 1;
 
             // Setup the isChecked state of the view.
             if (isChecked) {
@@ -308,7 +342,7 @@ public class TasksFragment extends Fragment {
          * @param id       of the given Task
          * @param position of the given Task
          */
-        private final void startTaskDetailsActivity(int id, int position) {
+        private void startTaskDetailsActivity(int id, int position) {
             final Intent intent = new Intent(getContext(), TaskDetailsActivity.class);
             intent.putExtra(TaskDetailsActivity.EXTRA_TASK_ID, id);
             intent.putExtra(TaskDetailsActivity.EXTRA_TASK_POSITION, position);
