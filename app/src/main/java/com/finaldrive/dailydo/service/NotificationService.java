@@ -105,11 +105,11 @@ public class NotificationService extends IntentService {
 
     /**
      * Creates a PendingIntent for Notification click.
-     * This will send the user to the {@link com.finaldrive.dailydo.TaskDetailsActivity}
+     * This will send the user to the {@link com.finaldrive.dailydo.MainActivity}
      *
      * @param context scope of the PendingIntent
      * @param task    that the user will be sent to
-     * @return pendingIntent that will send the user to the TaskDetailsActivity
+     * @return pendingIntent that will send the user to the MainActivity
      */
     private static PendingIntent createNotificationClickIntent(Context context, Task task) {
         final Intent intent = new Intent(context, MainActivity.class);
@@ -140,7 +140,7 @@ public class NotificationService extends IntentService {
      * Creates a PendingIntent for the Snooze action click.
      * This will send the user to the {@link com.finaldrive.dailydo.SnoozePickerActivity} to pick a snooze duration.
      *
-     * @param context
+     * @param context scope of this service
      * @return pendingIntent to direct to SnoozePickerActivity
      */
     private static PendingIntent createSnoozeIntent(Context context) {
@@ -151,12 +151,12 @@ public class NotificationService extends IntentService {
     /**
      * Handles creating and either cancelling or notifying the notification.
      *
-     * @param isAlertOnce
+     * @param isAlertOnce for whether to alert only once
      */
     private void handleNotification(boolean isAlertOnce) {
         int remaining = 0;
         Task ongoingTask = null;
-        StringBuffer bigTextMessageBuffer = new StringBuffer();
+        String contentString;
         for (int i = 0; i < taskList.size(); i++) {
             final Task task = taskList.get(i);
             if (task == null) {
@@ -166,15 +166,14 @@ public class NotificationService extends IntentService {
             if (ongoingTask == null) {
                 ongoingTask = task;
             }
-            if (remaining <= 5) {
-                bigTextMessageBuffer.append(task.getTitle() + "\n");
-            }
         }
         if (remaining == 0) {
             cancelNotification();
             return;
-        } else if (remaining > 5) {
-            bigTextMessageBuffer.append("...");
+        } else if (remaining == 1) {
+            contentString = "This is the last one!";
+        } else {
+            contentString = String.format("%d more left to do", remaining);
         }
 
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -193,12 +192,9 @@ public class NotificationService extends IntentService {
                 .addAction(R.drawable.ic_action_cancel,
                         getString(R.string.action_dismiss),
                         createActionIntent(this, ACTION_DISMISS))
-                .setContentTitle(String.format("%d remaining DO(s) today", remaining))
-                .setContentText(String.format("Ongoing: %s", ongoingTask.getTitle()))
+                .setContentTitle(ongoingTask.getTitle())
+                .setContentText(contentString)
                 .setContentIntent(createNotificationClickIntent(this, ongoingTask));
-        if (remaining > 1) {
-            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigTextMessageBuffer.toString().trim()));
-        }
         final Uri notificationTone = NotificationToneHelper.getTone(this);
         if (notificationTone != null) {
             notificationBuilder.setSound(notificationTone);
